@@ -10,24 +10,30 @@
 library(shiny)
 
 # Define UI for application that draws a histogram
-shinyUI(fluidPage(
-
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("distPlot")
-        )
+shinyUI (fluidPage (
+  
+  # Title for Page
+  titlePanel("Practice Shiny UI"),
+    
+  #Will Look to have a Sidebar Section so I'll have Sidebar-Layout
+  sidebarLayout (
+    # Sidebar Section only w/Inputs
+    sidebarPanel (
+      h2("My Sidebar"),
+      sliderInput (
+        "ratingScale", 
+        "Rating Scale",
+         value = 1, 
+         min = 1, 
+         max = 5
+      )
+    ),
+    mainPanel (
+     #Tabs w/ Hopefully Responsive Data from Inputs
+     tabsetPanel(
+       tabPanel("Ratings Data", plotOutput("distPlot")) #Still Figuirng Out
+     )
     )
+  )
+  
 ))
