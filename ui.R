@@ -11,13 +11,12 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 shinyUI (fluidPage (
-  
   # Title for Page
   titlePanel("Practice Shiny UI"),
     
   #Will Look to have a Sidebar Section so I'll have Sidebar-Layout
   sidebarLayout (
-    # Sidebar Section only w/Inputs
+     # Sidebar Section only w/Inputs
     sidebarPanel (
       h2("My Sidebar"),
       sliderInput (
@@ -26,14 +25,25 @@ shinyUI (fluidPage (
          value = 1, 
          min = 1, 
          max = 5
-      )
+      ),
+      textAreaInput (
+        "reviewInput",
+        label = "Review",
+        value = "",
+        width = NULL, 
+        placeholder = "Enter..."
+      ),
+      
     ),
+    
     mainPanel (
      #Tabs w/ Hopefully Responsive Data from Inputs
-     tabsetPanel(
-       tabPanel("Ratings Data", plotOutput("distPlot")) #Still Figuirng Out
-     )
+     tabsetPanel (
+       tabPanel("Ratings Data", plotOutput("plot")),
+       tabPanel("Review", )
+     ),
+   
     )
+    
   )
-  
 ))
