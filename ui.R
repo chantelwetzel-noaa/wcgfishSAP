@@ -39,11 +39,9 @@ shinyUI (fluidPage (
     mainPanel (
      #Tabs w/ Hopefully Responsive Data from Inputs
      tabsetPanel (
-       tabPanel("Ratings Data", plotOutput("plot")),
-       tabPanel("Review", )
-     ),
-   
-    )
+       tabPanel("Ratings Data"),
+       tabPanel("Review",textOutput("review") )
+     ))
     
   )
 ))
