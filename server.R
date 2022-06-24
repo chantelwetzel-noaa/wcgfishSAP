@@ -9,8 +9,9 @@
 
 library(shiny)
 
-# Define server logic required to draw a histogram
+# Define server logic to display user inputs
 shinyServer(function(input, output) {
+  #Shows Review Text
   output$review <- renderText(
     paste(input$reviewInput)
   )
