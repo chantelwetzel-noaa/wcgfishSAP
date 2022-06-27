@@ -32,7 +32,14 @@ shinyUI (
                     label = "Dataset", 
                     choices = ls("package:datasets")
                     ) ,
-        actionButton("do", "Click Me", class= "btn-success")
+        sliderInput(inputId = "rowSize",
+                     label = "Select Row Size",
+                     value = 10,
+                     min = 1,
+                     max = 30,
+                     step = 1
+                    )
+      
       ),
       mainPanel(
         tableOutput("dateViewer")
@@ -44,7 +51,7 @@ shinyUI (
                   label = h3("Leave a Review Below"),
                   value = "",
                   placeholder = "Enter text..."),
-        actionButton("reviewButton", "Press Here")
+        actionButton("reviewButton", "Press Here", class = "btn-success")
         
       ),
       mainPanel(

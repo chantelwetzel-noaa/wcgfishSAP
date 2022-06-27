@@ -23,7 +23,7 @@ shinyServer(function(input, output) {
   #Gets Data from Selected Dataset and shows it on a Table
   output$dateViewer <- renderTable({
     dataset <- get(input$dataset, "package:datasets")
-    dataset
+    head(dataset, n = input$rowSize)
   })
   
   #Shows Review to User after Typing
