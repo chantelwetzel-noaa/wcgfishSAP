@@ -11,9 +11,25 @@ library(shiny)
 
 # Define server logic to display user inputs
 shinyServer(function(input, output) {
-  #Shows Review Text
-  output$review <- renderText(
-    paste(input$reviewInput)
+ 
+  #Click Button to create Graph
+  output$hist <- renderPlot ({
+    x    <- faithful[, 2]
+    samples <- seq(min(x), max(x), length.out = input$sampleSize + 1)
+     
+    hist(x, breaks = samples, col = "#72A0C1", border = 'white')
+  })
+  
+  #Gets Data from Selected Dataset and shows it on a Table
+  output$dateViewer <- renderTable({
+    dataset <- get(input$dataset, "package:datasets")
+    dataset
+  })
+  
+  #Shows Review to User after Typing
+  output$reviewOutput <- renderText(
+    paste(input$reviewInput) 
   )
-
+  
+  
 })

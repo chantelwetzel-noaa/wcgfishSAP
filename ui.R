@@ -10,38 +10,46 @@
 library(shiny)
 
 # Define UI for application that draws a histogram
-shinyUI (fluidPage (
-  # Title for Page
-  titlePanel("Practice Shiny UI"),
-    
-  #Will Look to have a Sidebar Section so I'll have Sidebar-Layout
-  sidebarLayout (
-     # Sidebar Section only w/Inputs
-    sidebarPanel (
-      h2("My Sidebar"),
-      sliderInput (
-        "ratingScale", 
-        "Rating Scale",
-         value = 1, 
-         min = 1, 
-         max = 5
+shinyUI (
+  navbarPage(
+    "UI Practice",
+     tabPanel("Histogram Creator",
+       sidebarPanel(
+         sliderInput("sampleSize", "Select Sample Size",
+                      value = 10,
+                      min = 0,
+                      max = 100,
+                      step = 10
+         ),
+       ),
+       mainPanel(
+         plotOutput("hist")
+       )
+     ),
+    tabPanel("View DataSets",
+      sidebarPanel(
+        selectInput("dataset", 
+                    label = "Dataset", 
+                    choices = ls("package:datasets")
+                    ) ,
+        actionButton("do", "Click Me", class= "btn-success")
       ),
-      textAreaInput (
-        "reviewInput",
-        label = "Review",
-        value = "",
-        width = NULL, 
-        placeholder = "Enter..."
-      ),
-      
+      mainPanel(
+        tableOutput("dateViewer")
+      )
     ),
-    
-    mainPanel (
-     #Tabs w/ Hopefully Responsive Data from Inputs
-     tabsetPanel (
-       tabPanel("Ratings Data"),
-       tabPanel("Review",textOutput("review") )
-     ))
-    
+    tabPanel("Review",
+      sidebarPanel(
+        textAreaInput("reviewInput", 
+                  label = h3("Leave a Review Below"),
+                  value = "",
+                  placeholder = "Enter text..."),
+        actionButton("reviewButton", "Press Here")
+        
+      ),
+      mainPanel(
+        textOutput("reviewOutput")
+      )
+     )
   )
-))
+)
