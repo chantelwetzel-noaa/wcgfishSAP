@@ -1,16 +1,13 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
-#Commercial Revenue Data
+
+# Loaded Commercial Revenue Data - Will look to change
 commerRevData <- read.csv("assessment_prioritization-master/tables/commercial_revenue.csv", header = TRUE)
 
+# Loaded Tribal Revenue Data - Will look to change 
+tribalData <- read.csv("assessment_prioritization-master/tables/tribal_revenue.csv", header = TRUE)
+
+#  Loaded Recreational Revenue Data - Will look to change 
+recData <- read.csv("assessment_prioritization-master/tables/recreational_importance.csv", header = TRUE)
 
 # Define UI for application that draws a histogram
 shinyUI (
@@ -18,14 +15,18 @@ shinyUI (
     "Stock Assesment Priotization",
      tabPanel("Commercial Revenue Data",
       sidebarPanel (
-        textOutput("commercialRevTitle"),
         selectInput("commercialSpecies",
-                    "Species:",
+                    "Commericial Species:",
                     c("All",
                       unique(as.character(commerRevData$Species))
                       )
                    ),
-        sliderInput("commrankSlider", "Species Rank Slider", value = 65, min = 1, max = 65),
+        sliderInput("commrankSlider", 
+                        "Commerical Species Rank Slider", 
+                        min = 0,
+                        max = 65,
+                        value = 65
+                      )
       ),
       mainPanel (
         tableOutput("commerdataViewer")
@@ -33,20 +34,43 @@ shinyUI (
      ),
     tabPanel("Tribal Revenue Data",
       sidebarPanel(
-      
+        textOutput("tribalrevTitle"),
+        selectInput("tribalSpecies",
+                    "Tribal Species:",
+                    c("All",
+                      unique(as.character(tribalData$Species))
+                    )
+        ),
+        sliderInput("tribalrankSlider", 
+                    "Tribal Species Rank Slider", 
+                    min = 1,
+                    max = 65,
+                    value = 65
+        )
       
       ),
       mainPanel(
-       verbatimTextOutput("fixBugs")
+       tableOutput("tribaldataViewer")
       )
     ),
-    tabPanel("Review",
+    tabPanel("Recrerational Data",
       sidebarPanel(
-        
+        selectInput("recSpecies",
+                    "Recreational Species:",
+                    c("All",
+                      unique(as.character(tribalData$Species))
+                    )
+        ),
+        sliderInput("recreationrankSlider", 
+                    "Recreational Species Rank Slider", 
+                    min = 1,
+                    max = 65,
+                    value = 65
+        )
         
       ),
       mainPanel(
-  
+        tableOutput("recdataViewer")
       )
      )
   )
