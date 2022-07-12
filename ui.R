@@ -8,54 +8,42 @@
 #
 
 library(shiny)
+#Commercial Revenue Data
+commerRevData <- read.csv("assessment_prioritization-master/tables/commercial_revenue.csv", header = TRUE)
+
 
 # Define UI for application that draws a histogram
 shinyUI (
   navbarPage(
-    "UI Practice",
-     tabPanel("Histogram Creator",
-       sidebarPanel(
-         sliderInput("sampleSize", "Select Sample Size",
-                      value = 10,
-                      min = 0,
-                      max = 100,
-                      step = 10
-         ),
-       ),
-       mainPanel(
-         plotOutput("hist")
-       )
+    "Stock Assesment Priotization",
+     tabPanel("Commercial Revenue Data",
+      sidebarPanel (
+        textOutput("commercialRevTitle"),
+        selectInput("commercialSpecies",
+                    "Species:",
+                    c("All",
+                      unique(as.character(commerRevData$Species))))
+      ),
+      mainPanel (
+        tableOutput("dataViewer")
+      )
      ),
-    tabPanel("View DataSets",
+    tabPanel("Tribal Revenue Data",
       sidebarPanel(
-        selectInput("dataset", 
-                    label = "Dataset", 
-                    choices = ls("package:datasets")
-                    ) ,
-        sliderInput(inputId = "rowSize",
-                     label = "Select Row Size",
-                     value = 10,
-                     min = 1,
-                     max = 30,
-                     step = 1
-                    )
+      
       
       ),
       mainPanel(
-        tableOutput("dateViewer")
+        #tableOutput("dateViewer")
       )
     ),
     tabPanel("Review",
       sidebarPanel(
-        textAreaInput("reviewInput", 
-                  label = h3("Leave a Review Below"),
-                  value = "",
-                  placeholder = "Enter text..."),
-        actionButton("reviewButton", "Press Here", class = "btn-success")
+        
         
       ),
       mainPanel(
-        textOutput("reviewOutput")
+  
       )
      )
   )
