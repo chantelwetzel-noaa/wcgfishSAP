@@ -1,0 +1,62 @@
+\newpage
+
+## Recreational Importance
+
+Recreational landings lack a measure of value that is equivalent to commercial ex-vessel revenue. In the absence of an equivalent metric, these rankings continue to rely on the approach implemented in 2016, in which a "pseudo" value for the recreational landings of each species is calculated by multiplying the `r start_yr - end_yr` landed catch amounts in each state by a set of state-specific relative weights, which serve the same function as prices. The factor score by species is calculated as:
+
+
+\begin{equation}
+\text{pseudo}_{s} = \sum_{a=1}^{A} \text{catch}_{s,a}*\text{importance}_{s,a}  
+\end{equation}
+
+
+where catch is the recreational catch by stock $s$ and state $a$ and importance by stock $s$ and area $a$ is a qualitative measure to represent the importance of that stock to the recreational fishery by area. The overall factor for recreational importance is then calculated as:
+
+\begin{centering}
+
+$r_s = \frac{10}{\text{max}(\text{pseudo value}_s^{0.18})}\text{pseudo value}_s^{0.18}$  
+
+\end{centering}
+
+<!--
+\begin{equation}
+r_{s} = \frac{10}{\text{max}(\text{pseudo}_{s})} \text{pseudo}_{s}^{0.18} 
+\end{equation}
+-->
+
+The recreational importance by species and state are shown in Table \ref{tab:recr-import}. These weights were initially developed in cooperation with the state recreational representatives to the Groundfish Management Team in 2016, and were reviewed by members of the Groundfish Advisory Panel in in that year and 2018. The pseudo values are transformed into Factor Scores using the same exponential transformation that is applied to commercial revenues. Continued comments and input from the recreational fishing community or state agencies regarding relative value of species among recreational fishery participants of each state will allow these weights to reflect the current priority of the recreational sector.
+
+  
+```{r, results = 'asis', fig.pos = 'H'}
+tab = read.csv("tables/recr_importance.csv", header = TRUE) 
+col_names = c("Species", "California", "Oregon", "Washington")
+tab[is.na(tab)] = 0
+
+t = table_format(tab, 
+             caption = c('Recreational importance of species by state based on the relative species desirability.'),
+             label = 'recr-import',
+             align = c('l','r','r','r','r'),
+             col_names = col_names,
+             digits = c(0,2,2,2,2),
+             custom_width = TRUE,
+             col_to_adjust = 1:4,
+             width = c("6cm", rep("2cm", 3)))  
+
+t %>%
+    kableExtra::column_spec(2, 
+        color = "white", 
+        bold = TRUE,
+        background = kableExtra::spec_color(x = tab[, 2], 
+        alpha = 1, begin = 0.2, end = 0.8, option = 'D', direction = 1)) %>%
+    kableExtra::column_spec(3, 
+        color = "white", 
+        bold = TRUE,
+        background = kableExtra::spec_color(x = tab[, 3], 
+        alpha = 1, begin = 0.2, end = 0.8, option = 'D', direction = 1)) %>%
+    kableExtra::column_spec(4, 
+        color = "white", 
+        bold = TRUE,
+        background = kableExtra::spec_color(x = tab[, 4], 
+        alpha = 1, begin = 0.2, end = 0.8, option = 'D', direction = 1))
+  
+```

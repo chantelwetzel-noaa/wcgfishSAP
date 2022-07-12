@@ -1,0 +1,22 @@
+Package: assessment_prioritization
+Type: Package
+Title: West Coast Groundfish Assessment Prioritization
+Version: 1.0
+Authors@R:
+    c(person(given = c("Chantel", "R."),
+             family = "Wetzel",
+             role = c("aut", "cre"),
+             email = "chantel.wetzel@noaa.gov"))
+Maintainer: chantel.wetzel <chantel.wetzel@noaa.gov>
+Description: West Coast Groundfish Assessment Prioritization
+License: GPL (>=3)
+Suggests:
+Imports:
+    nwfscSurvey
+Depends:
+    dplyr (>= 1.0.0),
+    R (>= 4.0)
+Encoding: UTF-8
+VignetteBuilder: knitr
+RoxygenNote: 7.1.1
+LazyData: true

@@ -1,0 +1,84 @@
+## Assessment Frequency
+
+The original focus of this Factor was to quantify the extent to which a stock is "overdue" for an assessment (e.g., has it been more than the target number of years since the last assessment was conducted?). Gradually, other considerations which reflect the urgency of conducting a new assessment during the upcoming cycle have been included in the calculation of the final score for this Factor. 
+
+The first step in this process involves the calculation of a target assessment frequency for all stocks that have had a benchmark assessment.  As described in the NMFS Technical Memo [@methot_prioritizing_2015], the mean age of harvested fish serves as the starting point, which is then modified by a regional multiplier. In the case of U.S. west coast groundfish, there is more than a 10-fold difference among species in the mean age of fishery catch, so part of the initial adjustment serves to compress the range of the distribution to a range that is more useful for calculating target frequency. The mean age of the catch is transformed as:
+
+\begin{centering}
+
+  $T_s = (\bar{A}_s*20)^{0.38}$
+
+\end{centering}
+
+where $\bar{A}$ is the mean age in the catch for stock $s$.
+
+The transformed mean-age value ($T_s$) is then modified, based on each stock's recruitment variability (using the $\sigma_R$ value from the last assessment), the overall importance to fisheries, and the ecosystem importance score, as described in the previous section.  For each of these variables, a species is assigned a value of 1, 0, or -1, which is added to the scaled modified mean catch age.  For recruitment variability, species with that exhibit a high degree of recruitment variability  ($\sigma_R > 0.9$) receive a value of -1, low variability species ($\sigma_R < 0.30$) receive a +1, with others receiving values of zero.  For the Fishery and Ecosystem Importance scores, the top-third of each receive a -1, the bottom-third a +1, and the rest zero. The combined score based on the recruitment variability $r_s$, fishery importance $f_s$, ecosystem importance $e_s$, and the transformed mean age $T_s$ defining the assessment frequency recommended is calculated as:
+
+$$
+F_s =
+\begin{cases} 
+T_s + r_s + f_s + e_s & \text{if $<$ 10}\\ 
+10 & \text{if $T_s + r_s + f_s + e_s >$ 10} 
+\end{cases}
+$$
+
+where the $F_s$ score is then rounded to near factor of 2 to align with the groundfish biennial cycle.
+
+The number of years a stock is "overdue" for assessment is calculated as the difference between the years since the last assessment and the target frequency (with a minimum value of zero). In an effort to better reflect Council selection decisions of the past decade, a value of 2 was subtracted for any stock that was assessed in the previous cycle.  This makes it harder, but not impossible for a species to return directly to the top-20.  The guidance in the Technical Memorandum calls for points to be added to a species after it has not been assessed by its target frequency.  In order to promote assessing species by the time the target frequency has been reached, points start being added when the target frequency equals the years since the last assessment. This is calculated as:
+
+$$
+\text{Target Score}_s = 
+\begin{cases}
+-4 & \text{if $\text{LAY}_{s} - \text{NAY} =$ 2}\\
+0  & \text{if $\text{LAY}_{s} - \text{NAY} - F_s < $ 0}\\
+\text{LAY}_{s} - \text{NAY} - F_s & \text{otherwise}
+\end{cases}
+$$
+
+where LAY is the last year the stock $s$ was assessed and NAY is the next assessment cycle year.  If a stock has not had an accepted assessment to-date a score of 4 is assigned. 
+
+Several other conditional adjustments are made to initial scores. The first of these adds one point to the species if the prior assessment will be 10 years old by the next assessment year. This element acknowledges the Scientific and Statistical Committee's (SSC) previously expressed preference for not endorsing model projections beyond a 10-year period. Now, with a time-varying uncertainty buffer applied to West Coast groundfish when setting ABCs, this addition might need to be revisited.  If, at the time of the last assessment, the SSC recommended that an update assessment was suitable for the next assessment and that assessment will be no more than 6 years old, one point is subtracted.  This is intended to reflect the decreased need for a new assessment to be a benchmark.  If a species is at or beyond its target frequency an additional point is added.  
+
+The overall score for the Assessment Frequency Factor $a_s$ is calculated as:
+
+$$
+\begin{aligned}
+a_s = \text{Target Score}_s - (r_s + f_s + e_s) + \text{Assessment Age}_s + \text{Update}_s + \\
+\text{Target Frequency}_s 
+\end{aligned}
+$$
+
+where Assessment Age for stock $s$ is applied if the time since the last assessment will be 10 years or greater by next assessment cycle, the Update by stock $s$ is based on the time since the last assessment and if the STAR panel recommended an Update for the next assessment, and the Target Frequency by stock $s$ is whether the time since the last assessment is greater that the recommended target frequency $F_s$. The potential adjustment scores for each of these items is given in Table \ref{tab:penalty}.
+
+This Factor is a key element in the ability of the process to elevate species from lower ranks to higher-priority levels in a reasonable cyclical manner. Further exploration will likely be required to achieve desirable longer-term performance. What is 'desirable' should be the topic of discussion with Council and advisory bodies. There are real limits on how many assessments of different levels of complexity and review. 
+
+
+```{r, results = 'asis', fig.pos = 'h!'}
+adj = matrix(NA, 9, 2)
+col_names = c("Item", "Score")
+
+adj[1,]  = c("\\textit{Assessment Age}", " ")
+adj[2,]  = c("Number of years since last assessment $\\ge$ 10 years", 1)
+adj[3,]  = c("Otherwise", 0)
+adj[4,]  = c("\\textit{Update}", " ")
+adj[5,]  = c("Number of years since last assessment $<$ 6", 1)
+adj[6,]  = c("Otherwise", 0)
+adj[7,]  = c("\\textit{Target Frequency}", " ")
+adj[8,]  = c("Number of years since last assessment $\\ge F_s$", 1)
+adj[9,]  = c("Otherwise", 0)
+
+
+t <- table_format(adj, 
+             caption = c('List of scoring adjustments made depending upon assessment age, the level of recommended next assessment, and the target assessment frequency.'),
+             label = 'penalty',
+             align = 'l',
+             escape = FALSE,
+             col_names = col_names,             
+             custom_width = TRUE,
+             col_to_adjust = 1:2,
+             width = c("10cm","1cm"))
+
+t %>%
+    kableExtra::add_indent(c(2, 3, 5, 6, 8, 9)) 
+
+```                    

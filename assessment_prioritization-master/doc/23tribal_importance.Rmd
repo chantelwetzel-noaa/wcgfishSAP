@@ -1,0 +1,51 @@
+
+## Tribal Importance
+
+West Coast groundfish species are highly important to northwest coastal Tribes. The Subsistence category identified in the NMFS guidance document [@methot_prioritizing_2015] was expanded to include the value of Tribal fishing for both commercial sale and subsistence and ceremonial uses. The Tribal Importance Factor is calculated as:
+  
+\begin{equation}
+t_{s} = \frac{\alpha}{\text{max}(\text{revenue}_{s}^{0.18})} \text{revenue}_{s}^{0.18} + \beta_s    
+\end{equation}
+  
+where $\text{revenue}_s$ is the revenue based on ex-vessel prices by species $s$, $\alpha$ is the initial factor score set equal to 7.0 and $\beta_s$ is the subsistence score by species $s$ (Table \ref{tab:sub-score}).
+  
+Commercial revenue from landings by Tribal vessels were obtained from PacFIN. The calculation of the Tribal Importance scores is broken into two parts.  The first component uses revenues and were transformed using the same process described above for commercial and recreational values, except that the maximum for this part of the total score is set to 7.0. The second component of the score (ranging from 0 to 3.0), represents the relative value of groundfish species to Tribal subsistence harvesters (Table \ref{tab:sub-score}).  These species scores were refined through consultation with Tribal representatives.  Continued comments/input from the Tribal community regarding subsistence scores will ensure that the scoring reflect the current prioritization of the Tribal sector. 
+  
+```{r, results = 'asis'}
+
+tab = read.csv("tables/subsistence_score.csv", header = TRUE) 
+col_names = c("Species", "Score")
+  
+t = table_format(tab, 
+             caption = c('Subsistence score by species. The subsistence score is colored reflecting low to high scores ranging between blue to green, respectively.'),
+             label = 'sub-score',
+             col_names = col_names,
+             digits = 2,
+             align = c('l','c'),
+             custom_width = TRUE,
+             col_to_adjust = 1:2,
+             width = c("8cm", "1cm"))
+
+
+t %>%
+    kableExtra::column_spec(2, 
+        color = "white", 
+        bold = TRUE,
+        background = kableExtra::spec_color(x = tab[,"Score"], 
+        alpha = 1, begin = 0.2, end = 0.8, option = 'D', direction = 1))
+
+#t %>%
+#    kableExtra::column_spec(2, 
+#        color = "black", 
+#        bold = TRUE,
+#        background = kableExtra::spec_color(x = tab[,"Score"], 
+#        alpha = 1, begin = 0.6, end = 1, option = 'D', direction = 1))
+
+#t %>%
+#    kableExtra::column_spec(2, 
+#        color = kableExtra::spec_color(x = tab[,"Score"], 
+#        begin = 0.3, end = 1, option = 'D', direction = 1),
+#        bold = TRUE)
+  
+```
+
