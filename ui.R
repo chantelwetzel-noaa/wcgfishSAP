@@ -22,10 +22,13 @@ shinyUI (
         selectInput("commercialSpecies",
                     "Species:",
                     c("All",
-                      unique(as.character(commerRevData$Species))))
+                      unique(as.character(commerRevData$Species))
+                      )
+                   ),
+        sliderInput("commrankSlider", "Species Rank Slider", value = 65, min = 1, max = 65),
       ),
       mainPanel (
-        tableOutput("dataViewer")
+        tableOutput("commerdataViewer")
       )
      ),
     tabPanel("Tribal Revenue Data",
@@ -34,7 +37,7 @@ shinyUI (
       
       ),
       mainPanel(
-        #tableOutput("dateViewer")
+       verbatimTextOutput("fixBugs")
       )
     ),
     tabPanel("Review",

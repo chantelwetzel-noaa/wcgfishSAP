@@ -19,11 +19,20 @@ shinyServer(function(input, output) {
   })
   
   #Gets Data from Commercial Revenue csv file and shows it on a Table
-  output$dataViewer <- renderTable({
-   (commerRevData)
+  #Table can Filter based on Species name or Ascend order by Rank
+  output$commerdataViewer <- renderTable({
+    if (input$commercialSpecies != "All") {
+      commerRevData <- commerRevData[commerRevData$Species == input$commercialSpecies,]
+    } else if (input$commrankSlider != 65) {
+      commerRevData <- commerRevData[commerRevData$Rank <= input$commrankSlider,]
+    }
+    (commerRevData)
   })
   
-  #Filters Commercial Revenue Data based on Species
-  
+  #Console Debug Part
+  output$fixBugs <- renderPrint({
+    str(commerRevData,)
+  })
+
   
 })
