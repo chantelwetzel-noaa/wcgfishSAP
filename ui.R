@@ -23,7 +23,7 @@ shinyUI (
                    ),
         sliderInput("commrankSlider", 
                         "Commerical Species Rank Slider", 
-                        min = 0,
+                        min = 1,
                         max = 65,
                         value = 65
                       )
@@ -58,7 +58,7 @@ shinyUI (
         selectInput("recSpecies",
                     "Recreational Species:",
                     c("All",
-                      unique(as.character(tribalData$Species))
+                      unique(as.character(recData$Species))
                     )
         ),
         sliderInput("recreationrankSlider", 
