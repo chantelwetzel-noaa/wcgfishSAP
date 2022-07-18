@@ -1,13 +1,13 @@
 library(shiny)
 
 # Loaded Commercial Revenue Data - Will look to change
-commerRevData <- read.csv("assessment_prioritization-master/tables/commercial_revenue.csv", header = TRUE)
+commerRevData <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 
 # Loaded Tribal Revenue Data - Will look to change 
-tribalData <- read.csv("assessment_prioritization-master/tables/tribal_revenue.csv", header = TRUE)
+tribalData <- read.csv("tables/tribal_revenue.csv", header = TRUE)
 
 #  Loaded Recreational Revenue Data - Will look to change 
-recData <- read.csv("assessment_prioritization-master/tables/recreational_importance.csv", header = TRUE)
+recData <- read.csv("tables/recreational_importance.csv", header = TRUE)
 
 # Define UI for application that draws a histogram
 shinyUI (
@@ -21,15 +21,10 @@ shinyUI (
                       unique(as.character(commerRevData$Species))
                       )
                    ),
-        sliderInput("commrankSlider", 
-                        "Commerical Species Rank Slider", 
-                        min = 1,
-                        max = 65,
-                        value = 65
-                      )
+        textOutput("infoWindow")
       ),
       mainPanel (
-        tableOutput("commerdataViewer")
+        DT::dataTableOutput("commerdataViewer")
       )
      ),
     tabPanel("Tribal Revenue Data",

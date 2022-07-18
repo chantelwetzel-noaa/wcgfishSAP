@@ -1,15 +1,19 @@
 library(shiny)
+library(DT)
 #Read in Static commerical revenue file, maybe not best practice
-commerRevData <- read.csv("assessment_prioritization-master/tables/commercial_revenue.csv", header = TRUE)
+commerRevData <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 
 # Loaded Tribal Revenue Data - Will look to change 
-tribalData <- read.csv("assessment_prioritization-master/tables/tribal_revenue.csv", header = TRUE)
+tribalData <- read.csv("tables/tribal_revenue.csv", header = TRUE)
 
 #  Loaded Recreational Revenue Data - Will look to change 
-recData <- read.csv("assessment_prioritization-master/tables/recreational_importance.csv", header = TRUE)
+recData <- read.csv("tables/recreational_importance.csv", header = TRUE)
 
 # Define server logic to display user inputs
 shinyServer(function(input, output) {
+  
+  #Species Info Window
+  #output$infoWindow <- rend
   
   #Displays Table Title for Commercial Revenue
   output$commercialRevTitle <- renderText({
@@ -18,14 +22,11 @@ shinyServer(function(input, output) {
   
   #Gets Data from Commercial Revenue csv file and shows it on a Table
   #Table can Filter based on Species name or Ascend order by Rank
-  output$commerdataViewer <- renderTable({
-    if (input$commercialSpecies != "All") {
-      commerRevData <- commerRevData[commerRevData$Species == input$commercialSpecies,]
-    } else if (input$commrankSlider != 65) {
-      commerRevData <- commerRevData[commerRevData$Rank <= input$commrankSlider,]
-    } else {
-      commerRevData
-    }
+  output$commerdataViewer <- DT::renderDataTable({
+      datatable(commerRevData, options(
+                lengthMenu = c(5, 10, 20,nrow(commerRevData))
+                ))%>%formatRound(2:ncol(commerRevData), 2) # Round Data to 2 dec
+ 
   })
   
   #Can display and filter Tribal Fish Data by name and rank value
