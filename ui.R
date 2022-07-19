@@ -16,14 +16,21 @@ shinyUI (
     "Stock Assesment Priotization",
      tabPanel("Commercial Revenue Data",
       sidebarPanel (
-          pickerInput(
+          pickerInput (
             inputId = "commSpeciesSelector",
             label = "Commercial Species",
-            choices = c("All",unique(as.character(commerRevData$Species))),
+            choices = c(unique(as.character(commerRevData$Species))),
             multiple = TRUE,
-            selected = "All"
+            options = list(`actions-box` = TRUE),
+            selected = unique(as.character(commerRevData$Species))
           ),
-          textOutput("infoWindow")
+          selectInput(inputId = "comspecInfo",
+                      label = "Species Info Window",
+                      choices = c(unique(as.character(tribalData$Species)))
+                      ),
+          verbatimTextOutput (
+            outputId = "commInfoWindow"
+          )
       ),
       mainPanel (
         DT::dataTableOutput("commerdataViewer")
