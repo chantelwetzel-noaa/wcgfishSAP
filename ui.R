@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyWidgets)
 
 # Loaded Commercial Revenue Data - Will look to change
 commerRevData <- read.csv("tables/commercial_revenue.csv", header = TRUE)
@@ -15,16 +16,18 @@ shinyUI (
     "Stock Assesment Priotization",
      tabPanel("Commercial Revenue Data",
       sidebarPanel (
-        selectInput("commercialSpecies",
-                    "Commericial Species:",
-                    c("All",
-                      unique(as.character(commerRevData$Species))
-                      )
-                   ),
-        textOutput("infoWindow")
+          pickerInput(
+            inputId = "commSpeciesSelector",
+            label = "Commercial Species",
+            choices = c("All",unique(as.character(commerRevData$Species))),
+            multiple = TRUE,
+            selected = "All"
+          ),
+          textOutput("infoWindow")
       ),
       mainPanel (
         DT::dataTableOutput("commerdataViewer")
+        #verbatimTextOutput("commerdataViewer")
       )
      ),
     tabPanel("Tribal Revenue Data",
