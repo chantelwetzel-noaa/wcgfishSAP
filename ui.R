@@ -19,9 +19,10 @@ shinyUI (
           pickerInput(
             inputId = "commSpeciesSelector",
             label = "Commercial Species",
-            choices = c("All",unique(as.character(commerRevData$Species))),
+            choices = c(unique(as.character(commerRevData$Species))),
             multiple = TRUE,
-            selected = "All"
+            options = list(`actions-box` = TRUE),
+            selected = unique(as.character(commerRevData$Species))[1:5]
           ),
           textOutput("infoWindow")
       ),

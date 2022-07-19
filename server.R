@@ -24,7 +24,7 @@ shinyServer(function(input, output) {
   #Gets Data from Commercial Revenue csv file and shows it on a Table
   #Table can Filter based on Species name or Ascend order by Rank
   output$commerdataViewer <- DT::renderDataTable({
-      if (input$commSpeciesSelector != "All") {
+  #    if (input$commSpeciesSelector != "All") {
         #Filter Data Based off selected list, note if I select more than one option I am looking for a row with more than one species name which doesnt exist!
         commerRevData <- commerRevData %>% filter(input$commSpeciesSelector == Species)
         
@@ -32,11 +32,12 @@ shinyServer(function(input, output) {
         datatable(commerRevData, options(
                                 lengthMenu = c(5, 10, 20,nrow(commerRevData)))
                   )%>%formatRound(2:ncol(commerRevData), 2)
-      } else {
-        datatable(commerRevData, options(
-          lengthMenu = c(5, 10, 20,nrow(commerRevData)))
-        )%>%formatRound(2:ncol(commerRevData), 2)
-      }
+  #    } 
+  #  else {
+  #      datatable(commerRevData, options(
+  #        lengthMenu = c(5, 10, 20,nrow(commerRevData)))
+  #      )%>%formatRound(2:ncol(commerRevData), 2)
+  #    }
   })
   
   
