@@ -14,7 +14,7 @@ recData <- read.csv("tables/recreational_importance.csv", header = TRUE)
 shinyUI (
   navbarPage(
     "Stock Assesment Priotization",
-     tabPanel("Commercial Revenue Data",
+     tabPanel("Commercial Importance",
       sidebarPanel (
           pickerInput (
             inputId = "commSpeciesSelector",
@@ -26,7 +26,7 @@ shinyUI (
           ),
           selectInput(inputId = "comspecInfo",
                       label = "Species Info Window",
-                      choices = c(unique(as.character(tribalData$Species)))
+                      choices = c(unique(as.character(commerRevData$Species)))
                       ),
           verbatimTextOutput (
             outputId = "commInfoWindow"
@@ -34,48 +34,36 @@ shinyUI (
       ),
       mainPanel (
         DT::dataTableOutput("commerdataViewer")
-        #verbatimTextOutput("commerdataViewer")
       )
      ),
-    tabPanel("Tribal Revenue Data",
+    tabPanel("Tribal Importance",
       sidebarPanel(
-        textOutput("tribalrevTitle"),
-        selectInput("tribalSpecies",
-                    "Tribal Species:",
-                    c("All",
-                      unique(as.character(tribalData$Species))
-                    )
+        pickerInput (
+          inputId = "tribalSpeciesSelector",
+          label = "Tribal Species",
+          choices = c(unique(as.character(tribalData$Species))),
+          multiple = TRUE,
+          options = list(`actions-box` = TRUE),
+          selected = unique(as.character(tribalData$Species))
         ),
-        sliderInput("tribalrankSlider", 
-                    "Tribal Species Rank Slider", 
-                    min = 1,
-                    max = 65,
-                    value = 65
+        selectInput(inputId = "tribalspecInfo",
+                    label = "Species Info Window",
+                    choices = c(unique(as.character(tribalData$Species)))
+        ),
+        verbatimTextOutput (
+          outputId = "tribalInfoWindow"
         )
-      
       ),
       mainPanel(
-       tableOutput("tribaldataViewer")
+        DT::dataTableOutput("tribaldataViewer")
       )
     ),
-    tabPanel("Recrerational Data",
+    tabPanel("Recrerational Importance",
       sidebarPanel(
-        selectInput("recSpecies",
-                    "Recreational Species:",
-                    c("All",
-                      unique(as.character(recData$Species))
-                    )
-        ),
-        sliderInput("recreationrankSlider", 
-                    "Recreational Species Rank Slider", 
-                    min = 1,
-                    max = 65,
-                    value = 65
-        )
+        
         
       ),
       mainPanel(
-        tableOutput("recdataViewer")
       )
      )
   )

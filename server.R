@@ -13,9 +13,6 @@ recData <- read.csv("tables/recreational_importance.csv", header = TRUE)
 # Define server logic to display user inputs
 shinyServer(function(input, output) {
   
-  #Species Info Window
-  #output$infoWindow <- rend
-  
   #Displays Table Title for Commercial Revenue
   output$commercialRevTitle <- renderText({
     "Commericial Revenue"
@@ -24,49 +21,77 @@ shinyServer(function(input, output) {
   #Gets Data from Commercial Revenue csv file and shows it on a Table
   #Table can Filter based on Species name or Ascend order by Rank
   output$commerdataViewer <- DT::renderDataTable({
-      if (input$commSpeciesSelector != "All") {
-        #Filter Data Based off selected list, note if I select more than one option I am looking for a row with more than one species name which doesnt exist!
-        commerRevData <- commerRevData %>% filter(input$commSpeciesSelector == Species)
-        
-        #Format Data: Rounding Decimal Places and specifiying top "x" List
-        datatable(commerRevData, options(
-                                lengthMenu = c(5, 10, 20,nrow(commerRevData)))
-                  )%>%formatRound(2:ncol(commerRevData), 2)
-      } else {
-        datatable(commerRevData, options(
-          lengthMenu = c(5, 10, 20,nrow(commerRevData)))
-        )%>%formatRound(2:ncol(commerRevData), 2)
-      }
+    # Renamed CSV Columns
+    commerRevColumns <- c("Species", 
+                           "Rank", 
+                           "Factor Score", 
+                           "Interum Value",  
+                           "Revenue",
+                           "California Revenue",
+                           "Oregon Revenue",
+                           "Washington Revenue")
+    
+   # Change data
+    commerRevData <- commerRevData %>% filter(input$commSpeciesSelector == Species)
+    
+    # Format Data: Rounding Decimal Places and specifiying top "x" List
+    datatable(commerRevData, options(lengthMenu = c(5, 10,20, nrow(commerRevData)),
+                                     order = list(list(3, 'desc'))),
+              colnames = commerRevColumns
+              )%>% formatRound(3:ncol(commerRevData), 2)%>% 
+                   formatCurrency(5:ncol(commerRevData),currency = "$")%>%
+                   formatStyle(
+                     columns = "Species",
+                     backgroundColor = "#5F9EA0",
+                     color = "white",
+                     fontWeight = "bold"
+                   )
   })
   
-  
-  #Just to Debug and Have stuff logged out 
-  #output$commerdataViewer <- renderPrint ({
-      #commerRevData %>% filter(Species == input$commSpeciesSelector )
-  #})  
+  # Commercial Species Info Window
+  output$commInfoWindow <- renderPrint({
+    input$comspecInfo
+  })
 
   
   #Can display and filter Tribal Fish Data by name and rank value
-  output$tribaldataViewer <- renderTable({
-    if (input$tribalSpecies != "All") {
-      tribalData <- tribalData[tribalData$Species == input$tribalSpecies,]
-    } else if (input$tribalrankSlider != 65) {
-      tribalData <- tribalData[tribalData$Rank <= input$tribalrankSlider,]
-    } else {
-      tribalData
-    }
+  output$tribaldataViewer <- DT::renderDataTable({
+    # Renamed CSV Columns
+    tribalColumns <- c("Species", 
+                          "Rank", 
+                          "Factor Score", 
+                          "Subsistence Score",  
+                          "Initial Factor Score",
+                          "Interum Value",
+                          "Revenue"
+                          )
+    
+    # Change data
+    tribalData <- tribalData %>% filter(input$tribalSpeciesSelector == Species)
+    
+    # Format Data: Rounding Decimal Places and specifiying top "x" List
+    datatable(tribalData, options(lengthMenu = c(5, 10,20, nrow(tribalData)),
+                                     order = list(list(3, 'desc'))),
+              colnames = tribalColumns
+    )%>% formatRound(5:ncol(tribalData), 2)%>%
+      formatRound(3, 2)%>%
+      formatCurrency(ncol(tribalData),currency = "$")%>%
+      formatStyle(
+        columns = "Species",
+        backgroundColor = "#6a5acd",
+        color = "white",
+        fontWeight = "bold"
+      )
+  })
+  
+  # Tribal Species Info Window
+  output$tribalInfoWindow <- renderPrint({
+    input$tribalspecInfo
   })
   
   #Can display and filter Recreational Fish Data by name and rank value
   output$recdataViewer <- renderTable({
-    if (input$recSpecies != "All") {
-      recData <-recData[recData$Species == input$recSpecies,]
-    } else if (input$recreationrankSlider != 65) {
-      recData <- recData[recData$Rank <= input$recreationrankSlider,]
-    } else {
-     recData
-    }
+   
   })
-
   
 })
