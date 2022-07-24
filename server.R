@@ -1,7 +1,6 @@
 library(shiny)
 library(DT)
 library(tidyverse)
-#Hello
 #Read in Static commerical revenue file, maybe not best practice
 commerRevData <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 
@@ -33,7 +32,7 @@ shinyServer(function(input, output) {
                           "Washington Revenue")
     
     # Change data
-    commerRevData <- commerRevData[commerRevData$Species %in% input$commSpeciesSelector,]
+    commerRevData <- commerRevData %>% filter(input$commSpeciesSelector == Species)
     
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
@@ -41,10 +40,7 @@ shinyServer(function(input, output) {
                                      order = list(list(3, 'desc'))),
               colnames = commerRevColumns
     )%>% formatRound(3:ncol(commerRevData), 2)%>% 
-      formatCurrency(5:ncol(commerRevData),
-                     currency = "$",
-                     digits =0
-                     )%>%
+      formatCurrency(5:ncol(commerRevData),currency = "$")%>%
       formatStyle(
         columns = "Species",
         backgroundColor = "#5F9EA0",
@@ -69,10 +65,10 @@ shinyServer(function(input, output) {
                        "Initial Factor Score",
                        "Interum Value",
                        "Revenue"
-                       )
+    )
     
     # Change data
-    tribalData <- tribalData[tribalData$Species %in% input$tribalSpeciesSelector,]
+    tribalData <- tribalData %>% filter(input$tribalSpeciesSelector == Species)
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
     datatable(tribalData, options(lengthMenu = c(nrow(commerRevData),5, 10,20),
@@ -97,29 +93,29 @@ shinyServer(function(input, output) {
   #Can display and filter Recreational Fish Data by name and rank value
   output$recdataViewer <- DT::renderDataTable({
     # Renamed CSV Columns
-      recColumns <- c("Species", 
-                       "Rank", 
-                       "Factor Score", 
-                       "Initial Factor Score",
-                       "Pseudo Value Coast Wide",
-                       "Pseudo Value California",
-                       "Pseudo Value Oregon",
-                       "Pseudo Value Washington",
-                       "Relative Weight California",
-                       "Relative Weight Oregon",
-                       "Relative Weight Washington",
-                       "Retained Catch Coast Wide",
-                       "Retained Catch California",
-                       "Retained Catch Oregon",
-                       "Retained Catch Washington"
-                      )
+    recColumns <- c("Species", 
+                    "Rank", 
+                    "Factor Score", 
+                    "Initial Factor Score",
+                    "Pseudo Value Coast Wide",
+                    "Pseudo Value California",
+                    "Pseudo Value Oregon",
+                    "Pseudo Value Washington",
+                    "Relative Weight California",
+                    "Relative Weight Oregon",
+                    "Relative Weight Washington",
+                    "Retained Catch Coast Wide",
+                    "Retained Catch California",
+                    "Retained Catch Oregon",
+                    "Retained Catch Washington"
+    )
     
     # Change data
-    recData <- recData[recData$Species %in% input$recSpeciesSelector,]
+    recData <- recData %>% filter(input$recSpeciesSelector == Species)
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
     datatable(recData, options(lengthMenu = c(nrow(recData),5, 10,20),
-                                  order = list(list(2, 'desc'))),
+                               order = list(list(2, 'desc'))),
               colnames = recColumns
     )%>% formatRound(5:ncol(recData), 0)%>%
       formatRound(3:4, 2)%>%
@@ -134,9 +130,8 @@ shinyServer(function(input, output) {
   })
   
   output$debugScreen <- renderPrint({
-    commerRevData[commerRevData$Species %in% input$commSpeciesSelector,]
-    
-    #commerRevData %>% filter(input$commSpeciesSelector == Species)
+    #commerRevData[commerRevData$Species %in% input$commSpeciesSelector]
+    commerRevData %>% filter(input$commSpeciesSelector == Species)
   })
   
 })
