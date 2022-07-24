@@ -1,6 +1,5 @@
 library(shiny)
 library(DT)
-library(tidyverse)
 #Read in Static commerical revenue file, maybe not best practice
 commerRevData <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 
@@ -32,7 +31,7 @@ shinyServer(function(input, output) {
                           "Washington Revenue")
     
     # Change data
-    commerRevData <- commerRevData %>% filter(input$commSpeciesSelector == Species)
+    commerRevData <- commerRevData[commerRevData$Species %in% input$commSpeciesSelector,]
     
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
@@ -40,7 +39,10 @@ shinyServer(function(input, output) {
                                      order = list(list(3, 'desc'))),
               colnames = commerRevColumns
     )%>% formatRound(3:ncol(commerRevData), 2)%>% 
-      formatCurrency(5:ncol(commerRevData),currency = "$")%>%
+      formatCurrency(5:ncol(commerRevData),
+                     currency = "$",
+                     digits =0
+      )%>%
       formatStyle(
         columns = "Species",
         backgroundColor = "#5F9EA0",
@@ -68,7 +70,8 @@ shinyServer(function(input, output) {
     )
     
     # Change data
-    tribalData <- tribalData %>% filter(input$tribalSpeciesSelector == Species)
+    tribalData <- tribalData[tribalData$Species %in% input$tribalSpeciesSelector,]
+    
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
     datatable(tribalData, options(lengthMenu = c(nrow(commerRevData),5, 10,20),
@@ -111,7 +114,8 @@ shinyServer(function(input, output) {
     )
     
     # Change data
-    recData <- recData %>% filter(input$recSpeciesSelector == Species)
+    recData <- recData[recData$Species %in% input$recSpeciesSelector,]
+    
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
     datatable(recData, options(lengthMenu = c(nrow(recData),5, 10,20),
