@@ -42,14 +42,15 @@ shinyUI (
                            ")),
                tags$p(HTML("<b>Washington Revenue: </b> Total Revenue associated with 
                              a Species within Washington")),
-              pickerInput (
-                inputId = "commSpeciesSelector",
-                label = "Select Commercial Species",
-                choices = c(unique(as.character(commerRevData$Species))),
-                multiple = TRUE,
-                options = list(`actions-box` = TRUE),
-                selected = unique(as.character(commerRevData$Species))
-              )
+               h3("Commericial Species Selector"),
+               pickerInput (
+                 inputId = "commSpeciesSelector",
+                 label = "Select Commercial Species",
+                 choices = c(unique(as.character(commerRevData$Species))),
+                 multiple = TRUE,
+                 options = list(`actions-box` = TRUE),
+                 selected = unique(as.character(commerRevData$Species))
+               )
              ),
              mainPanel(
                DT::dataTableOutput("commerdataViewer")

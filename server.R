@@ -30,8 +30,11 @@ shinyServer(function(input, output) {
     
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
-    datatable(commerRevData, options(lengthMenu = c(nrow(commerRevData),5, 10,20),
-                                     order = list(list(3, 'desc'))),
+    datatable(commerRevData, options(lengthMenu = 
+                                       list( c(-1, 5, 10, 20), #ALL is a Keyword
+                                             c("All", 5, 10, 20)
+                                            ),
+              order = list(list(1, 'asc'))),
               colnames = commerRevColumns,
               rownames = FALSE
     )%>% formatRound(3:ncol(commerRevData), 2)%>% 
@@ -70,13 +73,18 @@ shinyServer(function(input, output) {
     
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
-    datatable(tribalData, options(lengthMenu = c(nrow(commerRevData),5, 10,20),
-                                  order = list(list(3, 'desc'))),
-              colnames = tribalColumns,
-              rownames = FALSE
+    datatable(tribalData, options(lengthMenu = list(
+                                                    c(-1, 5, 10, 20), #ALL is a Keyword
+                                                    c("All", 5, 10, 20)
+                                                    ),
+             order = list(list(1, 'asc'))),
+             colnames = tribalColumns,
+             rownames = FALSE
     )%>% formatRound(5:ncol(tribalData), 2)%>%
       formatRound(3, 2)%>%
-      formatCurrency(ncol(tribalData),currency = "$")%>%
+      formatCurrency(ncol(tribalData),
+                     currency = "$",
+                     digits = 0)%>%
       formatStyle(
         columns = "Species",
         backgroundColor = "#6a5acd",
@@ -115,20 +123,27 @@ shinyServer(function(input, output) {
     
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
-    datatable(recData, options(lengthMenu = c(nrow(recData),5, 10,20),
-                               order = list(list(2, 'desc'))),
+    datatable(recData, options(lengthMenu =  list( c(-1, 5, 10, 20), #ALL is a Keyword
+                                                   c("All", 5, 10, 20)
+                                                  ),
+                               order = list(list(1, 'asc'))),
               colnames = recColumns,
               rownames = FALSE
     )%>% formatRound(5:ncol(recData), 0)%>%
       formatRound(3:4, 2)%>%
       formatRound(2, 0)%>%
-      formatCurrency(ncol(recData),currency = "$")%>%
+      formatCurrency(ncol(recData),
+                     currency = "$",
+                     digits = 0)%>%
       formatStyle(
         columns = "Species",
         backgroundColor = "#fd5c63",
         color = "white",
         fontWeight = "bold"
-      )
+      )%>%
+      formatStyle('Rank', 
+                  background = styleInterval(cuts = c(5,10),  values = c("blue", 'red', "green"))
+                  )
   })
   
   output$debugScreen <- renderPrint({
