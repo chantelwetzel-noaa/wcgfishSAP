@@ -12,11 +12,6 @@ recData <- read.csv("tables/recreational_importance.csv", header = TRUE)
 # Define server logic to display user inputs
 shinyServer(function(input, output) {
   
-  #Displays Table Title for Commercial Revenue
-  output$commercialRevTitle <- renderText({
-    "Commericial Revenue"
-  })
-  
   #Gets Data from Commercial Revenue csv file and shows it on a Table
   #Table can Filter based on Species name or Ascend order by Rank
   output$commerdataViewer <- DT::renderDataTable({
@@ -37,7 +32,8 @@ shinyServer(function(input, output) {
     # Format Data: Rounding Decimal Places and specifying top "x" List
     datatable(commerRevData, options(lengthMenu = c(nrow(commerRevData),5, 10,20),
                                      order = list(list(3, 'desc'))),
-              colnames = commerRevColumns
+              colnames = commerRevColumns,
+              rownames = FALSE
     )%>% formatRound(3:ncol(commerRevData), 2)%>% 
       formatCurrency(5:ncol(commerRevData),
                      currency = "$",
@@ -76,7 +72,8 @@ shinyServer(function(input, output) {
     # Format Data: Rounding Decimal Places and specifying top "x" List
     datatable(tribalData, options(lengthMenu = c(nrow(commerRevData),5, 10,20),
                                   order = list(list(3, 'desc'))),
-              colnames = tribalColumns
+              colnames = tribalColumns,
+              rownames = FALSE
     )%>% formatRound(5:ncol(tribalData), 2)%>%
       formatRound(3, 2)%>%
       formatCurrency(ncol(tribalData),currency = "$")%>%
@@ -120,7 +117,8 @@ shinyServer(function(input, output) {
     # Format Data: Rounding Decimal Places and specifying top "x" List
     datatable(recData, options(lengthMenu = c(nrow(recData),5, 10,20),
                                order = list(list(2, 'desc'))),
-              colnames = recColumns
+              colnames = recColumns,
+              rownames = FALSE
     )%>% formatRound(5:ncol(recData), 0)%>%
       formatRound(3:4, 2)%>%
       formatRound(2, 0)%>%
