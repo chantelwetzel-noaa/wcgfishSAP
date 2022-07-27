@@ -47,6 +47,22 @@ shinyServer(function(input, output) {
         backgroundColor = "#5F9EA0",
         color = "white",
         fontWeight = "bold"
+      )%>%
+      formatStyle('Rank', 
+                  background = styleInterval(
+                    cuts = c(10, 20, 30 , 40, 50, 60),  
+                    values = c("#F4F9F4" , 
+                               "#A7D7C5",
+                               "#74B49B",
+                               "#5C8D89",
+                               "#698474",
+                               "#2C5D63",
+                               "#283739")
+                  ),
+                  color = styleInterval(
+                    cuts = c(30),
+                    values = c("black", "white")
+                  )
       )
   })
   
@@ -74,7 +90,7 @@ shinyServer(function(input, output) {
     
     # Format Data: Rounding Decimal Places and specifying top "x" List
     datatable(tribalData, options(lengthMenu = list(
-                                                    c(-1, 5, 10, 20), #ALL is a Keyword
+                                                    c(-1, 5, 10, 20), 
                                                     c("All", 5, 10, 20)
                                                     ),
              order = list(list(1, 'asc'))),
@@ -90,6 +106,22 @@ shinyServer(function(input, output) {
         backgroundColor = "#6a5acd",
         color = "white",
         fontWeight = "bold"
+      )%>% 
+      formatStyle('Rank', 
+                           background = styleInterval(
+                             cuts = c(10, 20, 30 , 40, 50, 60),  
+                             values = c("#F4F9F4" , 
+                                        "#A7D7C5",
+                                        "#74B49B",
+                                        "#5C8D89",
+                                        "#698474",
+                                        "#2C5D63",
+                                        "#283739")
+                           ),
+                           color = styleInterval(
+                             cuts = c(30),
+                             values = c("black", "white")
+                           )
       )
   })
   
@@ -142,13 +174,21 @@ shinyServer(function(input, output) {
         fontWeight = "bold"
       )%>%
       formatStyle('Rank', 
-                  background = styleInterval(cuts = c(5,10),  values = c("blue", 'red', "green"))
+                  background = styleInterval(
+                                  cuts = c(10, 20, 30 , 40, 50, 60),  
+                                  values = c("#F4F9F4" , 
+                                             "#A7D7C5",
+                                             "#74B49B",
+                                             "#5C8D89",
+                                             "#698474",
+                                             "#2C5D63",
+                                             "#283739")
+                                ),
+                  color = styleInterval(
+                                  cuts = c(30),
+                                  values = c("black", "white")
+                          )
                   )
-  })
-  
-  output$debugScreen <- renderPrint({
-    #commerRevData[commerRevData$Species %in% input$commSpeciesSelector]
-    commerRevData %>% filter(input$commSpeciesSelector == Species)
   })
   
 })
