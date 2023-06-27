@@ -17,33 +17,25 @@ shinyUI(
     navbarMenu("Factors",
                # subpanel for commercial importance
                tabPanel("Commercial Importance",
-                        sidebarPanel(
+                        # sidebarPanel(
                           h3("Commercial Importance Information Window"),
-                          tags$p(HTML("The following window provides a bit of information 
-                           on the Commercial Importance tab")),
-                          tags$p(HTML("<b>Species: </b> Denotes the Name of a Commericial
-                            Fish Species
-                           ")),
-                          tags$p(HTML("<b>Rank: </b> Denotes the Rank of a Commericial Fish
-                            Species based on a number of factors
-                           ")),
-                          tags$p(HTML("<b>Interum Value: </b> Denotes the Rank of a Commericial Fish
-                            Species based on a number of factors
-                           ")),
-                          tags$p(HTML("<b>Factor Score: </b> Denotes the Rank of a Commericial Fish
-                            Species based on a number of factors
-                           ")),
-                          tags$p(HTML("<b>Revenue: </b> Total Revenue associated with 
-                             a Species along the Pacific Coast States (CA, OR, and WA)
-                           ")),
-                          tags$p(HTML("<b>California Revenue: </b> Total Revenue associated with 
-                             a Species within California
-                           ")),
-                          tags$p(HTML("<b>Oregon Revenue: </b> Total Revenue associated with 
-                             a Species within Oregon
-                           ")),
-                          tags$p(HTML("<b>Washington Revenue: </b> Total Revenue associated with 
-                             a Species within Washington")),
+                          tags$p(HTML("The following window provides a bit of information
+                                      on the Commercial Importance tab")),
+                          tags$p(HTML("<b>Species: </b> Denotes the name of a fish species")),
+                          tags$p(HTML("<b>Rank: </b> Denotes the rank of a fish species based on
+                                      a number of factors")),
+                          tags$p(HTML("<b>Interum Value: </b> Denotes the rank of a fish species
+                                      based on a number of factors")),
+                          tags$p(HTML("<b>Factor Score: </b> Denotes the rank of a fish species
+                                      based on a number of factors")),
+                          tags$p(HTML("<b>Revenue: </b> Total revenue associated with a species
+                                      along the Pacific Coast States (CA, OR, and WA)")),
+                          tags$p(HTML("<b>California Revenue: </b> Total revenue associated with 
+                                      a species within California")),
+                          tags$p(HTML("<b>Oregon Revenue: </b> Total revenue associated with
+                                      a species within Oregon")),
+                          tags$p(HTML("<b>Washington Revenue: </b> Total revenue associated with
+                                      a species within Washington")),
                           h3("Commercial Species Selector"),
                           pickerInput(
                             inputId = "com_species_selector",
@@ -52,30 +44,29 @@ shinyUI(
                             multiple = TRUE,
                             options = list(`actions-box` = TRUE),
                             selected = unique(as.character(com_rev_data$Species))
-                          )
-                        ),
-                        mainPanel(
-                          DT::dataTableOutput("com_data_viewer")
-                        )
+                          ),
+                        # ),
+                        # mainPanel(
+                          gt_output("com_data_viewer")
+                        # )
                ),
                # subpanel for tribal importance
                tabPanel("Tribal Importance",
-                        sidebarPanel(
+                        # sidebarPanel(
                           h3("Tribal Importance Information Window"),
                           tags$p(HTML("The following window provides a bit of information 
                                       on the Tribal Importance tab")),
-                          tags$p(HTML("<b>Species: </b> Denotes the Name of a Tribal Fish Species")),
-                          tags$p(HTML("<b>Rank: </b> Denotes the Rank of a Tribal Fish Species
-                          based on a number of factors")),
-                          tags$p(HTML("<b>Factor Score: </b> Denotes the Factor Score of a Tribal
-                          Fish Species")),
-                          tags$p(HTML("<b>Subsistence Score: </b> Denotes the Subsistence Score of a
-                          Tribal Fish Species")),
-                          tags$p(HTML("<b>Initial Factor Score: </b> An Factor Score derived from X")),
-                          tags$p(HTML("<b>Interum Value: </b> A Value associated with Tribal Fish
-                          Species")),
-                          tags$p(HTML("<b>Revenue: </b> Total Revenue associated with a species
-                          along the Pacific Coast States (WA, OR, CA)")),
+                          tags$p(HTML("<b>Species: </b> Denotes the name of a fish species")),
+                          tags$p(HTML("<b>Rank: </b> Denotes the rank of a fish species 
+                                      based on a number of factors")),
+                          tags$p(HTML("<b>Factor Score: </b> Denotes the factor score of a fish species")),
+                          tags$p(HTML("<b>Subsistence Score: </b> Denotes the subsistence score of a
+                                      fish species")),
+                          tags$p(HTML("<b>Initial Factor Score: </b> A factor score derived from X")),
+                          tags$p(HTML("<b>Interum Value: </b> A value associated with fish
+                                      species")),
+                          tags$p(HTML("<b>Revenue: </b> Total revenue associated with a species
+                                      along the Pacific Coast States (WA, OR, CA)")),
                           h3("Tribal Species Selector"),
                           pickerInput(
                             inputId = "tribal_species_selector",
@@ -84,27 +75,26 @@ shinyUI(
                             multiple = TRUE,
                             options = list(`actions-box` = TRUE),
                             selected = unique(as.character(tribal_data$Species))
-                          )
-                        ),
-                        mainPanel(
+                          ),
+                        # ),
+                        # mainPanel(
                           DT::dataTableOutput("tribal_data_viewer")
-                        )
+                        # )
                ),
                
                # subpanel for recreational importance
                tabPanel("Recreational Importance",
-                        sidebarPanel(
+                        # sidebarPanel(
                           h3("Recreational Importance Information Window"),
                           tags$p(HTML("The following window provides a bit of information
                                       on the Recreational Importance tab")),
-                          tags$p(HTML("<b>Species: </b> Denotes the Name of a Recreational
-                          Fish Species")),
-                          tags$p(HTML("<b>Rank: </b> Denotes the Rank of a Recreational Fish
-                          Species based on a number of factors")),
-                          tags$p(HTML("<b>Factor Score: </b> Denotes the Factor Score of a
-                          Tribal Fish Species")),
-                          tags$p(HTML("<b>Initial Factor Score: </b> An Factor Score derived
-                          from X")),
+                          tags$p(HTML("<b>Species: </b> Denotes the Name of a fish species")),
+                          tags$p(HTML("<b>Rank: </b> Denotes the rank of a fish species based
+                                      on a number of factors")),
+                          tags$p(HTML("<b>Factor Score: </b> Denotes the factor Score of a 
+                                      fish species")),
+                          tags$p(HTML("<b>Initial Factor Score: </b> A factor score derived
+                                      from X")),
                           tags$p(HTML("<b>Pseudo Value Coast Wide: </b> lorem impsum lorem impsum lorem impsum
                            ")),
                           tags$p(HTML("<b>Pseudo Value California: </b> lorem impsum lorem impsum lorem impsum
@@ -135,11 +125,11 @@ shinyUI(
                             multiple = TRUE,
                             options = list(`actions-box` = TRUE),
                             selected = unique(as.character(rec_data$Species))
-                          )
-                        ), 
-                        mainPanel(
+                          ),
+                        # ), 
+                        # mainPanel(
                           DT::dataTableOutput("rec_data_viewer")
-                        )
+                        # )
                )
     )
   )

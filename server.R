@@ -1,5 +1,10 @@
 library(shiny)
+library(dplyr)
 library(DT)
+library(gt)
+library(gtExtras)
+library(viridis)
+
 #Read in Static commercial revenue file, maybe not best practice
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 
@@ -14,39 +19,31 @@ shinyServer(function(input, output) {
   
   #Gets Data from Commercial Revenue csv file and shows it on a Table
   #Table can Filter based on Species name or Ascend order by Rank
-  output$com_data_viewer <- DT::renderDataTable({
-    # Renamed CSV Columns
-    com_rev_col <- c("Species", 
-                      "Rank", 
-                      "Factor Score", 
-                      "Interum Value",  
-                      "Revenue",
-                      "California Revenue",
-                      "Oregon Revenue",
-                      "Washington Revenue")
+  output$com_data_viewer <- render_gt({
     
-    # Change data
+    # filter data down to species selected
     com_rev_data <- com_rev_data[com_rev_data$Species %in% input$com_species_selector,]
     
-    # create commercial rev. datatable output
-    datatable(com_rev_data, options = options(lengthMenu = list(c(10, 20, 30, -1),
-                                                                c(10, 20, 30, "All")),
-                                              order = list(list(1, "asc"))),
-              class = "cell-border stripe", rownames = FALSE, colnames = com_rev_col) %>%
-      
-      # round numeric entries + add $ sign for monetary values
-      formatRound(3:ncol(com_rev_data), 2) %>%
-      formatCurrency(5:ncol(com_rev_data), currency = "$", digits = 0) %>%
-      
-      # assign color coding
-      formatStyle(columns = "Species", backgroundColor = "#5F9EA0",
-                  color = "white", fontWeight = "bold") %>%
-      formatStyle("Rank", background = styleInterval(cuts = c(10, 20, 30, 40, 50, 60),
-                                                     values = c("#F4F9F4", "#A7D7C5",
-                                                                "#74B49B", "#5C8D89",
-                                                                "#698474", "#2C5D63",
-                                                                "#283739")),
-                  color = styleInterval(cuts = c(30), values = c("black", "white")))
+    # order rank in ascending order
+    com_rev_data <- arrange(com_rev_data, Rank)
+    
+    # create commercial revenue gt table output
+    gt(com_rev_data) %>%
+      tab_header(
+        title = "Commercial Importance"
+      ) %>%
+      cols_label(
+        Factor_Score = "Factor Score",
+        Interum_Value = "Interum Value",
+        CA_Revenue = "California Revenue",
+        OR_Revenue = "Oregon Revenue",
+        WA_Revenue = "Washington Revenue"
+      ) %>%
+      fmt_number(columns = 3:ncol(com_rev_data), decimals = 2) %>%
+      fmt_currency(columns = 5:ncol(com_rev_data), decimals = 0) %>%
+      data_color(columns = Rank, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      opt_interactive(use_search = TRUE)
   })
   
   #Can display and filter Tribal Fish Data by name and rank value
@@ -76,13 +73,12 @@ shinyServer(function(input, output) {
       formatCurrency(ncol(tribal_data), currency = "$", digits = 0) %>%
       
       # assign color coding
-      formatStyle(columns = "Species", backgroundColor = "#6A5ACD", color = "white",
-                  fontWeight = "bold") %>% 
+      formatStyle(columns = "Species", fontWeight = "bold") %>% 
       formatStyle("Rank", background = styleInterval(cuts = c(10, 20, 30 , 40, 50, 60),  
-                                                     values = c("#F4F9F4", "#A7D7C5",
-                                                                "#74B49B", "#5C8D89",
-                                                                "#698474", "#2C5D63",
-                                                                "#283739")),
+                                                     values = c("#FDE725FF", "#95D840FF",
+                                                                "#3CBB75FF", "#1F968BFF",
+                                                                "#2D708EFF", "#404788FF",
+                                                                "#481567FF")),
                   color = styleInterval(cuts = c(30), values = c("black", "white")))
   })
   
