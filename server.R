@@ -155,4 +155,21 @@ shinyServer(function(input, output) {
                                        rows = is.na(Rel_Weight_WA))) %>%
       opt_interactive(use_search = TRUE)
   })
+  
+  # tab where user can input own .csv file, create gt table
+  data <- reactive({
+    req(input$upload)
+    
+    ext <- tools::file_ext(input$upload$name)
+    switch(ext,
+           csv = vroom::vroom(input$upload$datapath, delim = ","),
+           validate("Invalid file; Please upload a .csv file")
+    )
+  })
+  
+  output$table <- render_gt({
+    data() %>%
+      arrange(Rank) %>%
+      gt()
+  })
 })

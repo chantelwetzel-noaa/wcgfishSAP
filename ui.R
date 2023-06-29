@@ -130,6 +130,10 @@ shinyUI(
                         # mainPanel(
                           gt_output("rec_data_viewer")
                         # )
+               ),
+               tabPanel("Test",
+                        fileInput("upload", NULL, accept = ".csv"),
+                        gt_output("table")
                )
     )
   )
