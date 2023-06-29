@@ -1,89 +1,83 @@
 library(shiny)
 library(dplyr)
-library(DT)
 library(gt)
 library(gtExtras)
 library(viridis)
 
-#Read in Static commercial revenue file, maybe not best practice
+# read in commercial revenue data
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 
-# Loaded Tribal Revenue Data - Will look to change 
+# read in tribal revenue data
 tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
 
-#  Loaded Recreational Revenue Data - Will look to change 
+# read in recreational revenue data 
 rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
 
-# Define server logic to display user inputs
+# define server logic to display user inputs
 shinyServer(function(input, output) {
   
-  #Gets Data from Commercial Revenue csv file and shows it on a Table
-  #Table can Filter based on Species name or Ascend order by Rank
+  # commercial revenue table
   output$com_data_viewer <- render_gt({
     
     # filter data down to species selected
     com_rev_data <- com_rev_data[com_rev_data$Species %in% input$com_species_selector,]
     
-    # order rank in ascending order
-    com_rev_data <- arrange(com_rev_data, Rank)
-    
-    # create commercial revenue gt table output
-    gt(com_rev_data) %>%
+    # create commercial revenue gt table output, display in ascending order by rank
+    com_rev_data %>%
+      arrange(Rank) %>%
+      gt() %>%
       tab_header(
-        title = "Commercial Importance"
+        title = "Commercial Importance",
+        subtitle = "Measured by average ex-vessel revenue data
+        between 2018-2021"
       ) %>%
       cols_label(
         Factor_Score = "Factor Score",
-        Interum_Value = "Interum Value",
+        Interum_Value = "Interim Value",
         CA_Revenue = "California Revenue",
         OR_Revenue = "Oregon Revenue",
         WA_Revenue = "Washington Revenue"
       ) %>%
-      fmt_number(columns = 3:ncol(com_rev_data), decimals = 2) %>%
+      fmt_number(columns = 3:4, decimals = 2) %>%
       fmt_currency(columns = 5:ncol(com_rev_data), decimals = 0) %>%
       data_color(columns = Rank, method = "numeric", palette = "viridis",
                  reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
       opt_interactive(use_search = TRUE)
   })
   
-  #Can display and filter Tribal Fish Data by name and rank value
-  output$tribal_data_viewer <- DT::renderDataTable({
-    # Renamed CSV Columns
-    tribal_col <- c("Species", 
-                    "Rank", 
-                    "Factor Score", 
-                    "Subsistence Score",  
-                    "Initial Factor Score",
-                    "Interum Value",
-                    "Revenue")
+  # tribal revenue table
+  output$tribal_data_viewer <- render_gt({
     
-    # Change data
+    # filter data down to species selected
     tribal_data <- tribal_data[tribal_data$Species %in% input$tribal_species_selector,]
     
-    
-    # create tribal datatable output
-    datatable(tribal_data, options(lengthMenu = list(c(10, 20, 30, -1), 
-                                                     c(10, 20, 30, "All")),
-                                   order = list(list(1, "asc"))),
-              class = "cell-border stripe", rownames = FALSE, colnames = tribal_col) %>%
-      
-      # round numeric entries + add $ sign to monetary values
-      formatRound(5:ncol(tribal_data), 2) %>%
-      formatRound(3, 2) %>%
-      formatCurrency(ncol(tribal_data), currency = "$", digits = 0) %>%
-      
-      # assign color coding
-      formatStyle(columns = "Species", fontWeight = "bold") %>% 
-      formatStyle("Rank", background = styleInterval(cuts = c(10, 20, 30 , 40, 50, 60),  
-                                                     values = c("#FDE725FF", "#95D840FF",
-                                                                "#3CBB75FF", "#1F968BFF",
-                                                                "#2D708EFF", "#404788FF",
-                                                                "#481567FF")),
-                  color = styleInterval(cuts = c(30), values = c("black", "white")))
+    # create tribal revenue gt table output, display in ascending order by rank
+    tribal_data %>%
+      arrange(Rank) %>%
+      gt() %>%
+      tab_header(
+        title = "Tribal Importance",
+        subtitle = "Enter subtitle here"
+      ) %>%
+      cols_label(
+        Factor_Score = "Factor Score",
+        Subsitence_Score = "Subsistence Score",
+        Initial_Factor_Score = "Initial Factor Score",
+        Interum_Value = "Interim Value"
+      ) %>%
+      fmt_number(columns = 3:6, decimals = 2) %>%
+      fmt_currency(columns = Revenue, decimals = 0) %>%
+      data_color(columns = Rank, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
+      opt_interactive(use_search = TRUE)
   })
   
-  # Can display and filter Recreational Fish Data by name and rank value
-  output$rec_data_viewer <- DT::renderDataTable({
+  # recreational importance table
+  output$rec_data_viewer <- render_gt({
     # Renamed CSV Columns
     rec_col <- c("Species", 
                  "Rank", 
@@ -101,29 +95,64 @@ shinyServer(function(input, output) {
                  "Retained Catch Oregon",
                  "Retained Catch Washington")
     
-    # Change data
+    # filter data down to species selected
     rec_data <- rec_data[rec_data$Species %in% input$rec_species_selector,]
     
-    # create recreational datatable output
-    datatable(rec_data, options(lengthMenu = list(c(10, 20, 30, -1), #ALL is a Keyword
-                                                  c(10, 20, 30, "All")),
-                                order = list(list(1, "asc"))),
-              class = "cell-border stripe", rownames = FALSE, colnames = rec_col) %>%
+    # create recreational gt table output, display in ascending order by rank
+    rec_data %>%
+      arrange(Rank) %>%
+      gt() %>%
+      tab_header(
+        title = "Recreational Importance",
+        subtitle = "Enter subtitle here"
+      ) %>%
+      cols_label(
+        Factor_Score = "Factor Score",
+        Initial_Factor_Score = "Initial Factor Score",
+        Pseudo_CW = "Pseudo Value Coastwide",
+        Pseudo_CA = "Pseudo Value California",
+        Pseudo_OR = "Pseudo Value Oregon",
+        Pseudo_WA = "Pseudo Value Washington",
+        Rel_Weight_CA = "Relative Weight California",
+        Rel_Weight_OR = "Relative Weight Oregon",
+        Rel_Weight_WA = "Relative Weight Washington",
+        Ret_Catch_CW = "Retained Catch Coastwide",
+        Ret_Catch_CA = "Retained Catch California",
+        Ret_Catch_OR = "Retained Catch Oregon",
+        Ret_Catch_WA = "Retained Catch Washington"
+      ) %>%
+      fmt_number(columns = 3:ncol(rec_data), decimals = 2) %>%
+      data_color(columns = Rank, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
       
-      # round numeric entries + add $ sign to monetary values
-      formatRound(5:ncol(rec_data), 0) %>%
-      formatRound(3:4, 2) %>%
-      formatRound(2, 0) %>%
-      formatCurrency(ncol(rec_data), currency = "$", digits = 0) %>%
-      
-      # assign color coding
-      formatStyle(columns = "Species", backgroundColor = "#FD5C63", color = "white",
-                  fontWeight = "bold") %>%
-      formatStyle("Rank", background = styleInterval(cuts = c(10, 20, 30, 40, 50, 60),
-                                                     values = c("#F4F9F4", "#A7D7C5",
-                                                                "#74B49B", "#5C8D89",
-                                                                "#698474", "#2C5D63",
-                                                                "#283739")),
-                  color = styleInterval(cuts = c(30), values = c("black", "white")))
+      # shades cells w/ NA values red
+      # using brute force—is there a better way to do this??
+      tab_style(style = list(cell_fill(color = "#F9E3D6"),
+                             cell_text(style = "italic")),
+                locations = cells_body(columns = Pseudo_CA,
+                                       rows = is.na(Pseudo_CA))) %>%
+      tab_style(style = list(cell_fill(color = "#F9E3D6"),
+                             cell_text(style = "italic")),
+                locations = cells_body(columns = Pseudo_OR,
+                                       rows = is.na(Pseudo_OR))) %>%
+      tab_style(style = list(cell_fill(color = "#F9E3D6"),
+                             cell_text(style = "italic")),
+                locations = cells_body(columns = Pseudo_WA,
+                                       rows = is.na(Pseudo_WA))) %>%
+      tab_style(style = list(cell_fill(color = "#F9E3D6"),
+                             cell_text(style = "italic")),
+                locations = cells_body(columns = Rel_Weight_CA,
+                                       rows = is.na(Rel_Weight_CA))) %>%
+      tab_style(style = list(cell_fill(color = "#F9E3D6"),
+                             cell_text(style = "italic")),
+                locations = cells_body(columns = Rel_Weight_OR,
+                                       rows = is.na(Rel_Weight_OR))) %>%
+      tab_style(style = list(cell_fill(color = "#F9E3D6"),
+                             cell_text(style = "italic")),
+                locations = cells_body(columns = Rel_Weight_WA,
+                                       rows = is.na(Rel_Weight_WA))) %>%
+      opt_interactive(use_search = TRUE)
   })
 })

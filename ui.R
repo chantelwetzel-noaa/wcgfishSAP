@@ -78,7 +78,7 @@ shinyUI(
                           ),
                         # ),
                         # mainPanel(
-                          DT::dataTableOutput("tribal_data_viewer")
+                          gt_output("tribal_data_viewer")
                         # )
                ),
                
@@ -128,7 +128,7 @@ shinyUI(
                           ),
                         # ), 
                         # mainPanel(
-                          DT::dataTableOutput("rec_data_viewer")
+                          gt_output("rec_data_viewer")
                         # )
                )
     )
