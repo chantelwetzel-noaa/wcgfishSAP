@@ -4,8 +4,9 @@ library(gt)
 library(gtExtras)
 library(viridis)
 
-# read in commercial revenue data
+# read in commercial revenue data + clean up species name
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
+com_rev_data[com_rev_data == "rougheye rocommercial_revenueckfish"] <- "rougheye rockfish"
 
 # read in tribal revenue data
 tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
@@ -13,10 +14,12 @@ tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
 # read in recreational revenue data 
 rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
 
-# read in species management groups
+# read in species management groups + clean up mismatching species names
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
-# species_groups <- species_groups %>%
-#   rename(Species = speciesName)
+species_groups[species_groups == "blue/deacon rockfish"] <- "blue rockfish"
+species_groups[species_groups == "gopher/black and yellow rockfish"] <- "gopher rockfish"
+species_groups[species_groups == "rougheye/blackspotted rockfish"] <- "rougheye rockfish"
+species_groups[species_groups == "vermilion/sunset rockfish"] <- "vermilion rockfish"
 
 # join data + species management groups
 joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
@@ -55,7 +58,34 @@ shinyServer(function(input, output) {
                  reverse = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      opt_interactive(use_search = TRUE)
+      
+      # add descriptions of variables as footnotes
+      tab_footnote(footnote = "Denotes the rank of a fish species based
+                   on a number of factors.",
+                   locations = cells_column_labels(columns = Rank)) %>%
+      tab_footnote(footnote = "Denotes a weighted sum of all factors.",
+                   locations = cells_column_labels(columns = Factor_Score)) %>%
+      tab_footnote(footnote = "Denotes a value associated with a fish species.",
+                   locations = cells_column_labels(columns = Interum_Value)) %>%
+      tab_footnote(footnote = "Total revenue associated with a species
+                   along the Pacific Coast States (CA, OR, and WA).",
+                   locations = cells_column_labels(columns = Revenue)) %>%
+      tab_footnote(footnote = "Total revenue associated with a species
+                   within California.",
+                   locations = cells_column_labels(columns = CA_Revenue)) %>%
+      tab_footnote(footnote = "Total revenue associated with a species
+                   within Oregon.",
+                   locations = cells_column_labels(columns = OR_Revenue)) %>%
+      tab_footnote(footnote = "Total revenue associated with a species
+                   within Washington.",
+                   locations = cells_column_labels(columns = WA_Revenue)) %>%
+      tab_footnote(footnote = "Management group associated with a species
+                   within the fishery management plan.",
+                   locations = cells_column_labels(columns = managementGroup)) %>%
+      opt_footnote_marks(marks = c("1", "2", "3", "4", "5", "6", "7", "8")) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
   })
   
   # tribal revenue table
@@ -85,7 +115,29 @@ shinyServer(function(input, output) {
                  reverse = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      opt_interactive(use_search = TRUE)
+      
+      # add descriptions of variables as footnotes
+      tab_footnote(footnote = "Denotes the rank of a fish species based
+                   on a number of factors.",
+                   locations = cells_column_labels(columns = Rank)) %>%
+      tab_footnote(footnote = "Denotes a weighted sum of all factors.",
+                   locations = cells_column_labels(columns = Factor_Score)) %>%
+      tab_footnote(footnote = "Denotes the subsistence score of a fish species.",
+                   locations = cells_column_labels(columns = Subsitence_Score)) %>%
+      tab_footnote(footnote = "Factor score before adding the subsistence score.",
+                   locations = cells_column_labels(columns = Initial_Factor_Score)) %>%
+      tab_footnote(footnote = "Denotes a value associated with a fish species.",
+                   locations = cells_column_labels(columns = Interum_Value)) %>%
+      tab_footnote(footnote = "Total revenue associated with a species along the
+                   Pacific Coast States (WA, OR, CA).",
+                   locations = cells_column_labels(columns = Revenue)) %>%
+      tab_footnote(footnote = "Management group associated with a species
+                   within the fishery management plan.",
+                   locations = cells_column_labels(columns = managementGroup)) %>%
+      opt_footnote_marks(marks = c("1", "2", "3", "4", "5", "6", "7")) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
   })
   
   # recreational importance table
@@ -150,7 +202,42 @@ shinyServer(function(input, output) {
                              cell_text(style = "italic")),
                 locations = cells_body(columns = Rel_Weight_WA,
                                        rows = is.na(Rel_Weight_WA))) %>%
-      opt_interactive(use_search = TRUE)
+      
+      # add description of variables as footnotes
+      tab_footnote(footnote = "Denotes the rank of a fish species based
+                   on a number of factors.",
+                   locations = cells_column_labels(columns = Rank)) %>%
+      tab_footnote(footnote = "Denotes a weighted sum of all factors.",
+                   locations = cells_column_labels(columns = Factor_Score)) %>%
+      tab_footnote(footnote = "Given value for the recreational landing
+                   of a species along the Pacific Coast States (WA, OR, CA).",
+                   locations = cells_column_labels(columns = Pseudo_CW)) %>%
+      tab_footnote(footnote = "Given value for the recreational landing
+                   of a species in California.",
+                   locations = cells_column_labels(columns = Pseudo_CA)) %>%
+      tab_footnote(footnote = "Given value for the recreational landing
+                   of a species in Oregon.",
+                   locations = cells_column_labels(columns = Pseudo_OR)) %>%
+      tab_footnote(footnote = "Given value for the recreational landing
+                   of a species in Washington.",
+                   locations = cells_column_labels(columns = Pseudo_WA)) %>%
+      tab_footnote(footnote = "Denotes a weight associated with a fish species
+                   in California.",
+                   locations = cells_column_labels(columns = Rel_Weight_CA)) %>%
+      tab_footnote(footnote = "Denotes a weight associated with a fish species
+                   in Oregon.",
+                   locations = cells_column_labels(columns = Rel_Weight_OR)) %>%
+      tab_footnote(footnote = "Denotes a weight associated with a fish species
+                   in Washington.",
+                   locations = cells_column_labels(columns = Rel_Weight_WA)) %>%
+      tab_footnote(footnote = "Management group associated with a species
+                   within the fishery management plan.",
+                   locations = cells_column_labels(columns = managementGroup)) %>%
+      opt_footnote_marks(marks = c("1", "2", "3", "4", "5", "6", "7", "8", "9",
+                                   "10")) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
   })
   
   # tab where user can input own .csv file, create gt table
