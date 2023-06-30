@@ -10,7 +10,10 @@ tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
 #  Loaded Recreational Revenue Data - Will look to change 
 rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
 
-# Define UI for application that draws a histogram
+# read in species management groups
+species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
+
+# Define UI for application that produces tables + description of variables
 shinyUI(
   navbarPage(
     "Stock Assessment Prioritization",
@@ -37,13 +40,12 @@ shinyUI(
                           tags$p(HTML("<b>Washington Revenue: </b> Total revenue associated with
                                       a species within Washington")),
                           h3("Commercial Species Selector"),
-                          pickerInput(
+                          selectInput(
                             inputId = "com_species_selector",
-                            label = "Select Commercial Species",
-                            choices = c(unique(as.character(com_rev_data$Species))),
-                            multiple = TRUE,
-                            options = list(`actions-box` = TRUE),
-                            selected = unique(as.character(com_rev_data$Species))
+                            label = "Select a species management group:",
+                            choices = c(unique(as.character(species_groups$managementGroup))),
+                            selected = c(unique(as.character(species_groups$managementGroup))),
+                            multiple = TRUE
                           ),
                         # ),
                         # mainPanel(
@@ -68,13 +70,12 @@ shinyUI(
                           tags$p(HTML("<b>Revenue: </b> Total revenue associated with a species
                                       along the Pacific Coast States (WA, OR, CA)")),
                           h3("Tribal Species Selector"),
-                          pickerInput(
+                          selectInput(
                             inputId = "tribal_species_selector",
-                            label = "Select Tribal Species Below",
-                            choices = c(unique(as.character(tribal_data$Species))),
-                            multiple = TRUE,
-                            options = list(`actions-box` = TRUE),
-                            selected = unique(as.character(tribal_data$Species))
+                            label = "Select a species management group:",
+                            choices = c(unique(as.character(species_groups$managementGroup))),
+                            selected = c(unique(as.character(species_groups$managementGroup))),
+                            multiple = TRUE
                           ),
                         # ),
                         # mainPanel(
@@ -118,13 +119,12 @@ shinyUI(
                           tags$p(HTML("<b>Retained Catch Washington: </b> lorem impsum lorem impsum lorem impsum
                            ")),
                           h3("Recreational Species Selector"),
-                          pickerInput(
+                          selectInput(
                             inputId = "rec_species_selector",
-                            label = "Select Recreational Species",
-                            choices = c(unique(as.character(rec_data$Species))),
-                            multiple = TRUE,
-                            options = list(`actions-box` = TRUE),
-                            selected = unique(as.character(rec_data$Species))
+                            label = "Select a species management group",
+                            choices = c(unique(as.character(species_groups$managementGroup))),
+                            selected = c(unique(as.character(species_groups$managementGroup))),
+                            multiple = TRUE
                           ),
                         # ), 
                         # mainPanel(

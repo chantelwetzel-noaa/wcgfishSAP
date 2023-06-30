@@ -13,6 +13,16 @@ tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
 # read in recreational revenue data 
 rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
 
+# read in species management groups
+species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
+# species_groups <- species_groups %>%
+#   rename(Species = speciesName)
+
+# join data + species management groups
+joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
+joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
+joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName"))
+
 # define server logic to display user inputs
 shinyServer(function(input, output) {
   
@@ -20,10 +30,10 @@ shinyServer(function(input, output) {
   output$com_data_viewer <- render_gt({
     
     # filter data down to species selected
-    com_rev_data <- com_rev_data[com_rev_data$Species %in% input$com_species_selector,]
+    joined_com_df <- joined_com_df[joined_com_df$managementGroup %in% input$com_species_selector,]
     
     # create commercial revenue gt table output, display in ascending order by rank
-    com_rev_data %>%
+    joined_com_df %>%
       arrange(Rank) %>%
       gt() %>%
       tab_header(
@@ -36,7 +46,8 @@ shinyServer(function(input, output) {
         Interum_Value = "Interim Value",
         CA_Revenue = "California Revenue",
         OR_Revenue = "Oregon Revenue",
-        WA_Revenue = "Washington Revenue"
+        WA_Revenue = "Washington Revenue",
+        managementGroup = "Management Group"
       ) %>%
       fmt_number(columns = 3:4, decimals = 2) %>%
       fmt_currency(columns = 5:ncol(com_rev_data), decimals = 0) %>%
@@ -51,10 +62,10 @@ shinyServer(function(input, output) {
   output$tribal_data_viewer <- render_gt({
     
     # filter data down to species selected
-    tribal_data <- tribal_data[tribal_data$Species %in% input$tribal_species_selector,]
+    joined_tribal_df <- joined_tribal_df[joined_tribal_df$managementGroup %in% input$tribal_species_selector,]
     
     # create tribal revenue gt table output, display in ascending order by rank
-    tribal_data %>%
+    joined_tribal_df %>%
       arrange(Rank) %>%
       gt() %>%
       tab_header(
@@ -65,7 +76,8 @@ shinyServer(function(input, output) {
         Factor_Score = "Factor Score",
         Subsitence_Score = "Subsistence Score",
         Initial_Factor_Score = "Initial Factor Score",
-        Interum_Value = "Interim Value"
+        Interum_Value = "Interim Value",
+        managementGroup = "Management Group"
       ) %>%
       fmt_number(columns = 3:6, decimals = 2) %>%
       fmt_currency(columns = Revenue, decimals = 0) %>%
@@ -78,28 +90,12 @@ shinyServer(function(input, output) {
   
   # recreational importance table
   output$rec_data_viewer <- render_gt({
-    # Renamed CSV Columns
-    rec_col <- c("Species", 
-                 "Rank", 
-                 "Factor Score", 
-                 "Initial Factor Score",
-                 "Pseudo Value Coast Wide",
-                 "Pseudo Value California",
-                 "Pseudo Value Oregon",
-                 "Pseudo Value Washington",
-                 "Relative Weight California",
-                 "Relative Weight Oregon",
-                 "Relative Weight Washington",
-                 "Retained Catch Coast Wide",
-                 "Retained Catch California",
-                 "Retained Catch Oregon",
-                 "Retained Catch Washington")
     
     # filter data down to species selected
-    rec_data <- rec_data[rec_data$Species %in% input$rec_species_selector,]
+    joined_rec_df <- joined_rec_df[joined_rec_df$managementGroup %in% input$rec_species_selector,]
     
     # create recreational gt table output, display in ascending order by rank
-    rec_data %>%
+    joined_rec_df %>%
       arrange(Rank) %>%
       gt() %>%
       tab_header(
@@ -119,7 +115,8 @@ shinyServer(function(input, output) {
         Ret_Catch_CW = "Retained Catch Coastwide",
         Ret_Catch_CA = "Retained Catch California",
         Ret_Catch_OR = "Retained Catch Oregon",
-        Ret_Catch_WA = "Retained Catch Washington"
+        Ret_Catch_WA = "Retained Catch Washington",
+        managementGroup = "Management Group"
       ) %>%
       fmt_number(columns = 3:ncol(rec_data), decimals = 2) %>%
       data_color(columns = Rank, method = "numeric", palette = "viridis",
