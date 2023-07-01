@@ -57,8 +57,15 @@ shinyUI(
                         gt_output("rec_data_viewer")
                ),
                tabPanel("Test",
-                        fileInput("upload", NULL, accept = ".csv"),
-                        gt_output("table")
+                        sidebarLayout(
+                          sidebarPanel(
+                            fileInput("upload", "Upload file here:", accept = ".csv"),
+                            checkboxInput("rename", "Rename columns?", value = TRUE)
+                          ),
+                          mainPanel(
+                            gt_output("table")
+                          )
+                        )
                )
     )
   )
