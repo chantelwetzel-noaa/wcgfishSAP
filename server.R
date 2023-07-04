@@ -2,7 +2,9 @@ library(shiny)
 library(dplyr)
 library(gt)
 library(gtExtras)
+library(DT)
 library(viridis)
+library(nmfspalette)
 
 # read in commercial revenue data + clean up species name
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
@@ -86,6 +88,26 @@ shinyServer(function(input, output) {
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
+    
+  })
+  
+  # commercial importance species ranking plot
+  output$com_species_ranking <- renderPlot({
+    ggplot(joined_com_df, aes(x = Species, y = Rank, size = Rank)
+           ) + geom_point(aes(color = managementGroup)) +
+      labs(
+        title = "Fish Species Ranking",
+        subtitle = "By Commercial Importance",
+        caption = "Click points to view more information about the selected entries.",
+        x = "Species", y = "Rank",
+        color = "Management Group") +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      scale_color_nmfs()
+  }, res = 96)
+  
+  output$com_point_data <- renderTable({
+    req(input$plot_click)
+    nearPoints(joined_com_df, input$plot_click)
   })
   
   # tribal revenue table
@@ -138,6 +160,24 @@ shinyServer(function(input, output) {
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
+  })
+  
+  output$tribal_species_ranking <- renderPlot({
+    ggplot(joined_tribal_df, aes(x = Species, y = Rank, size = Rank)
+           ) + geom_point(aes(color = managementGroup)) +
+      labs(
+        title = "Fish Species Ranking",
+        subtitle = "By Tribal Importance",
+        caption = "Click points to view more information about the selected entries.",
+        x = "Species", y = "Rank",
+        color = "Management Group") +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      scale_color_nmfs()
+  }, res = 96)
+  
+  output$tribal_point_data <- renderTable({
+    req(input$plot_click)
+    nearPoints(joined_tribal_df, input$plot_click)
   })
   
   # recreational importance table
@@ -240,6 +280,24 @@ shinyServer(function(input, output) {
                       use_page_size_select = TRUE)
   })
   
+  output$rec_species_ranking <- renderPlot({
+    ggplot(joined_rec_df, aes(x = Species, y = Rank, size = Rank)
+           ) + geom_point(aes(color = managementGroup)) +
+      labs(
+        title = "Fish Species Ranking",
+        subtitle = "By Recreational Importance",
+        caption = "Click points to view more information about selected entries.",
+        x = "Species", y = "Rank",
+        color = "Management Group") +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      scale_color_nmfs()
+  }, res = 96)
+  
+  output$rec_point_data <- renderTable({
+    req(input$plot_click)
+    nearPoints(joined_rec_df, input$plot_click)
+  })
+  
   # tab where user can input own .csv file, create gt table
   # upload file
   data <- reactive({
@@ -275,4 +333,22 @@ shinyServer(function(input, output) {
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
   })
+  
+  # interactive ranking plot of selected file
+  output$test_species_ranking <- renderPlot({
+    ggplot(tidied(), aes(x = Species, y = Rank, size = Rank)
+           ) + geom_point() +
+      labs(
+        title = "Fish Species Ranking",
+        caption = "Click points to view more information about selected entries.",
+        x = "Species", y = "Rank") +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      scale_color_nmfs()
+  })
+  
+  output$test_point_data <- renderTable({
+    req(input$plot_click)
+    nearPoints(tidied(), input$plot_click)
+  })
+  
 })
