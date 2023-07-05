@@ -5,6 +5,7 @@ library(shinycssloaders)
 library(DT)
 library(gt)
 library(nmfspalette)
+library(plotly)
 
 # Loaded Commercial Revenue Data - Will look to change
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
@@ -60,8 +61,7 @@ shinyUI(
                   ),
                   gt_output("com_data_viewer") %>% withSpinner(),
                   h3("Species Ranking Plot"),
-                  plotOutput("com_species_ranking", click = "plot_click"),
-                  tableOutput("com_point_data")
+                  plotlyOutput("com_species_ranking")
           ),
           
           tabItem(tabName = "tribal_table",
@@ -75,8 +75,7 @@ shinyUI(
                   ),
                   gt_output("tribal_data_viewer") %>% withSpinner(),
                   h3("Species Ranking Plot"),
-                  plotOutput("tribal_species_ranking", click = "plot_click"),
-                  tableOutput("tribal_point_data")
+                  plotlyOutput("tribal_species_ranking")
           ),
           
           tabItem(tabName = "rec_table",
@@ -90,8 +89,7 @@ shinyUI(
                   ),
                   gt_output("rec_data_viewer") %>% withSpinner(),
                   h3("Species Ranking Plot"),
-                  plotOutput("rec_species_ranking", click = "plot_click"),
-                  tableOutput("rec_point_data")
+                  plotlyOutput("rec_species_ranking")
           ),
           
           tabItem(tabName = "test",
@@ -106,8 +104,7 @@ shinyUI(
                     )
                   ),
                   h3("Species Ranking Plot"),
-                  plotOutput("test_species_ranking", click = "plot_click"),
-                  tableOutput("test_point_data")
+                  plotlyOutput("test_species_ranking")
           )
         )
       )  # end dashboardBody
