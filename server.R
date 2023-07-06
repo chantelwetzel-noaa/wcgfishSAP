@@ -4,20 +4,37 @@ library(ggplot2)
 library(gt)
 library(gtExtras)
 library(plotly)
+library(stringr)
 library(viridis)
 
-# read in commercial revenue data + clean up species name
+# load in commercial revenue data + clean up rougheye rockfish name
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 com_rev_data[com_rev_data == "rougheye rocommercial_revenueckfish"] <- "rougheye rockfish"
 
-# read in tribal revenue data
-tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
-
-# read in recreational revenue data 
+# load in rest of data
 rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
+tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
+const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE)
 
-# read in species management groups + clean up mismatching species names
+# table has no rank column
+rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
+
+stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
+fish_mort_data <- read.csv("tables/fishing_mortality.csv", header = TRUE)
+eco_data <- read.csv("tables/ecosystem.csv", header = TRUE)
+new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
+
+# rank column at end of table
+ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
+
+# SPELLING INCONSISTENCIES:
+## const_demand, assessment_frequency, ecosystem, new_information,
+## rebuilding use sentence case for both species names
+
+# load in species management groups 
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
+
+# clean up cryptic species names
 species_groups[species_groups == "blue/deacon rockfish"] <- "blue rockfish"
 species_groups[species_groups == "gopher/black and yellow rockfish"] <- "gopher rockfish"
 species_groups[species_groups == "rougheye/blackspotted rockfish"] <- "rougheye rockfish"
@@ -25,8 +42,21 @@ species_groups[species_groups == "vermilion/sunset rockfish"] <- "vermilion rock
 
 # join data + species management groups
 joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
-joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
 joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName"))
+joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
+joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "speciesName"))
+joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
+joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName"))
+joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "speciesName"))
+joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
+joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName"))
+joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName"))
+
+# convert all species names to sentence case
+joined_com_df$Species <- str_to_sentence(joined_com_df$Species)
+joined_tribal_df$Species <- str_to_sentence(joined_tribal_df$Species)
+joined_rec_df$Species <- str_to_sentence(joined_rec_df$Species)
+joined_fm_df$Species <- str_to_sentence(joined_fm_df$Species)
 
 # define server logic to display user inputs
 shinyServer(function(input, output) {
@@ -94,9 +124,10 @@ shinyServer(function(input, output) {
   # commercial importance species ranking plot
   com_plot <- ggplot(joined_com_df, aes(x = Species, y = Rank, size = Rank)) +
     geom_point(aes(color = managementGroup)) +
+    scale_size(trans = "reverse") +
     labs(
       title = "Fish Species Ranking by Commercial Importance",
-      x = "Species", y = "Rank", color = "Management Group") +
+      x = "Species (in alphabetical order)", y = "Rank", color = "Management Group") +
     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
     scale_color_viridis(discrete = TRUE)
   
@@ -159,9 +190,10 @@ shinyServer(function(input, output) {
   # tribal importance species ranking plot
   tribal_plot <- ggplot(joined_tribal_df, aes(x = Species, y = Rank, size = Rank)) +
     geom_point(aes(color = managementGroup)) +
+    scale_size(trans = "reverse") +
     labs(
       title = "Fish Species Ranking by Tribal Importance",
-      x = "Species", y = "Rank", color = "Management Group") +
+      x = "Species (in alphabetical order)", y = "Rank", color = "Management Group") +
     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
     scale_color_viridis(discrete = TRUE)
   
@@ -272,11 +304,11 @@ shinyServer(function(input, output) {
   # recreational importance species ranking plot
   rec_plot <- ggplot(joined_rec_df, aes(x = Species, y = Rank, size = Rank)) +
     geom_point(aes(color = managementGroup)) +
+    scale_size(trans = "reverse") +
     labs(
       title = "Fish Species Ranking by Recreational Importance",
       caption = "Click points to view more information about selected entries.",
-      x = "Species", y = "Rank",
-      color = "Management Group") +
+      x = "Species (in alphabetical order)", y = "Rank", color = "Management Group") +
     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
     scale_color_viridis(discrete = TRUE)
   
@@ -321,15 +353,14 @@ shinyServer(function(input, output) {
   })
   
   # interactive ranking plot of selected file
-  test_plot <- ggplot(tidied(), aes(x = Species, y = Rank, size = Rank)) +
-    geom_point() +
-    labs(
-      title = "Fish Species Ranking",
-      x = "Species", y = "Rank") +
-    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
-    scale_color_viridis(discrete = TRUE)
-  
   output$test_species_ranking <- renderPlotly({
-    ggplotly(test_plot, tooltip = c("x", "y"))
+    ggplot(tidied(), aes(x = Species, y = Rank, size = Rank)
+           ) + geom_point() +
+      labs(
+        title = "Fish Species Ranking",
+        caption = "Click points to view more information about selected entries.",
+        x = "Species (in alphabetical order)", y = "Rank") +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      scale_color_viridis(discrete = TRUE)
   })
 })

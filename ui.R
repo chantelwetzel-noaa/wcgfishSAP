@@ -2,21 +2,23 @@ library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
 library(shinycssloaders)
-library(DT)
 library(gt)
 library(nmfspalette)
 library(plotly)
 
-# Loaded Commercial Revenue Data - Will look to change
+# load in data (10 factors)
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
-
-# Loaded Tribal Revenue Data - Will look to change 
-tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
-
-#  Loaded Recreational Revenue Data - Will look to change 
 rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
+tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
+const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE)
+rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
+stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
+fish_mort_data <- read.csv("tables/fishing_mortality.csv", header = TRUE)
+eco_data <- read.csv("tables/ecosystem.csv", header = TRUE)
+new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
+ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE) 
 
-# read in species management groups
+# load in species management groups
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
 
 # Define UI for application that produces tables + description of variables
@@ -33,13 +35,29 @@ shinyUI(
       dashboardSidebar(width = 300,
                        sidebarMenu(
                          menuItem("Home", tabName = "home", icon = icon("home")),
-                         menuItem("Commercial Importance", tabName = "com_table",
-                                  icon = icon("table")),
-                         menuItem("Tribal Importance", tabName = "tribal_table",
-                                  icon = icon("table")),
-                         menuItem("Recreational Importance", tabName = "rec_table",
-                                  icon = icon("table")),
-                         menuItem("Test Table", tabName = "test", icon = icon("table"))
+                         menuItem("Factors", tabName = "factors", icon = icon("table"),
+                                  menuSubItem("Commercial Importance", tabName = "com_table",
+                                              icon = icon("dollar-sign")),
+                                  menuSubItem("Recreational Importance", tabName = "rec_table",
+                                              icon = icon("campground")),
+                                  menuSubItem("Tribal Importance", tabName = "tribal_table",
+                                              icon = icon("feather")),
+                                  menuSubItem("Constituent Demand", tabName = "cs_table",
+                                              icon = icon("person")),
+                                  menuSubItem("Rebuilding", tabName = "rebuilding_table",
+                                              icon = icon("hammer")),
+                                  menuSubItem("Stock Status", tabName = "ss_table",
+                                              icon = icon("fish")),
+                                  menuSubItem("Fishing Mortality", tabName = "fm_table",
+                                              icon = icon("ship")),
+                                  menuSubItem("Ecosystem", tabName = "eco_table",
+                                              icon = icon("water")),
+                                  menuSubItem("New Information", tabName = "ni_table",
+                                              icon = icon("info")),
+                                  menuSubItem("Assessment Frequency", tabName = "af_table",
+                                              icon = icon("calendar-check"))
+                         ),
+                         menuItem("Upload your own file", tabName = "test", icon = icon("upload"))
                        )
       ),
       
@@ -52,30 +70,19 @@ shinyUI(
           
           tabItem(tabName = "com_table",
                   h3("Factor Table"),
-                  selectInput(
-                    inputId = "com_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
+                  selectInput("com_species_selector",
+                              "Select a species management group:",
+                              choices = c(unique(as.character(species_groups$managementGroup))),
+                              selected = c(unique(as.character(species_groups$managementGroup))),
+                              multiple = TRUE
                   ),
-                  gt_output("com_data_viewer") %>% withSpinner(),
-                  h3("Species Ranking Plot"),
-                  plotlyOutput("com_species_ranking")
-          ),
-          
-          tabItem(tabName = "tribal_table",
-                  h3("Factor Table"),
-                  selectInput(
-                    inputId = "tribal_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
+                  fluidRow(
+                    box(gt_output("com_data_viewer") %>% withSpinner(), width = 12)
                   ),
-                  gt_output("tribal_data_viewer") %>% withSpinner(),
                   h3("Species Ranking Plot"),
-                  plotlyOutput("tribal_species_ranking")
+                  fluidRow(
+                    box(plotlyOutput("com_species_ranking"), width = 12)
+                  )
           ),
           
           tabItem(tabName = "rec_table",
@@ -92,6 +99,34 @@ shinyUI(
                   plotlyOutput("rec_species_ranking")
           ),
           
+          tabItem(tabName = "tribal_table",
+                  h3("Factor Table"),
+                  selectInput(
+                    inputId = "tribal_species_selector",
+                    label = "Select a species management group:",
+                    choices = c(unique(as.character(species_groups$managementGroup))),
+                    selected = c(unique(as.character(species_groups$managementGroup))),
+                    multiple = TRUE
+                  ),
+                  gt_output("tribal_data_viewer") %>% withSpinner(),
+                  h3("Species Ranking Plot"),
+                  plotlyOutput("tribal_species_ranking")
+          ),
+          
+          tabItem(tabName = "cs_table"),
+          
+          tabItem(tabName = "rebuilding_table"),
+          
+          tabItem(tabName = "ss_table"),
+          
+          tabItem(tabName = "fm_table"),
+          
+          tabItem(tabName = "eco_table"),
+          
+          tabItem(tabName = "ni_table"),
+          
+          tabItem(tabName = "af_table"),
+          
           tabItem(tabName = "test",
                   sidebarLayout(
                     sidebarPanel(
@@ -103,62 +138,10 @@ shinyUI(
                       gt_output("table") %>% withSpinner()
                     )
                   ),
-                  h3("Species Ranking Plot"),
                   plotlyOutput("test_species_ranking")
           )
         )
       )  # end dashboardBody
     )  # end dashboard Page
-
-    # navbarMenu("Factors",
-    #            # subpanel for commercial importance
-    #            tabPanel("Commercial Importance",
-    #                     selectInput(
-    #                       inputId = "com_species_selector",
-    #                       label = "Select a species management group:",
-    #                       choices = c(unique(as.character(species_groups$managementGroup))),
-    #                       selected = c(unique(as.character(species_groups$managementGroup))),
-    #                       multiple = TRUE
-    #                     ),
-    #                     gt_output("com_data_viewer")
-    #            ),
-    #            # subpanel for tribal importance
-    #            tabPanel("Tribal Importance",
-    #                     h1("Tribal Importance"),
-    #                     selectInput(
-    #                       inputId = "tribal_species_selector",
-    #                       label = "Select a species management group:",
-    #                       choices = c(unique(as.character(species_groups$managementGroup))),
-    #                       selected = c(unique(as.character(species_groups$managementGroup))),
-    #                       multiple = TRUE
-    #                     ),
-    #                     gt_output("tribal_data_viewer")
-    #            ),
-    #            
-    #            # subpanel for recreational importance
-    #            tabPanel("Recreational Importance",
-    #                     h1("Recreational Importance"),
-    #                     selectInput(
-    #                       inputId = "rec_species_selector",
-    #                       label = "Select a species management group",
-    #                       choices = c(unique(as.character(species_groups$managementGroup))),
-    #                       selected = c(unique(as.character(species_groups$managementGroup))),
-    #                       multiple = TRUE
-    #                     ),
-    #                     gt_output("rec_data_viewer")
-    #            ),
-    #            tabPanel("Test",
-    #                     sidebarLayout(
-    #                       sidebarPanel(
-    #                         fileInput("upload", "Upload file here:", accept = ".csv"),
-    #                         tags$hr(),
-    #                         checkboxInput("rename", "Rename columns?", value = TRUE)
-    #                       ),
-    #                       mainPanel(
-    #                         gt_output("table")
-    #                       )
-    #                     )
-    #            )
-    # )
   )
 )
