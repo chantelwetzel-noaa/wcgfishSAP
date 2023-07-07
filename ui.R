@@ -42,7 +42,7 @@ shinyUI(
                                               icon = icon("campground")),
                                   menuSubItem("Tribal Importance", tabName = "tribal_table",
                                               icon = icon("feather")),
-                                  menuSubItem("Constituent Demand", tabName = "cs_table",
+                                  menuSubItem("Constituent Demand", tabName = "cd_table",
                                               icon = icon("person")),
                                   menuSubItem("Rebuilding", tabName = "rebuilding_table",
                                               icon = icon("hammer")),
@@ -94,9 +94,13 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
-                  gt_output("rec_data_viewer") %>% withSpinner(),
+                  fluidRow(
+                    box(gt_output("rec_data_viewer") %>% withSpinner(), width = 12)
+                  ),
                   h3("Species Ranking Plot"),
-                  plotlyOutput("rec_species_ranking")
+                  fluidRow(
+                    box(plotlyOutput("rec_species_ranking"), width = 12)
+                  )
           ),
           
           tabItem(tabName = "tribal_table",
@@ -108,24 +112,140 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
-                  gt_output("tribal_data_viewer") %>% withSpinner(),
+                  fluidRow(
+                    box(gt_output("tribal_data_viewer") %>% withSpinner(), width = 12)
+                  ),
                   h3("Species Ranking Plot"),
-                  plotlyOutput("tribal_species_ranking")
+                  fluidRow(
+                    box(plotlyOutput("tribal_species_ranking"), width = 12)
+                  )
           ),
           
-          tabItem(tabName = "cs_table"),
+          tabItem(tabName = "cd_table",
+                  h3("Factor Table"),
+                  selectInput(
+                    inputId = "cd_species_selector",
+                    label = "Select a species management group:",
+                    choices = c(unique(as.character(species_groups$managementGroup))),
+                    selected = c(unique(as.character(species_groups$managementGroup))),
+                    multiple = TRUE
+                  ),
+                  fluidRow(
+                    box(gt_output("cd_gt_table") %>% withSpinner(), width = 12)
+                  ),
+                  h3("Species Ranking Plot"),
+                  fluidRow(
+                    box(plotlyOutput("cd_species_ranking"), width = 12)
+                  )
+          ),
           
-          tabItem(tabName = "rebuilding_table"),
+          tabItem(tabName = "rebuilding_table",
+                  h3("Factor Table"),
+                  selectInput(
+                    inputId = "reb_species_selector",
+                    label = "Select a species management group:",
+                    choices = c(unique(as.character(species_groups$managementGroup))),
+                    selected = c(unique(as.character(species_groups$managementGroup))),
+                    multiple = TRUE
+                  ),
+                  fluidRow(
+                    box(gt_output("reb_gt_table") %>% withSpinner(), width = 12)
+                  ),
+                  h3("Species Ranking Plot"),
+                  fluidRow(
+                    box(plotlyOutput("reb_species_ranking"), width = 12)
+                  )
+          ),
           
-          tabItem(tabName = "ss_table"),
+          tabItem(tabName = "ss_table",
+                  h3("Factor Table"),
+                  selectInput(
+                    inputId = "ss_species_selector",
+                    label = "Select a species management group:",
+                    choices = c(unique(as.character(species_groups$managementGroup))),
+                    selected = c(unique(as.character(species_groups$managementGroup))),
+                    multiple = TRUE
+                  ),
+                  fluidRow(
+                    box(gt_output("ss_gt_table") %>% withSpinner(), width = 12)
+                  ),
+                  h3("Species Ranking Plot"),
+                  fluidRow(
+                    box(plotlyOutput("ss_species_ranking"), width = 12)
+                  )
+          ),
           
-          tabItem(tabName = "fm_table"),
+          tabItem(tabName = "fm_table",
+                  h3("Factor Table"),
+                  selectInput(
+                    inputId = "fm_species_selector",
+                    label = "Select a species management group:",
+                    choices = c(unique(as.character(species_groups$managementGroup))),
+                    selected = c(unique(as.character(species_groups$managementGroup))),
+                    multiple = TRUE
+                  ),
+                  fluidRow(
+                    box(gt_output("fm_gt_table") %>% withSpinner(), width = 12)
+                  ),
+                  h3("Species Ranking Plot"),
+                  fluidRow(
+                    box(plotlyOutput("fm_species_ranking"), width = 12)
+                  )
+          ),
           
-          tabItem(tabName = "eco_table"),
+          tabItem(tabName = "eco_table",
+                  h3("Factor Table"),
+                  selectInput(
+                    inputId = "eco_species_selector",
+                    label = "Select a species management group:",
+                    choices = c(unique(as.character(species_groups$managementGroup))),
+                    selected = c(unique(as.character(species_groups$managementGroup))),
+                    multiple = TRUE
+                  ),
+                  fluidRow(
+                    box(gt_output("eco_gt_table") %>% withSpinner(), width = 12)
+                  ),
+                  h3("Species Ranking Plot"),
+                  fluidRow(
+                    box(plotlyOutput("eco_species_ranking"), width = 12)
+                  )
+          ),
           
-          tabItem(tabName = "ni_table"),
+          tabItem(tabName = "ni_table",
+                  h3("Factor Table"),
+                  selectInput(
+                    inputId = "ni_species_selector",
+                    label = "Select a species management group:",
+                    choices = c(unique(as.character(species_groups$managementGroup))),
+                    selected = c(unique(as.character(species_groups$managementGroup))),
+                    multiple = TRUE
+                  ),
+                  fluidRow(
+                    box(gt_output("ni_gt_table") %>% withSpinner(), width = 12)
+                  ),
+                  h3("Species Ranking Plot"),
+                  fluidRow(
+                    box(plotlyOutput("ni_species_ranking"), width = 12)
+                  )
+          ),
           
-          tabItem(tabName = "af_table"),
+          tabItem(tabName = "af_table",
+                  h3("Factor Table"),
+                  selectInput(
+                    inputId = "af_species_selector",
+                    label = "Select a species management group:",
+                    choices = c(unique(as.character(species_groups$managementGroup))),
+                    selected = c(unique(as.character(species_groups$managementGroup))),
+                    multiple = TRUE
+                  ),
+                  fluidRow(
+                    box(gt_output("af_gt_table") %>% withSpinner(), width = 12)
+                  ),
+                  h3("Species Ranking Plot"),
+                  fluidRow(
+                    box(plotlyOutput("af_species_ranking"), width = 12)
+                  )
+          ),
           
           tabItem(tabName = "test",
                   sidebarLayout(

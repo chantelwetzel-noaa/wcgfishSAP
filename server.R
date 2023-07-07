@@ -7,40 +7,56 @@ library(plotly)
 library(stringr)
 library(viridis)
 
-# load in commercial revenue data + clean up rougheye rockfish name
-com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
-com_rev_data[com_rev_data == "rougheye rocommercial_revenueckfish"] <- "rougheye rockfish"
+# load in data
+## SPELLING INCONSISTENCIES:
+## const_demand, assessment_frequency, ecosystem, new_information,
+## rebuilding use sentence case for both species names
 
-# load in rest of data
+## rougheye rockfish has spelling error
+com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
+
 rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
 tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
 const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE)
 
-# table has no rank column
+## table has no rank column
 rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
 
 stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
 fish_mort_data <- read.csv("tables/fishing_mortality.csv", header = TRUE)
 eco_data <- read.csv("tables/ecosystem.csv", header = TRUE)
-new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
+new_info_data <- read.csv("tables/new_information.csv", header = TRUE,
+                          na.strings = c("", "NA"))
 
-# rank column at end of table
+## rank column at end of table
 ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
 
-# SPELLING INCONSISTENCIES:
-## const_demand, assessment_frequency, ecosystem, new_information,
-## rebuilding use sentence case for both species names
-
-# load in species management groups 
+## load in species management groups 
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
 
-# clean up cryptic species names
-species_groups[species_groups == "blue/deacon rockfish"] <- "blue rockfish"
-species_groups[species_groups == "gopher/black and yellow rockfish"] <- "gopher rockfish"
-species_groups[species_groups == "rougheye/blackspotted rockfish"] <- "rougheye rockfish"
-species_groups[species_groups == "vermilion/sunset rockfish"] <- "vermilion rockfish"
+# replace species column
+com_rev_data$Species <- str_to_sentence(species_groups$speciesName)
+tribal_data$Species <- str_to_sentence(species_groups$speciesName)
+rebuilding_data$Species <- str_to_sentence(species_groups$speciesName)
+stock_stat_data$Species <- str_to_sentence(species_groups$speciesName)
+eco_data$Species <- str_to_sentence(species_groups$speciesName)
+ass_freq_data$Species <- str_to_sentence(species_groups$speciesName)
 
-# join data + species management groups
+# order species alphabetically, replace species column
+rec_data <- rec_data[order(rec_data$Species),]
+rec_data$Species <- str_to_sentence(species_groups$speciesName)
+
+fish_mort_data <- fish_mort_data[order(fish_mort_data$Species),]
+fish_mort_data$Species <- str_to_sentence(species_groups$speciesName)
+
+const_dem_data <- const_dem_data[order(const_dem_data$Species),]
+const_dem_data$Species <- str_to_sentence(species_groups$speciesName)
+
+new_info_data <- new_info_data[order(new_info_data$Species),]
+new_info_data$Species <- str_to_sentence(species_groups$speciesName)
+
+# join tables + species mgmt. groups
+species_groups$speciesName <- str_to_sentence(species_groups$speciesName)
 joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
 joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName"))
 joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
@@ -51,12 +67,6 @@ joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "sp
 joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
 joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName"))
 joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName"))
-
-# convert all species names to sentence case
-joined_com_df$Species <- str_to_sentence(joined_com_df$Species)
-joined_tribal_df$Species <- str_to_sentence(joined_tribal_df$Species)
-joined_rec_df$Species <- str_to_sentence(joined_rec_df$Species)
-joined_fm_df$Species <- str_to_sentence(joined_fm_df$Species)
 
 # define server logic to display user inputs
 shinyServer(function(input, output) {
@@ -314,6 +324,212 @@ shinyServer(function(input, output) {
   
   output$rec_species_ranking <- renderPlotly({
     ggplotly(rec_plot, tooltip = c("x", "y", "color"))
+  })
+  
+  # constituent demand table
+  ## NEED TO EDIT - SOME SPECIES NAMES DON'T MATCH (59/65) !!
+  output$cd_gt_table <- render_gt({
+    # filter data down to species selected
+    joined_cd_df <- joined_cd_df[joined_cd_df$managementGroup %in% input$cd_species_selector,]
+    
+    # create recreational gt table output, display in ascending order by rank
+    joined_cd_df %>%
+      arrange(Rank) %>%
+      gt() %>%
+      tab_header(
+        title = "Constituent Demand"
+      ) %>%
+      cols_label(
+        Factor_Score = "Factor Score",
+        Choke_Stock = "Choke Stock",
+        Commercial_Importance = "Commercial Importance",
+        Recreational_Importance = "Recreational Importance",
+        Landings_Constricted = "Landings Constricted",
+        Percent_Attainment = "Percent Attainment"
+      ) %>%
+      fmt_percent(columns = Percent_Attainment, decimals = 2,
+                  scale_values = FALSE) %>%
+      data_color(columns = Rank, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
+  })
+  
+  # rebuilding table
+  output$reb_gt_table <- render_gt({
+    joined_reb_df <- joined_reb_df[joined_reb_df$managementGroup %in% input$reb_species_selector,]
+
+    joined_reb_df %>%
+      arrange(rebuilding) %>%
+      gt() %>%
+      tab_header(
+        title = "Rebuilding"
+      ) %>%
+      cols_label(
+        rebuilding = "Rebuilding",
+        target_year = "Target Year",
+        managementGroup = "Management Group"
+      ) %>%
+      data_color(columns = rebuilding, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
+  })
+  
+  # stock status table
+  output$ss_gt_table <- render_gt({
+    joined_ss_df <- joined_ss_df[joined_ss_df$managementGroup %in% input$ss_species_selector,]
+
+    joined_ss_df %>%
+      arrange(Rank) %>%
+      gt() %>%
+      tab_header(
+        title = "Stock Status"
+      ) %>%
+      cols_label(
+        managementGroup = "Management Group"
+      ) %>%
+      fmt_percent(columns = 4:6, decimals = 2) %>%
+      data_color(columns = Rank, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
+  })
+  
+  # fish mortality table
+  ## NEED TO EDIT - SOME SPECIES NAMES DON'T MATCH (61/65)
+  output$fm_gt_table <- render_gt({
+    joined_fm_df <- joined_fm_df[joined_fm_df$managementGroup %in% input$fm_species_selector,]
+    
+    joined_fm_df %>%
+      arrange(Rank) %>%
+      gt() %>%
+      tab_header(
+        title = "Fishing Mortality"
+      ) %>%
+      cols_label(
+        Factor_Score = "Factor Score",
+        Fishing_Mortality = "Fishing Mortality",
+        OFL_Attain_Percent = "OFL Attain Percent",
+        Total_Below_OFL = "Total Below AFL",
+        ABC_Attain_Percent = "ABC Attain Percent",
+        managementGroup = "Management Group"
+      ) %>%
+      fmt_number(columns = c(4, 5, 7, 8), decimals = 2) %>%
+      fmt_percent(columns = c(6, 9), decimals = 2, scale_values = FALSE) %>%
+      data_color(columns = Rank, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
+  })
+  
+  # ecosystem table
+  output$eco_gt_table <- render_gt({
+    joined_eco_df <- joined_eco_df[joined_eco_df$managementGroup %in% input$eco_species_selector,]
+    
+    joined_eco_df %>%
+      arrange(Rank) %>%
+      gt() %>%
+      tab_header(
+        title = "Ecosystem"
+      ) %>%
+      cols_label(
+        Factor_Score = "Factor Score",
+        Ecosystem_Score = "Ecosystem Score",
+        managementGroup = "Management Group"
+      ) %>%
+      fmt_number(columns = Factor_Score, decimals = 2) %>%
+      fmt_percent(columns = Quantile, decimals = 0) %>%
+      data_color(columns = Rank, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
+  })
+  
+  # new information table
+  output$ni_gt_table <- render_gt({
+    joined_ni_df <- joined_ni_df[joined_ni_df$managementGroup %in% input$ni_species_selector,]
+    
+    joined_ni_df %>%
+      arrange(Rank) %>%
+      gt() %>%
+      tab_header(
+        title = "New Information"
+      ) %>%
+      cols_label(
+        Factor_score = "Factor Score",
+        Last_full_assessment = "Last Full Assessment",
+        Las_assessment = "Last Assessment",
+        steepness_prior = "Steepness Prior",
+        abundance_info = "Abundance Info",
+        dynamics_info = "Dynamics Info",
+        issues = "Issues",
+        notes = "Notes",
+        managementGroup = "Management Group"
+      ) %>%
+      data_color(columns = Rank, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
+  })
+  
+  # assessment frequency table
+  output$af_gt_table <- render_gt({
+    joined_af_df <- joined_af_df[joined_af_df$managementGroup %in% input$af_species_selector,]
+    
+    joined_af_df %>%
+      select(Species, Rank, Recruit_Var:managementGroup) %>%
+      arrange(Rank) %>%
+      gt() %>%
+      tab_header(
+        title = "Assessment Frequency"
+      ) %>%
+      cols_label(
+        Recruit_Var = "Recruitment Variability",
+        MeanAge = "Mean Age",
+        Trans_MeanAge = "Transformed Mean Age",
+        Recruit_Adj = "Adjustment for Recruit. Var.",
+        Mortality_Adj = "Adjustment for Mort.",
+        Eco_Adj = "Adjustment for Eco.",
+        Total_Adj = "Total Adjustment",
+        MeanAge_Adj = "Adjusted Mean Age",
+        MeanAge_Adj_Round = "Adjusted Mean Age (rounded)",
+        Last_Assess = "Last Assessment",
+        Years_Since_Assess = "Years since Assessment",
+        Beyond_Target_Freq = "Beyond Target Frequency",
+        Adj_Negative = "Negative Adjustment",
+        Greater_Than_10 = "Greater Than 10",
+        Less_Than_6_Update = "Less Than 6 - Update",
+        Greater_Than_Target_Freq = "Greater Than Target Frequency",
+        Constraint_2022 = "2022 Constraint",
+        managementGroup = "Management Group"
+      ) %>%
+      fmt_number(columns = c(3:5, 10), decimals = 2) %>%
+      data_color(columns = Rank, method = "numeric", palette = "viridis",
+                 reverse = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
   })
   
   # tab where user can input own .csv file, create gt table
