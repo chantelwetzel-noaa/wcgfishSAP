@@ -124,24 +124,29 @@ shinyServer(function(input, output) {
       tab_footnote(footnote = "Management group associated with a species
                    within the fishery management plan.",
                    locations = cells_column_labels(columns = managementGroup)) %>%
-      opt_footnote_marks(marks = c("1", "2", "3", "4", "5", "6", "7", "8")) %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
     
   })
   
-  # commercial importance species ranking plot
-  com_plot <- ggplot(joined_com_df, aes(x = Species, y = Rank, size = Rank)) +
-    geom_point(aes(color = managementGroup)) +
-    scale_size(trans = "reverse") +
+  # commercial importance species ranking plot (lollipop)
+  com_plot <- ggplot(joined_com_df, aes(x = Species, y = Rank)) +
+    geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
+                 color = "gray") +
+    geom_hline(yintercept = 65, color = "gray") +
+    geom_point(aes(color = managementGroup), size = 3) +
+    scale_y_reverse() +
     labs(
       title = "Fish Species Ranking by Commercial Importance",
-      x = "Species (in alphabetical order)", y = "Rank", color = "Management Group") +
-    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+      x = "Species (in alphabetical order)", y = "Rank", color = "Management Group"
+    ) +
+    theme_light() +
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+          panel.grid.major.x = element_blank(), panel.border = element_blank()) +
     scale_color_viridis(discrete = TRUE)
   
-  output$com_species_ranking <- renderPlotly({
+  output$com_ranking <- renderPlotly({
     ggplotly(com_plot, tooltip = c("x", "y", "color"))
   })
   
@@ -246,33 +251,6 @@ shinyServer(function(input, output) {
                  reverse = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      
-      # shades cells w/ NA values red
-      # using brute force—find better way to do this
-      tab_style(style = list(cell_fill(color = "#F9E3D6"),
-                             cell_text(style = "italic")),
-                locations = cells_body(columns = Pseudo_CA,
-                                       rows = is.na(Pseudo_CA))) %>%
-      tab_style(style = list(cell_fill(color = "#F9E3D6"),
-                             cell_text(style = "italic")),
-                locations = cells_body(columns = Pseudo_OR,
-                                       rows = is.na(Pseudo_OR))) %>%
-      tab_style(style = list(cell_fill(color = "#F9E3D6"),
-                             cell_text(style = "italic")),
-                locations = cells_body(columns = Pseudo_WA,
-                                       rows = is.na(Pseudo_WA))) %>%
-      tab_style(style = list(cell_fill(color = "#F9E3D6"),
-                             cell_text(style = "italic")),
-                locations = cells_body(columns = Rel_Weight_CA,
-                                       rows = is.na(Rel_Weight_CA))) %>%
-      tab_style(style = list(cell_fill(color = "#F9E3D6"),
-                             cell_text(style = "italic")),
-                locations = cells_body(columns = Rel_Weight_OR,
-                                       rows = is.na(Rel_Weight_OR))) %>%
-      tab_style(style = list(cell_fill(color = "#F9E3D6"),
-                             cell_text(style = "italic")),
-                locations = cells_body(columns = Rel_Weight_WA,
-                                       rows = is.na(Rel_Weight_WA))) %>%
       
       # add description of variables as footnotes
       tab_footnote(footnote = "Denotes the rank of a fish species based

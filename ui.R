@@ -40,6 +40,7 @@ shinyUI(
                                               icon = icon("dollar-sign")),
                                   menuSubItem("Recreational Importance", tabName = "rec_table",
                                               icon = icon("campground")),
+                                  # edit tribal icon
                                   menuSubItem("Tribal Importance", tabName = "tribal_table",
                                               icon = icon("feather")),
                                   menuSubItem("Constituent Demand", tabName = "cd_table",
@@ -69,19 +70,26 @@ shinyUI(
                   h1("Welcome!")),
           
           tabItem(tabName = "com_table",
-                  h3("Factor Table"),
+                  h1("Commercial Importance"),
                   selectInput("com_species_selector",
                               "Select a species management group:",
                               choices = c(unique(as.character(species_groups$managementGroup))),
                               selected = c(unique(as.character(species_groups$managementGroup))),
                               multiple = TRUE
                   ),
+                  em("Press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("com_data_viewer") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("com_data_viewer") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("com_species_ranking"), width = 12)
+                    box(title = "Commercial Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("com_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
