@@ -216,8 +216,6 @@ shinyServer(function(input, output) {
       tab_footnote(footnote = "Management group associated with a species
                    within the fishery management plan.",
                    locations = cells_column_labels(columns = managementGroup)) %>%
-      opt_footnote_marks(marks = c("1", "2", "3", "4", "5", "6", "7", "8", "9",
-                                   "10")) %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -289,7 +287,6 @@ shinyServer(function(input, output) {
       tab_footnote(footnote = "Management group associated with a species
                    within the fishery management plan.",
                    locations = cells_column_labels(columns = managementGroup)) %>%
-      opt_footnote_marks(marks = c("1", "2", "3", "4", "5", "6", "7")) %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -474,8 +471,19 @@ shinyServer(function(input, output) {
       fmt_percent(columns = c(6, 9), decimals = 2, scale_values = FALSE) %>%
       data_color(columns = Rank, method = "numeric", palette = "viridis",
                  reverse = TRUE) %>%
+      data_color(columns = managementGroup, target_columns = OFL,
+                 method = "factor",
+                 domain = c("minor slope rockfish",
+                            "minor nearshore rockfish",
+                            "minor shelf rockfish",
+                            "other flatfish",
+                            "other groundfish"),
+                 palette = c("#F9E3D6"),
+                 na_color = "white") %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
+      tab_footnote(footnote = "Cells highlighted red indicate OFL contributions.",
+                   locations = cells_column_labels(columns = OFL)) %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
