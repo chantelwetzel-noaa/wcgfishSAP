@@ -36,26 +36,25 @@ shinyUI(
                        sidebarMenu(
                          menuItem("Home", tabName = "home", icon = icon("home")),
                          menuItem("Factors", tabName = "factors", icon = icon("table"),
-                                  menuSubItem("Commercial Importance", tabName = "com_table",
+                                  menuSubItem("Commercial Importance", tabName = "com_page",
                                               icon = icon("dollar-sign")),
-                                  menuSubItem("Recreational Importance", tabName = "rec_table",
+                                  menuSubItem("Recreational Importance", tabName = "rec_page",
                                               icon = icon("campground")),
-                                  # edit tribal icon
-                                  menuSubItem("Tribal Importance", tabName = "tribal_table",
-                                              icon = icon("feather")),
-                                  menuSubItem("Constituent Demand", tabName = "cd_table",
+                                  # edit tribal icon!
+                                  menuSubItem("Tribal Importance", tabName = "tribal_page"),
+                                  menuSubItem("Constituent Demand", tabName = "cd_page",
                                               icon = icon("person")),
-                                  menuSubItem("Rebuilding", tabName = "rebuilding_table",
+                                  menuSubItem("Rebuilding", tabName = "rebuilding_page",
                                               icon = icon("hammer")),
-                                  menuSubItem("Stock Status", tabName = "ss_table",
+                                  menuSubItem("Stock Status", tabName = "ss_page",
                                               icon = icon("fish")),
-                                  menuSubItem("Fishing Mortality", tabName = "fm_table",
+                                  menuSubItem("Fishing Mortality", tabName = "fm_page",
                                               icon = icon("ship")),
-                                  menuSubItem("Ecosystem", tabName = "eco_table",
+                                  menuSubItem("Ecosystem", tabName = "eco_page",
                                               icon = icon("water")),
-                                  menuSubItem("New Information", tabName = "ni_table",
+                                  menuSubItem("New Information", tabName = "ni_page",
                                               icon = icon("info")),
-                                  menuSubItem("Assessment Frequency", tabName = "af_table",
+                                  menuSubItem("Assessment Frequency", tabName = "af_page",
                                               icon = icon("calendar-check"))
                          ),
                          menuItem("Upload your own file", tabName = "test", icon = icon("upload"))
@@ -69,7 +68,7 @@ shinyUI(
           tabItem(tabName = "home",
                   h1("Welcome!")),
           
-          tabItem(tabName = "com_table",
+          tabItem(tabName = "com_page",
                   h1("Commercial Importance"),
                   selectInput("com_species_selector",
                               "Select a species management group:",
@@ -77,24 +76,24 @@ shinyUI(
                               selected = c(unique(as.character(species_groups$managementGroup))),
                               multiple = TRUE
                   ),
-                  em("Press delete to narrow down your selection."),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
                   br(),
                   br(),
                   fluidRow(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("com_data_viewer") %>% withSpinner(),
+                        collapsible = TRUE, gt_output("com_gt_table") %>% withSpinner(),
                         width = 12)
                   ),
                   fluidRow(
-                    box(title = "Commercial Ranking Plot", status = "primary",
+                    box(title = "Commercial Importance Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("com_ranking") %>% withSpinner(),
                         width = 12)
                   )
           ),
           
-          tabItem(tabName = "rec_table",
-                  h3("Factor Table"),
+          tabItem(tabName = "rec_page",
+                  h1("Recreational Importance"),
                   selectInput(
                     inputId = "rec_species_selector",
                     label = "Select a species management group:",
@@ -102,17 +101,24 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("rec_data_viewer") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("rec_gt_table") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("rec_species_ranking"), width = 12)
+                    box(title = "Recreational Importance Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE, 
+                        plotlyOutput("rec_species_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
-          tabItem(tabName = "tribal_table",
-                  h3("Factor Table"),
+          tabItem(tabName = "tribal_page",
+                  h1("Tribal Importance"),
                   selectInput(
                     inputId = "tribal_species_selector",
                     label = "Select a species management group:",
@@ -120,17 +126,24 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("tribal_data_viewer") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("tribal_gt_table") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("tribal_species_ranking"), width = 12)
+                    box(title = "Tribal Importance Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("tribal_species_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
-          tabItem(tabName = "cd_table",
-                  h3("Factor Table"),
+          tabItem(tabName = "cd_page",
+                  h1("Constituent Demand"),
                   selectInput(
                     inputId = "cd_species_selector",
                     label = "Select a species management group:",
@@ -138,17 +151,24 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("cd_gt_table") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("cd_gt_table") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("cd_species_ranking"), width = 12)
+                    box(title = "Constituent Demand Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("cd_species_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
-          tabItem(tabName = "rebuilding_table",
-                  h3("Factor Table"),
+          tabItem(tabName = "rebuilding_page",
+                  h1("Rebuilding"),
                   selectInput(
                     inputId = "reb_species_selector",
                     label = "Select a species management group:",
@@ -156,17 +176,24 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("reb_gt_table") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("reb_gt_table") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("reb_species_ranking"), width = 12)
+                    box(title = "Rebuilding Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("reb_species_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
-          tabItem(tabName = "ss_table",
-                  h3("Factor Table"),
+          tabItem(tabName = "ss_page",
+                  h1("Stock Status"),
                   selectInput(
                     inputId = "ss_species_selector",
                     label = "Select a species management group:",
@@ -174,17 +201,24 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("ss_gt_table") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("ss_gt_table") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("ss_species_ranking"), width = 12)
+                    box(title = "Stock Status Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("ss_species_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
-          tabItem(tabName = "fm_table",
-                  h3("Factor Table"),
+          tabItem(tabName = "fm_page",
+                  h1("Fishing Mortality"),
                   selectInput(
                     inputId = "fm_species_selector",
                     label = "Select a species management group:",
@@ -192,17 +226,24 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("fm_gt_table") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("fm_gt_table") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("fm_species_ranking"), width = 12)
+                    box(title = "Fishing Mortality Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("fm_species_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
-          tabItem(tabName = "eco_table",
-                  h3("Factor Table"),
+          tabItem(tabName = "eco_page",
+                  h1("Ecosystem"),
                   selectInput(
                     inputId = "eco_species_selector",
                     label = "Select a species management group:",
@@ -210,17 +251,24 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("eco_gt_table") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("eco_gt_table") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("eco_species_ranking"), width = 12)
+                    box(title = "Ecosystem Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("eco_species_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
-          tabItem(tabName = "ni_table",
-                  h3("Factor Table"),
+          tabItem(tabName = "ni_page",
+                  h1("New Information"),
                   selectInput(
                     inputId = "ni_species_selector",
                     label = "Select a species management group:",
@@ -228,17 +276,24 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("ni_gt_table") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("ni_gt_table") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("ni_species_ranking"), width = 12)
+                    box(title = "New Information Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("ni_species_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
-          tabItem(tabName = "af_table",
-                  h3("Factor Table"),
+          tabItem(tabName = "af_page",
+                  h1("Assessment Frequency"),
                   selectInput(
                     inputId = "af_species_selector",
                     label = "Select a species management group:",
@@ -246,12 +301,19 @@ shinyUI(
                     selected = c(unique(as.character(species_groups$managementGroup))),
                     multiple = TRUE
                   ),
+                  em("Place cursor in the box and press delete to narrow down your selection."),
+                  br(),
+                  br(),
                   fluidRow(
-                    box(gt_output("af_gt_table") %>% withSpinner(), width = 12)
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, gt_output("af_gt_table") %>% withSpinner(),
+                        width = 12)
                   ),
-                  h3("Species Ranking Plot"),
                   fluidRow(
-                    box(plotlyOutput("af_species_ranking"), width = 12)
+                    box(title = "Assessment Frequency Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("af_species_ranking") %>% withSpinner(),
+                        width = 12)
                   )
           ),
           
