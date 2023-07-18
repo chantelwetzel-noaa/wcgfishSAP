@@ -1,4 +1,4 @@
-Species,rebuilding,target_year
+Species,Currently_Rebuilding,Rebuilding_Target_Year
 Arrowtooth flounder,0,
 Aurora rockfish,0,
 Bank rockfish,0,
@@ -38,7 +38,7 @@ Pacific Ocean perch,0,
 Pacific sanddab,0,
 Pacific spiny dogfish,0,
 Petrale sole,0,
-Quillback rockfish,4,
+Quillback rockfish,4,TBD
 Redbanded rockfish,0,
 Redstripe rockfish,0,
 Rex Sole,0,
@@ -61,6 +61,6 @@ Stripetail rockfish,0,
 Treefish rockfish,0,
 Vermilion/Sunset rockfish,0,
 Widow rockfish,0,
-Yelloweye rockfish,6,
+Yelloweye rockfish,6,2029
 Yellowmouth rockfish,0,
 Yellowtail rockfish,0,

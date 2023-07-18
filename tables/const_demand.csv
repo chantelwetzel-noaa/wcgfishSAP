@@ -1,66 +1,66 @@
-Species,Rank,Factor_Score,Total,Choke_Stock,Modifiers,Commercial_Importance,Recreational_Importance,Landings_Constricted,Concern,Percent_Attainment
-Quillback rockfish,1,10,10,10,2,1,1,,,5.107837832
-Yelloweye rockfish,1,10,10,10,1,,1,,,0.335552617
-Rosethorn rockfish,3,6,6,4,2,2,,,,1.830926281
-Copper rockfish,4,5,5,4,1,1,,,,1.573751524
-Vermilion/Sunset rockfish,4,5,5,4,1,1,,,,1.300542731
-Pacific spiny dogfish,6,4,4,2,2,2,,,,0.966957945
-Redbanded rockfish,6,4,4,3,1,1,,,,1.073486456
-Rougheye/Blackspotted rockfish,6,4,4,2,2,2,,,,0.9873546
-Squarespot rockfish,6,4,4,4,0,,,,,1.708198769
-Stripetail rockfish,6,4,4,4,0,,,,,1.588135166
-Treefish rockfish,6,4,4,3,1,1,,,,1.057498005
-China rockfish,12,2,2,0,2,1,1,,,0.647950425
-Cowcod ,12,2,2,-2,4,,,4,,0.031632837
-Flathead sole,12,2,2,2,0,,,,,0.993780794
-Shortraker rockfish,12,2,2,0,2,2,,,,0.733501949
-Silvergray rockfish,12,2,2,0,2,2,,,,0.57239966
-Widow rockfish,12,2,2,1,1,,,1,,0.829410156
-Blue/Deacon rockfish,18,1,1,0,1,1,,,,1.045036514
-Petrale sole,18,1,1,1,0,,,,,0.781502633
-Brown rockfish,20,0,0,0,0,,,,,0.652870598
-Curlfin sole,20,0,0,0,0,,,,,0.516454845
-Darkblotched rockfish,20,0,0,-2,2,1,,1,,0.489838167
-Gopher/Black and yellow rockfish,20,0,0,0,0,,,,,0.749519333
-Kelp greenling,20,0,0,-2,2,1,1,,,0.089103259
-Pacific cod,20,0,0,-2,2,1,1,,,0.033853182
-Pacific Ocean perch,20,0,0,-2,2,1,,1,,0.126305153
-Redstripe rockfish,20,0,0,-2,2,2,,,,0.200698944
-Sablefish ,20,0,0,0,0,,,,,0.255217593
-Sharpchin rockfish,20,0,0,-2,2,2,,,,0.089346863
-Starry rockfish,20,0,0,0,0,,,,,0.746585014
-Yellowtail rockfish,20,0,0,0,0,,,,,0.5813971
-Aurora rockfish,32,-1,-1,-2,1,1,,,,0.466963162
-Big skate,32,-1,-1,-2,1,1,,,,0.141059296
-Blackgill rockfish,32,-1,-1,-2,1,1,,,,0.257970073
-Bocaccio,32,-1,-1,-2,1,,,1,,0.236960358
-Cabezon,32,-1,-1,-2,1,,1,,,0.155317535
-Canary rockfish,32,-1,-1,-2,1,,,1,,0.439407578
-Grass rockfish,32,-1,-1,-2,1,1,,,,0.243693586
-Olive rockfish,32,-1,-1,-2,1,1,,,,0.28646485
-Pacific sanddab,32,-1,-1,-2,1,1,,,,0.049193615
-Rock sole,32,-1,-1,-2,1,1,,,,0.086897706
-Sand Sole,32,-1,-1,-2,1,,1,,,0.066738094
-Splitnose rockfish,32,-1,-1,-2,1,1,,,,0.083837522
-Starry flounder,32,-1,-1,-2,1,1,,,,0.025987261
-Yellowmouth rockfish,32,-1,-1,-2,1,1,,,,0.160447827
-Arrowtooth flounder,46,-2,-2,-2,0,,,,,0.065121891
-Bank rockfish,46,-2,-2,-2,0,,,,,0.080507201
-Black rockfish,46,-2,-2,-2,0,,,,,0.475650548
-California scorpionfish,46,-2,-2,-2,0,,,,,0.397076335
-Chilipepper rockfish ,46,-2,-2,-2,0,,,,,0.266116203
-Dover sole,46,-2,-2,-2,0,,,,,0.11429107
-English sole,46,-2,-2,-2,0,,,,,0.02698435
-Flag rockfish,46,-2,-2,-2,0,,,,,0.460318773
-Greenspotted rockfish,46,-2,-2,-2,0,,,,,0.241060384
-Greenstriped rockfish,46,-2,-2,-2,0,,,,,0.078321875
-Honeycomb rockfish,46,-2,-2,-2,0,,,,,0.424836774
-Kelp rockfish,46,-2,-2,-2,0,,,,,0.204874764
-Leopard shark,46,-2,-2,-2,0,,,,,0.152827831
-Lingcod ,46,-2,-2,-2,0,,,,,0.29028793
-Longnose skate,46,-2,-2,-2,0,,,,,0.410408984
-Longspine thornyhead,46,-2,-2,-2,0,,,,,0.097564397
-Rex sole,46,-2,-2,-2,0,,,,,0.327497891
-Rosy rockfish,46,-2,-2,-2,0,,,,,0.339110932
-Shortspine thornyhead ,46,-2,-2,-2,0,,,,,0.349621316
-Speckled rockfish,46,-2,-2,-2,0,,,,,0.26003083
+Species,Rank,Factor_Score,Choke_Stock_Adjustment,Total_of_Modifiers,Commercial_Importance,Recreational_Importance,Landings_Constricted,Concern,Percent_Attainment
+Quillback rockfish,1,10,10,2,1,1,,,5.107837832
+Yelloweye rockfish,1,10,10,1,,1,,,0.335552617
+Rosethorn rockfish,3,6,4,2,2,,,,1.830926281
+Copper rockfish,4,5,4,1,1,,,,1.573751524
+Vermilion/Sunset rockfish,4,5,4,1,1,,,,1.300542731
+Pacific spiny dogfish,6,4,2,2,2,,,,0.966957945
+Redbanded rockfish,6,4,3,1,1,,,,1.073486456
+Rougheye/Blackspotted rockfish,6,4,2,2,2,,,,0.9873546
+Squarespot rockfish,6,4,4,0,,,,,1.708198769
+Stripetail rockfish,6,4,4,0,,,,,1.588135166
+Treefish rockfish,6,4,3,1,1,,,,1.057498005
+China rockfish,12,2,0,2,1,1,,,0.647950425
+Cowcod ,12,2,-2,4,,,4,,0.031632837
+Flathead sole,12,2,2,0,,,,,0.993780794
+Shortraker rockfish,12,2,0,2,2,,,,0.733501949
+Silvergray rockfish,12,2,0,2,2,,,,0.57239966
+Widow rockfish,12,2,1,1,,,1,,0.829410156
+Blue/Deacon rockfish,18,1,0,1,1,,,,1.045036514
+Petrale sole,18,1,1,0,,,,,0.781502633
+Brown rockfish,20,0,0,0,,,,,0.652870598
+Curlfin sole,20,0,0,0,,,,,0.516454845
+Darkblotched rockfish,20,0,-2,2,1,,1,,0.489838167
+Gopher/Black and yellow rockfish,20,0,0,0,,,,,0.749519333
+Kelp greenling,20,0,-2,2,1,1,,,0.089103259
+Pacific cod,20,0,-2,2,1,1,,,0.033853182
+Pacific Ocean perch,20,0,-2,2,1,,1,,0.126305153
+Redstripe rockfish,20,0,-2,2,2,,,,0.200698944
+Sablefish ,20,0,0,0,,,,,0.255217593
+Sharpchin rockfish,20,0,-2,2,2,,,,0.089346863
+Starry rockfish,20,0,0,0,,,,,0.746585014
+Yellowtail rockfish,20,0,0,0,,,,,0.5813971
+Aurora rockfish,32,-1,-2,1,1,,,,0.466963162
+Big skate,32,-1,-2,1,1,,,,0.141059296
+Blackgill rockfish,32,-1,-2,1,1,,,,0.257970073
+Bocaccio,32,-1,-2,1,,,1,,0.236960358
+Cabezon,32,-1,-2,1,,1,,,0.155317535
+Canary rockfish,32,-1,-2,1,,,1,,0.439407578
+Grass rockfish,32,-1,-2,1,1,,,,0.243693586
+Olive rockfish,32,-1,-2,1,1,,,,0.28646485
+Pacific sanddab,32,-1,-2,1,1,,,,0.049193615
+Rock sole,32,-1,-2,1,1,,,,0.086897706
+Sand Sole,32,-1,-2,1,,1,,,0.066738094
+Splitnose rockfish,32,-1,-2,1,1,,,,0.083837522
+Starry flounder,32,-1,-2,1,1,,,,0.025987261
+Yellowmouth rockfish,32,-1,-2,1,1,,,,0.160447827
+Arrowtooth flounder,46,-2,-2,0,,,,,0.065121891
+Bank rockfish,46,-2,-2,0,,,,,0.080507201
+Black rockfish,46,-2,-2,0,,,,,0.475650548
+California scorpionfish,46,-2,-2,0,,,,,0.397076335
+Chilipepper rockfish ,46,-2,-2,0,,,,,0.266116203
+Dover sole,46,-2,-2,0,,,,,0.11429107
+English sole,46,-2,-2,0,,,,,0.02698435
+Flag rockfish,46,-2,-2,0,,,,,0.460318773
+Greenspotted rockfish,46,-2,-2,0,,,,,0.241060384
+Greenstriped rockfish,46,-2,-2,0,,,,,0.078321875
+Honeycomb rockfish,46,-2,-2,0,,,,,0.424836774
+Kelp rockfish,46,-2,-2,0,,,,,0.204874764
+Leopard shark,46,-2,-2,0,,,,,0.152827831
+Lingcod ,46,-2,-2,0,,,,,0.29028793
+Longnose skate,46,-2,-2,0,,,,,0.410408984
+Longspine thornyhead,46,-2,-2,0,,,,,0.097564397
+Rex sole,46,-2,-2,0,,,,,0.327497891
+Rosy rockfish,46,-2,-2,0,,,,,0.339110932
+Shortspine thornyhead ,46,-2,-2,0,,,,,0.349621316
+Speckled rockfish,46,-2,-2,0,,,,,0.26003083

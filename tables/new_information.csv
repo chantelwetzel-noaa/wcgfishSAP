@@ -1,66 +1,66 @@
-Species,Rank,Factor_score,Last_full_assessment,Las_assessment,steepness_prior,abundance_info,dynamics_info,issues,notes
-Splitnose rockfish,1,9,2009,2009,5,2,2,,~38K lengths and 16K otoliths collected since last assessment
-Brown rockfish,2,6,2013,,3,1,2,,~84K lengths and ~1K otoliths have been collected
+Species,Rank,Factor_score,Year_Last_Assessed,Assessmet_Type,Steepness_Prior,Abundance_Information,Population_Dynamics_Information,Past_Issues_can_be_Addressed,notes
+Splitnose rockfish,1,9,2009,Benchmark,5,2,2,,~38K lengths and 16K otoliths collected since last assessment
+Brown rockfish,2,6,2013,Data Moderate,3,1,2,,~84K lengths and ~1K otoliths have been collected
 Pacific sanddab,2,6,,,,3,3,,"~167K lengths, ~8K aged, and ~21K otoliths collected"
 Bank rockfish,4,5,,,3,,2,,~50K lengths and ~28K otoliths collected
-English sole,4,5,2013,2013,,2,3,,"~208K lengths, ~80K ages not used in 2013 D-M assessment (~22K otoliths available from 2010-2021)"
+English sole,4,5,2013,Data Moderate,,2,3,,"~208K lengths, ~80K ages not used in 2013 D-M assessment (~22K otoliths available from 2010-2021)"
 Kelp rockfish,4,5,,,3,,2,,"~92K lengths, ~4K ages, and ~5K otoliths collected"
 Olive rockfish,4,5,,,3,,2,,~39K lengths and 785 otoliths collected
 Redbanded rockfish,4,5,,,3,1,1,,~35K lengths and ~15K otoltish have been collected
-Rex sole,4,5,2013,2013,,2,3,,~184K lengths and ~29K otoliths available (none used in 2013 D-M assessment)
+Rex sole,4,5,2013,Data Moderate,,2,3,,~184K lengths and ~29K otoliths available (none used in 2013 D-M assessment)
 Shortraker rockfish,4,5,,,3,,2,,~6k lengths and ~3k otoliths collected
-Black rockfish,11,4,2015,2015,,2,2,,"~150K lengths, ~14k, ages and ~21K otoliths collected since 2015"
+Black rockfish,11,4,2015,Benchmark,,2,2,,"~150K lengths, ~14k, ages and ~21K otoliths collected since 2015"
 Flag rockfish,11,4,,,3,,1,,~13k lengths and 583 otoliths collected
 Grass rockfish,11,4,,,3,,1,,~13k lengths collected
 Honeycomb rockfish,11,4,,,3,,1,,~14k lengths and 352 otoliths collected
-Longspine thornyhead,11,4,2013,2013,,2,2,,~64K lengths collected since last assessment
+Longspine thornyhead,11,4,2013,Benchmark,,2,2,,~64K lengths collected since last assessment
 Starry rockfish,11,4,,,3,,1,,~37K lengths and ~2K otoliths collected
 Treefish rockfish,11,4,,,3,,1,,~11K lengths collected
-Greenstriped rockfish,18,3,2009,2009,,2,1,,~27K lengths and ~11K otoliths collected since last assessment
+Greenstriped rockfish,18,3,2009,Benchmark,,2,1,,~27K lengths and ~11K otoliths collected since last assessment
 Pacific cod,18,3,,,,1,2,,"~70K lengths, ~1K aged, and ~5K otoliths collected"
-Petrale sole,18,3,2013,2019,,,3,,New ecosystem driver of recruitment available
+Petrale sole,18,3,2019,Update,,,3,,New ecosystem driver of recruitment available
 Speckled rockfish,18,3,,,3,,1,,~16K length and ~3k otoliths collected
-Canary rockfish,22,2,2015,2015,,,2,,"~59K lengths, ~7k aged, and ~17K otoliths collected since the last assessment"
-Chilipepper rockfish ,22,2,2015,2015,,1,1,,~25K lengths and ~6K otoliths collected since the last assessment
+Canary rockfish,22,2,2015,Benchmark,,,2,,"~59K lengths, ~7k aged, and ~17K otoliths collected since the last assessment"
+Chilipepper rockfish ,22,2,2015,Benchmark,,1,1,,~25K lengths and ~6K otoliths collected since the last assessment
 Flathead Sole,22,2,,,,1,1,,~11K lengths and ~3k otoliths collected
-Greenspotted rockfish,22,2,2011,2011,,1,1,,~17K lengths and ~5K otoliths collected since the last assessment
-Sharpchin rockfish,22,2,,2013,,1,1,,~28K lengths and ~9K otoliths collected (none used in 2013 D-M assessment)
-Shortspine thornyhead ,22,2,2013,2013,,,2,,~73K lengths collected since last assessment
-Aurora rockfish,28,1,2013,2013,,,1,,"~10K lengths, ~5k otoliths collected since 2013 by the NWFSC WCGBT survey"
-China rockfish,28,1,2015,2015,,1,,,
-Kelp greenling,28,1,2015,2015,,,1,,~17K lengths and ~2K otoliths collected since last assessment
+Greenspotted rockfish,22,2,2011,Benchmark,,1,1,,~17K lengths and ~5K otoliths collected since the last assessment
+Sharpchin rockfish,22,2,2013,Data Moderate,,1,1,,~28K lengths and ~9K otoliths collected (none used in 2013 D-M assessment)
+Shortspine thornyhead ,22,2,2013,Data Moderate,,,2,,~73K lengths collected since last assessment
+Aurora rockfish,28,1,2013,Benchmark,,,1,,"~10K lengths, ~5k otoliths collected since 2013 by the NWFSC WCGBT survey"
+China rockfish,28,1,2015,Benchmark,,1,,,
+Kelp greenling,28,1,2015,Benchmark,,,1,,~17K lengths and ~2K otoliths collected since last assessment
 Rosy rockfish,28,1,,,,,1,,~22K lengths and ~912 otoliths collected
-Rougheye/Blackspotted rockfish,28,1,2013,2013,,,1,,~19K lengths and 9K otoliths collected since last assessment
+Rougheye/Blackspotted rockfish,28,1,2013,Benchmark,,,1,,~19K lengths and 9K otoliths collected since last assessment
 Sand sole,28,1,,,,,1,,~10K lengths and ~4k otoliths collected
-Starry flounder,28,1,2005,,,,1,,~7K lengths and 3K otoliths collected since last assessmnet
-Arrowtooth flounder,35,0,2007,2017,,,,,
-Big skate,35,0,2019,2019,,,,,
-Blackgill rockfish,35,0,2017,2017,,,,,
-Blue/Deacon rockfish,35,0,2017,2017,,,,,
-Bocaccio,35,0,2017,2017,,,,,
-Cabezon,35,0,2019,2019,,,,,
-California scorpionfish,35,0,2017,2017,,,,,
-Copper rockfish,35,0,2021,2021,,,,,
-Cowcod ,35,0,2019,2019,,,,,
+Starry flounder,28,1,,,,,1,,~7K lengths and 3K otoliths collected since last assessmnet
+Arrowtooth flounder,35,0,2017,Data Moderate,,,,,
+Big skate,35,0,2019,Benchmark,,,,,
+Blackgill rockfish,35,0,2017,Update,,,,,
+Blue/Deacon rockfish,35,0,2017,Benchmark,,,,,
+Bocaccio,35,0,2017,Benchmark,,,,,
+Cabezon,35,0,2019,Benchmark,,,,,
+California scorpionfish,35,0,2017,Benchmark,,,,,
+Copper rockfish,35,0,2021,Data Moderate,,,,,
+Cowcod ,35,0,2019,Benchmark,,,,,
 Curlfin sole,35,0,,,,,,,~1K lengths and 289 otoliths collected
-Darkblotched rockfish,35,0,2017,2017,,,,,
-Dover sole,35,0,2021,2021,,,,,
-Gopher/Black and yellow rockfish,35,0,2019,2019,,,,,
+Darkblotched rockfish,35,0,2017,Update,,,,,
+Dover sole,35,0,2021,Benchmark,,,,,
+Gopher/Black and yellow rockfish,35,0,2019,Benchmark,,,,,
 Leopard shark,35,0,,,,,,,~2K lengths collected
-Lingcod ,35,0,2021,2021,,,,,
-Longnose skate,35,0,2019,2019,,,,,
-Pacific Ocean perch,35,0,2017,2017,,,,,
-Pacific spiny dogfish,35,0,2021,2021,,,,,
-Quillback rockfish,35,0,2021,2021,,,,,
+Lingcod ,35,0,2021,Benchmark,,,,,
+Longnose skate,35,0,2019,Benchmark,,,,,
+Pacific Ocean perch,35,0,2017,Benchmark,,,,,
+Pacific spiny dogfish,35,0,2021,Benchmark,,,,,
+Quillback rockfish,35,0,2021,Data Moderate,,,,,
 Redstripe rockfish,35,0,,,,,,,
 Rock sole,35,0,,,,,,,~3K lengths and 827 otoliths collected
 Rosethorn rockfish,35,0,,,,,,,~5K lengths and ~2K otoliths collected
-Sablefish ,35,0,2019,2021,,,,,
+Sablefish ,35,0,2021,Update,,,,,
 Silvergray rockfish,35,0,,,,,,,~7K lengths and ~2K otoliths collected
-Squarespot rockfish,35,0,2021,2021,,,,,
+Squarespot rockfish,35,0,2021,Data Moderate,,,,,
 Stripetail rockfish,35,0,,,,,,,
-Vermilion/Sunset rockfish,35,0,2021,2021,,,,,
-Widow rockfish,35,0,2015,2019,,,,,
-Yelloweye rockfish,35,0,2017,2017,,,,,"~1K lengths, 500 aged, and 679 otoliths collected since the last assessment"
+Vermilion/Sunset rockfish,35,0,2021,Benchmark,,,,,
+Widow rockfish,35,0,2019,Update,,,,,
+Yelloweye rockfish,35,0,2017,Benchmark,,,,,"~1K lengths, 500 aged, and 679 otoliths collected since the last assessment"
 Yellowmouth rockfish,35,0,,,,,,,
-Yellowtail rockfish,35,0,2017,2017,,,,,~4K lengths and ~2K otoliths collected
+Yellowtail rockfish,35,0,2017,Benchmark,,,,,~4K lengths and ~2K otoliths collected
