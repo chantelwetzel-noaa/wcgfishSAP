@@ -102,8 +102,12 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("com_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("com_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('Commercial_importance_definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here."))
+                    )
                   ),
                   fluidRow(
                     box(title = "Commercial Importance Ranking Plot", status = "primary",
@@ -135,8 +139,10 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("rec_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("rec_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here.")
+                    )
                   ),
                   fluidRow(
                     box(title = "Recreational Importance Ranking Plot", status = "primary",
@@ -168,8 +174,9 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("tribal_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("tribal_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
                   ),
                   fluidRow(
                     box(title = "Tribal Importance Ranking Plot", status = "primary",
@@ -205,8 +212,9 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("cd_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("cd_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
                   ),
                   fluidRow(
                     box(title = "Constituent Demand Ranking Plot", status = "primary",
@@ -238,8 +246,9 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("reb_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("reb_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
                   ),
                   fluidRow(
                     box(title = "Rebuilding Ranking Plot", status = "primary",
@@ -271,8 +280,9 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("ss_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("ss_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
                   ),
                   fluidRow(
                     box(title = "Stock Status Ranking Plot", status = "primary",
@@ -307,8 +317,9 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("fm_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("fm_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
                   ),
                   fluidRow(
                     box(title = "Fishing Mortality Ranking Plot", status = "primary",
@@ -341,8 +352,9 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("eco_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("eco_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
                   ),
                   fluidRow(
                     box(title = "Ecosystem Ranking Plot", status = "primary",
@@ -374,8 +386,9 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("ni_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("ni_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
                   ),
                   fluidRow(
                     box(title = "New Information Ranking Plot", status = "primary",
@@ -407,8 +420,9 @@ shinyUI(
                         br()
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, gt_output("af_gt_table") %>% withSpinner(),
-                        width = 9)
+                        collapsible = TRUE, width = 9,
+                        gt_output("af_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
                   ),
                   fluidRow(
                     box(title = "Assessment Frequency Ranking Plot", status = "primary",

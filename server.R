@@ -17,7 +17,9 @@ library(viridis)
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 
 rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
+
 tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
+
 const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
   mutate_at(c("Commercial_Importance", "Recreational_Importance",
               "Landings_Constricted"), ~replace_na(., 0))
@@ -26,15 +28,22 @@ const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
 rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
 
 stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
+
 fish_mort_data <- read.csv("tables/fishing_mortality.csv", header = TRUE)
-eco_data <- read.csv("tables/ecosystem.csv", header = TRUE)
+
+eco_data <- read.csv("tables/ecosystem.csv", header = TRUE) %>%
+  mutate(Factor_Score = na_if(Factor_Score, " -   "))
+eco_data$Factor_Score <- as.numeric(eco_data$Factor_Score)
+
 new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
 
 ## rank column at end of table
 ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
 
+
 ## load in species management groups 
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
+
 
 # replace species column
 com_rev_data$Species <- str_to_sentence(species_groups$speciesName)
@@ -43,6 +52,7 @@ rebuilding_data$Species <- str_to_sentence(species_groups$speciesName)
 stock_stat_data$Species <- str_to_sentence(species_groups$speciesName)
 eco_data$Species <- str_to_sentence(species_groups$speciesName)
 ass_freq_data$Species <- str_to_sentence(species_groups$speciesName)
+
 
 # order species alphabetically, replace species column
 rec_data <- rec_data[order(rec_data$Species),]
@@ -57,22 +67,45 @@ const_dem_data$Species <- str_to_sentence(species_groups$speciesName)
 new_info_data <- new_info_data[order(new_info_data$Species),]
 new_info_data$Species <- str_to_sentence(species_groups$speciesName)
 
+
 # join tables + species mgmt. groups
 species_groups$speciesName <- str_to_sentence(species_groups$speciesName)
-joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
-joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName"))
-joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
-joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "speciesName"))
-joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
-joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName"))
-joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "speciesName"))
-joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
-joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName"))
+
+joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName")) %>%
+  arrange(Rank)
+
+joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName")) %>%
+  arrange(Rank)
+
+joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName")) %>%
+  arrange(Rank)
+
+joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "speciesName")) %>%
+  arrange(Rank)
+
+joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName")) %>%
+  arrange(desc(rebuilding))
+
+joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName")) %>%
+  arrange(Rank)
+
+joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "speciesName")) %>%
+  arrange(Rank)
+
+joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName")) %>%
+  arrange(Rank)
+
+joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName")) %>%
+  arrange(Rank)
+
 joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName")) %>%
-  select(Species, Rank, Score, Recruit_Var:managementGroup)
+  select(Species, Rank, Score, Recruit_Var:managementGroup) %>%
+  arrange(Rank)
+
 
 # define server logic to display user inputs
 shinyServer(function(input, output) {
+  
   
   # commercial revenue table
   output$com_gt_table <- render_gt({
@@ -85,27 +118,28 @@ shinyServer(function(input, output) {
     # create commercial revenue gt table output, display in ascending order by rank
     com_base_table <- joined_com_df %>%
       select(input$com_columns) %>%
-      arrange(Rank) %>%
       gt() %>%
       tab_header(
         title = "Commercial Importance",
         subtitle = "Measured by average ex-vessel revenue data
         between 2018-2021"
-      ) %>%
-      fmt_number(columns = -c("Rank"), decimals = 2) %>%
+      )
+      # data_color(columns = -c("Species"), method = "auto", palette = "viridis")
+    
+    if("Rank" %in% input$com_columns) {
+      com_base_table <- com_base_table %>%
+        fmt_number(columns = -c("Rank"), decimals = 2) %>%
+        data_color(columns = Rank, method = "numeric", palette = "viridis",
+                   reverse = TRUE)
+    } else {
+      com_base_table <- com_base_table %>%
+        fmt_number(columns = everything(), decimals = 2)
+    }
+    
+    com_base_table %>%
       fmt_currency(columns = contains("Revenue"), decimals = 0) %>%
-      data_color(columns = Rank, method = "numeric", palette = "viridis",
-                 reverse = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      
-      # add footnotes
-      tab_footnote(footnote = "Data taken from 2023 stock assessment cycle.",
-                   locations = cells_title(groups = "subtitle")) %>%
-      tab_footnote(footnote = "See descriptions of each column here.",
-                   locations = cells_column_labels(columns = everything())) %>%
-      tab_options(footnotes.multiline = TRUE) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -131,6 +165,7 @@ shinyServer(function(input, output) {
     ggplotly(com_plot, tooltip = c("x", "y", "Factor_Score", "color"))
   })
   
+  
   # recreational importance table
   output$rec_gt_table <- render_gt({
     
@@ -138,28 +173,27 @@ shinyServer(function(input, output) {
     joined_rec_df <- joined_rec_df[joined_rec_df$managementGroup %in% input$rec_species_selector,]
     
     # create recreational gt table output, display in ascending order by rank
-    joined_rec_df %>%
+    rec_table <- joined_rec_df %>%
       select(input$rec_columns) %>%
-      arrange(Rank) %>%
       gt() %>%
       tab_header(
-        title = "Recreational Importance",
-        subtitle = "Enter subtitle here"
-      ) %>%
-      fmt_number(columns = -c("Rank"), decimals = 2) %>%
+        title = "Recreational Importance"
+      )
+    
+    if("Rank" %in% input$rec_columns) {
+      rec_table <- rec_table %>%
+        fmt_number(columns = -c("Rank"), decimals = 2) %>%
+        data_color(columns = Rank, method = "numeric", palette = "viridis",
+                   reverse = TRUE)
+    } else {
+      rec_table <- rec_table %>%
+        fmt_number(columns = everything(), decimals = 2)
+    }
+    
+    rec_table %>%
       fmt_currency(columns = contains("Pseudo"), decimals = 0) %>%
-      data_color(columns = Rank, method = "numeric", palette = "viridis",
-                 reverse = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      
-      # add description of variables as footnotes
-      tab_footnote(footnote = "Data taken from 2023 stock assessment cycle.",
-                   locations = cells_title(groups = "subtitle")) %>%
-      tab_footnote(footnote = "See descriptions of each column here.",
-                   locations = cells_column_labels(columns = everything())) %>%
-      tab_options(footnotes.multiline = TRUE) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -185,6 +219,7 @@ shinyServer(function(input, output) {
     ggplotly(rec_plot, tooltip = c("x", "y", "Factor_Score", "color"))
   })
   
+  
   # tribal revenue table
   output$tribal_gt_table <- render_gt({
     
@@ -192,27 +227,27 @@ shinyServer(function(input, output) {
     joined_tribal_df <- joined_tribal_df[joined_tribal_df$managementGroup %in% input$tribal_species_selector,]
     
     # create tribal revenue gt table output, display in ascending order by rank
-    joined_tribal_df %>%
+    tribal_table <- joined_tribal_df %>%
       select(input$tribal_columns) %>%
-      arrange(Rank) %>%
       gt() %>%
       tab_header(
-        title = "Tribal Importance",
-        subtitle = "Enter subtitle here"
-      ) %>%
-      fmt_number(columns = -c("Rank"), decimals = 2) %>%
+        title = "Tribal Importance"
+      )
+    
+    if("Rank" %in% input$tribal_columns) {
+      tribal_table <- tribal_table %>%
+        fmt_number(columns = -c("Rank"), decimals = 2) %>%
+        data_color(columns = Rank, method = "numeric", palette = "viridis",
+                   reverse = TRUE)
+    } else {
+      tribal_table <- tribal_table %>%
+        fmt_number(columns = everything(), decimals = 2)
+    }
+    
+    tribal_table %>%
       fmt_currency(columns = contains("Revenue"), decimals = 0) %>%
-      data_color(columns = Rank, method = "numeric", palette = "viridis",
-                 reverse = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      
-      # add descriptions of variables as footnotes
-      tab_footnote(footnote = "Data taken from 2023 stock asssessment cycle.",
-                   locations = cells_title(groups = "subtitle")) %>%
-      tab_footnote(footnote = "See description of columns here.",
-                   locations = cells_column_labels(columns = everything())) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -238,6 +273,7 @@ shinyServer(function(input, output) {
     ggplotly(tribal_plot, tooltip = c("x", "y", "Factor_Score", "color"))
   })
   
+  
   # constituent demand table
   output$cd_gt_table <- render_gt({
     
@@ -245,24 +281,26 @@ shinyServer(function(input, output) {
     joined_cd_df <- joined_cd_df[joined_cd_df$managementGroup %in% input$cd_species_selector,]
     
     # create recreational gt table output, display in ascending order by rank
-    joined_cd_df %>%
+    cd_table <- joined_cd_df %>%
       select(input$cd_columns) %>%
-      arrange(Rank) %>%
       gt() %>%
       tab_header(
         title = "Constituent Demand"
-      ) %>%
-      fmt_percent(columns = contains("Percent"), decimals = 2,
+      )
+    
+    if("Rank" %in% input$cd_columns) {
+      cd_table <- cd_table %>%
+        fmt_number(columns = -c("Rank"), decimals = 2) %>%
+        data_color(columns = Rank, method = "numeric", palette = "viridis",
+                   reverse = TRUE)
+    } else {
+      cd_table <- cd_table %>%
+        fmt_number(columns = everything(), decimals = 2)
+    }
+    
+    cd_table %>%
+      fmt_percent(columns = contains("Percent"), decimals = 1,
                   scale_values = FALSE) %>%
-      data_color(columns = Rank, method = "numeric", palette = "viridis",
-                 reverse = TRUE) %>%
-      tab_style(style = list(cell_text(weight = "bold")),
-                locations = cells_body(columns = Species)) %>%
-      tab_footnote(footnote = "Data taken from 2023 stock assessment cycle.",
-                   locations = cells_title(groups = "title")) %>%
-      tab_footnote(footnote = "See descriptions of columns here.",
-                   locations = cells_column_labels()) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -288,26 +326,30 @@ shinyServer(function(input, output) {
     ggplotly(cd_plot, tooltip = c("x", "y", "Factor_Score", "color"))
   })
   
+  
   # rebuilding table
   output$reb_gt_table <- render_gt({
     joined_reb_df <- joined_reb_df[joined_reb_df$managementGroup %in% input$reb_species_selector,]
 
-    joined_reb_df %>%
+    reb_table <- joined_reb_df %>%
       select(input$reb_columns) %>%
-      arrange(rebuilding) %>%
       gt() %>%
       tab_header(
         title = "Rebuilding"
-      ) %>%
-      data_color(columns = rebuilding, method = "numeric", palette = "viridis",
-                 reverse = TRUE) %>%
+      )
+    
+    if("rebuilding" %in% input$reb_columns) {
+      reb_table <- reb_table %>%
+        fmt_number(columns = -c("rebuilding"), decimals = 2) %>%
+        data_color(columns = rebuilding, method = "numeric", palette = "viridis")
+    } else {
+      reb_table <- reb_table %>%
+        fmt_number(columns = everything(), decimals = 2)
+    }
+    
+    reb_table %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      tab_footnote(footnote = "Data taken from 2023 stock assessment cycle.",
-                   locations = cells_title(groups = "title")) %>%
-      tab_footnote(footnote = "See descriptions of columns here.",
-                   locations = cells_column_labels(columns = everything())) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -331,27 +373,42 @@ shinyServer(function(input, output) {
     ggplotly(reb_plot, tooltip = c("x", "y", "color"))
   })
   
+  
   # stock status table
   output$ss_gt_table <- render_gt({
     joined_ss_df <- joined_ss_df[joined_ss_df$managementGroup %in% input$ss_species_selector,]
 
-    joined_ss_df %>%
+    ss_table <- joined_ss_df %>%
       select(input$ss_columns) %>%
-      arrange(Rank) %>%
       gt() %>%
       tab_header(
         title = "Stock Status"
-      ) %>%
-      fmt_number(columns = Estimate, decimals = 2) %>%
-      data_color(columns = Rank, method = "numeric", palette = "viridis",
-                 reverse = TRUE) %>%
+      )
+    
+    if("Rank" %in% input$ss_columns) {
+      ss_table <- ss_table %>%
+        data_color(columns = Rank, method = "numeric", palette = "viridis",
+                   reverse = TRUE)
+    }
+    
+    if("Estimate" %in% input$ss_columns) {
+      ss_table <- ss_table %>%
+        fmt_percent(columns = Estimate, decimals = 1)
+    }
+    
+    if("Target" %in% input$ss_columns) {
+      ss_table <- ss_table %>%
+        fmt_percent(columns = Target, decimals = 1)
+    }
+    
+    if("MSST" %in% input$ss_columns) {
+      ss_table <- ss_table %>%
+        fmt_percent(columns = MSST, decimals = 1)
+    }
+    
+    ss_table %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      tab_footnote(footnote = "Data taken from 2023 stock assessment cycle.",
-                   locations = cells_title(groups = "title")) %>%
-      tab_footnote(footnote = "See descriptions of columns here.",
-                   locations = cells_column_labels(columns = everything())) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -377,21 +434,42 @@ shinyServer(function(input, output) {
     ggplotly(ss_plot, tooltip = c("x", "y", "Score", "color"))
   })
   
-  # fishing mortality table
+  
+  # fishing mortality table - CREATE CONDITIONALS
   output$fm_gt_table <- render_gt({
     joined_fm_df <- joined_fm_df[joined_fm_df$managementGroup %in% input$fm_species_selector,]
     
-    joined_fm_df %>%
+    fm_table <- joined_fm_df %>%
       select(input$fm_columns) %>%
-      arrange(Rank) %>%
       gt() %>%
       tab_header(
         title = "Fishing Mortality"
-      ) %>%
-      fmt_number(columns = -c("Rank"), decimals = 2) %>%
-      fmt_percent(columns = contains("Percent"), decimals = 2) %>%
-      data_color(columns = Rank, method = "numeric", palette = "viridis",
-                 reverse = TRUE) %>%
+      )
+    
+    if("Rank" %in% input$fm_columns) {
+      fm_table <- fm_table %>%
+        fmt_number(columns = -c("Rank"), decimals = 2) %>%
+        data_color(columns = Rank, method = "numeric", palette = "viridis",
+                   reverse = TRUE)
+    } else {
+      fm_table <- fm_table %>%
+        fmt_number(columns = everything(), decimals = 2)
+    }
+    
+    if("OFL_Attain_Percent" %in% input$fm_columns) {
+      fm_table <- fm_table %>%
+        tab_style(style = list(cell_fill(color = "red"),
+                               cell_text(color = "white")),
+                  locations = cells_body(columns = OFL_Attain_Percent,
+                                         rows = OFL_Attain_Percent > 1.00)
+        ) %>%
+        tab_footnote(footnote = "Cells highlighted bright red indicate
+                     high OFL attainment percentages.",
+                     locations = cells_column_labels(columns = OFL_Attain_Percent))
+    }
+    
+    fm_table %>%
+      fmt_percent(columns = contains("Percent"), decimals = 1) %>%
       data_color(columns = managementGroup, target_columns = OFL,
                  method = "factor",
                  domain = c("minor slope rockfish",
@@ -403,15 +481,12 @@ shinyServer(function(input, output) {
                  na_color = "white") %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      tab_footnote(footnote = "Data taken from 2023 stock assessment cycle.",
-                   locations = cells_title(groups = "title")) %>%
-      tab_footnote(footnote = "See descriptions of columns here.",
-                   locations = cells_column_labels(columns = everything())) %>%
+      
+      # doesn't appear?
       tab_footnote(
-        footnote = "Cells highlighted red indicate OFL contributions.",
+        footnote = "Cells highlighted light red indicate OFL contributions.",
         locations = cells_column_labels(columns = OFL)
       ) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -437,28 +512,36 @@ shinyServer(function(input, output) {
     ggplotly(fm_plot, tooltip = c("x", "y", "Factor_Score", "color"))
   })
   
-  # ecosystem table
+  
+  # ecosystem table - factor score has 3 decimals
   output$eco_gt_table <- render_gt({
     joined_eco_df <- joined_eco_df[joined_eco_df$managementGroup %in% input$eco_species_selector,]
     
-    joined_eco_df %>%
+    eco_table <- joined_eco_df %>%
       select(input$eco_columns) %>%
-      arrange(Rank) %>%
       gt() %>%
       tab_header(
         title = "Ecosystem"
-      ) %>%
-      fmt_number(columns = contains("Score"), decimals = 2) %>%
-      fmt_percent(columns = contains("Quantile"), decimals = 0) %>%
+      )
+    
+    if("Rank" %in% input$eco_columns) {
+      eco_table <- eco_table %>%
+        data_color(columns = Rank, method = "numeric", palette = "viridis",
+                   reverse = TRUE)
+    }
+    
+    if("Factor_Score" %in% input$eco_columns) {
+      eco_table <- eco_table %>%
+        fmt_number(columns = Factor_Score, decimals = 2)
+    }
+    
+    eco_table %>%
+      fmt_number(columns = ends_with("Score"), decimals = 2) %>%
+      fmt_percent(columns = contains("Quantile"), decimals = 1) %>%
       data_color(columns = Rank, method = "numeric", palette = "viridis",
                  reverse = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      tab_footnote(footnote = "Data taken from 2023 stock assessment cycle.",
-                   locations = cells_title(groups = "title")) %>%
-      tab_footnote(footnote = "See descriptions of columns here.",
-                   locations = cells_column_labels(columns = everything())) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -484,26 +567,27 @@ shinyServer(function(input, output) {
     ggplotly(eco_plot, tooltip = c("x", "y", "Factor_Score", "color"))
   })
   
+  
   # new information table
   output$ni_gt_table <- render_gt({
     joined_ni_df <- joined_ni_df[joined_ni_df$managementGroup %in% input$ni_species_selector,]
     
-    joined_ni_df %>%
+    ni_table <- joined_ni_df %>%
       select(input$ni_columns) %>%
-      arrange(Rank) %>%
       gt() %>%
       tab_header(
         title = "New Information"
-      ) %>%
-      data_color(columns = Rank, method = "numeric", palette = "viridis",
-                 reverse = TRUE) %>%
+      )
+    
+    if("Rank" %in% input$ni_columns) {
+      ni_table <- ni_table %>%
+        data_color(columns = Rank, method = "numeric", palette = "viridis",
+                   reverse = TRUE)
+    }
+    
+    ni_table %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      tab_footnote(footnote = "Data taken from 2023 stock assessment cycle.",
-                   locations = cells_title(groups = "title")) %>%
-      tab_footnote(footnote = "See descriptions of columns here.",
-                   locations = cells_column_labels(columns = everything())) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -529,26 +613,28 @@ shinyServer(function(input, output) {
     ggplotly(ni_plot, tooltip = c("x", "y", "Factor_score", "color"))
   })
   
+  
   # assessment frequency table
   output$af_gt_table <- render_gt({
     joined_af_df <- joined_af_df[joined_af_df$managementGroup %in% input$af_species_selector,]
     
-    joined_af_df %>%
+    af_table <- joined_af_df %>%
       select(input$af_columns) %>%
-      arrange(desc(Score)) %>%
       gt() %>%
       tab_header(
         title = "Assessment Frequency"
-      ) %>%
+      )
+    
+    if("Score" %in% input$af_columns) {
+      af_table <- af_table %>%
+        data_color(columns = Score, method = "numeric", palette = "viridis",
+                   reverse = TRUE)
+    }
+    
+    af_table %>%
       fmt_number(columns = contains("Age"), decimals = 2) %>%
-      data_color(columns = Score, method = "numeric", palette = "viridis") %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      tab_footnote(footnote = "Data taken from 2023 stock assessment cycle.",
-                   locations = cells_title(groups = "title")) %>%
-      tab_footnote(footnote = "See descriptions of columns here.",
-                   locations = cells_column_labels(columns = everything())) %>%
-      opt_footnote_marks(marks = "standard") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -600,7 +686,7 @@ shinyServer(function(input, output) {
     tidied() %>%
       arrange(Rank) %>%
       gt() %>%
-      fmt_number(columns = 3:ncol(tidied()), decimals = 2) %>%
+      fmt_number(columns = -c("Rank"), decimals = 2) %>%
       data_color(columns = Rank, method = "numeric", palette = "viridis",
                  reverse = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
