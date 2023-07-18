@@ -2,8 +2,8 @@ library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
 library(shinycssloaders)
+library(dplyr)
 library(gt)
-library(nmfspalette)
 library(plotly)
 
 # load in data (10 factors)
@@ -20,6 +20,19 @@ ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
 
 # load in species management groups
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
+
+# join data
+joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
+joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName"))
+joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
+joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "speciesName"))
+joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
+joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName"))
+joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "speciesName"))
+joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
+joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName"))
+joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName")) %>%
+  select(Species, Rank, Score, Recruit_Var:managementGroup)
 
 # Define UI for application that produces tables + description of variables
 shinyUI(
@@ -70,19 +83,27 @@ shinyUI(
           
           tabItem(tabName = "com_page",
                   h1("Commercial Importance"),
-                  selectInput("com_species_selector",
-                              "Select a species management group:",
-                              choices = c(unique(as.character(species_groups$managementGroup))),
-                              selected = c(unique(as.character(species_groups$managementGroup))),
-                              multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("com_columns", "Select columns:",
+                                           choices = colnames(joined_com_df),
+                                           selected = c("Species", "Rank",
+                                                        "Factor_Score", "Revenue")
+                        ),
+                        selectInput("com_species_selector",
+                                    "Select a species management group:",
+                                    choices = c(unique(as.character(species_groups$managementGroup))),
+                                    selected = c(unique(as.character(species_groups$managementGroup))),
+                                    multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("com_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "Commercial Importance Ranking Plot", status = "primary",
@@ -94,20 +115,28 @@ shinyUI(
           
           tabItem(tabName = "rec_page",
                   h1("Recreational Importance"),
-                  selectInput(
-                    inputId = "rec_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("rec_columns", "Select columns:",
+                                           choices = colnames(joined_rec_df),
+                                           selected = c("Species", "Rank",
+                                                        "Factor_Score", "Pseudo_CW")
+                        ),
+                        selectInput(
+                          inputId = "rec_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("rec_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "Recreational Importance Ranking Plot", status = "primary",
@@ -119,20 +148,28 @@ shinyUI(
           
           tabItem(tabName = "tribal_page",
                   h1("Tribal Importance"),
-                  selectInput(
-                    inputId = "tribal_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("tribal_columns", "Select columns:",
+                                           choices = colnames(joined_tribal_df),
+                                           selected = c("Species", "Rank",
+                                                        "Factor_Score", "Revenue")
+                        ),
+                        selectInput(
+                          inputId = "tribal_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("tribal_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "Tribal Importance Ranking Plot", status = "primary",
@@ -144,20 +181,32 @@ shinyUI(
           
           tabItem(tabName = "cd_page",
                   h1("Constituent Demand"),
-                  selectInput(
-                    inputId = "cd_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("cd_columns", "Select columns:",
+                                           choices = colnames(joined_cd_df),
+                                           selected = c("Species", "Rank",
+                                                        "Factor_Score", "Choke_Stock",
+                                                        "Commercial_Importance",
+                                                        "Recreational_Importance",
+                                                        "Landings_Constricted",
+                                                        "Concern")
+                        ),
+                        selectInput(
+                          inputId = "cd_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("cd_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "Constituent Demand Ranking Plot", status = "primary",
@@ -169,20 +218,28 @@ shinyUI(
           
           tabItem(tabName = "rebuilding_page",
                   h1("Rebuilding"),
-                  selectInput(
-                    inputId = "reb_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("reb_columns", "Select columns:",
+                                           choices = colnames(joined_reb_df),
+                                           selected = c("Species", "rebuilding",
+                                                        "target_year")
+                        ),
+                        selectInput(
+                          inputId = "reb_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("reb_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "Rebuilding Ranking Plot", status = "primary",
@@ -194,20 +251,28 @@ shinyUI(
           
           tabItem(tabName = "ss_page",
                   h1("Stock Status"),
-                  selectInput(
-                    inputId = "ss_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("ss_columns", "Select columns:",
+                                           choices = colnames(joined_ss_df),
+                                           selected = c("Species", "Rank",
+                                                        "Estimate", "PSA")
+                        ),
+                        selectInput(
+                          inputId = "ss_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("ss_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "Stock Status Ranking Plot", status = "primary",
@@ -219,20 +284,31 @@ shinyUI(
           
           tabItem(tabName = "fm_page",
                   h1("Fishing Mortality"),
-                  selectInput(
-                    inputId = "fm_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("fm_columns", "Select columns:",
+                                           choices = colnames(joined_fm_df),
+                                           selected = c("Species", "Rank",
+                                                        "Factor_Score",
+                                                        "Fishing_Mortality", "OFL",
+                                                        "OFL_Attain_Percent",
+                                                        "managementGroup")
+                        ),
+                        selectInput(
+                          inputId = "fm_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("fm_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "Fishing Mortality Ranking Plot", status = "primary",
@@ -244,20 +320,29 @@ shinyUI(
           
           tabItem(tabName = "eco_page",
                   h1("Ecosystem"),
-                  selectInput(
-                    inputId = "eco_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("eco_columns", "Select columns:",
+                                           choices = colnames(joined_eco_df),
+                                           selected = c("Species", "Rank",
+                                                        "Factor_Score",
+                                                        "Ecosystem_Score")
+                        ),
+                        selectInput(
+                          inputId = "eco_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("eco_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "Ecosystem Ranking Plot", status = "primary",
@@ -269,20 +354,28 @@ shinyUI(
           
           tabItem(tabName = "ni_page",
                   h1("New Information"),
-                  selectInput(
-                    inputId = "ni_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("ni_columns", "Select columns:",
+                                           choices = colnames(joined_ni_df),
+                                           selected = c("Species", "Rank",
+                                                        "notes")
+                        ),
+                        selectInput(
+                          inputId = "ni_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("ni_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "New Information Ranking Plot", status = "primary",
@@ -294,20 +387,28 @@ shinyUI(
           
           tabItem(tabName = "af_page",
                   h1("Assessment Frequency"),
-                  selectInput(
-                    inputId = "af_species_selector",
-                    label = "Select a species management group:",
-                    choices = c(unique(as.character(species_groups$managementGroup))),
-                    selected = c(unique(as.character(species_groups$managementGroup))),
-                    multiple = TRUE
-                  ),
-                  em("Place cursor in the box and press delete to narrow down your selection."),
-                  br(),
-                  br(),
                   fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxGroupInput("af_columns", "Select columns:",
+                                           choices = colnames(joined_af_df),
+                                           selected = c("Species", "Score",
+                                                        "Last_Assess", "MeanAge")
+                        ),
+                        selectInput(
+                          inputId = "af_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, gt_output("af_gt_table") %>% withSpinner(),
-                        width = 12)
+                        width = 9)
                   ),
                   fluidRow(
                     box(title = "Assessment Frequency Ranking Plot", status = "primary",
