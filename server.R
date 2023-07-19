@@ -84,7 +84,7 @@ joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "sp
   arrange(Rank)
 
 joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName")) %>%
-  arrange(desc(rebuilding))
+  arrange(desc(Currently_Rebuilding))
 
 joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName")) %>%
   arrange(Rank)
@@ -99,7 +99,7 @@ joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "spe
   arrange(Rank)
 
 joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName")) %>%
-  select(Species, Rank, Score, Recruit_Var:managementGroup) %>%
+  select(Species, Rank, Score, Recruit_Variation:managementGroup) %>%
   arrange(Rank)
 
 

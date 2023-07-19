@@ -1,4 +1,4 @@
-Species,Rank,Factor_score,Year_Last_Assessed,Assessmet_Type,Steepness_Prior,Abundance_Information,Population_Dynamics_Information,Past_Issues_can_be_Addressed,notes
+Species,Rank,Factor_score,Year_Last_Assessed,Assessmet_Type,Steepness_Prior,Abundance_Information,Population_Dynamics_Information,Past_Issues_can_be_Addressed,Notes
 Splitnose rockfish,1,9,2009,Benchmark,5,2,2,,~38K lengths and 16K otoliths collected since last assessment
 Brown rockfish,2,6,2013,Data Moderate,3,1,2,,~84K lengths and ~1K otoliths have been collected
 Pacific sanddab,2,6,,,,3,3,,"~167K lengths, ~8K aged, and ~21K otoliths collected"

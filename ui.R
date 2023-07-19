@@ -32,7 +32,7 @@ joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "sp
 joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
 joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName"))
 joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName")) %>%
-  select(Species, Rank, Score, Recruit_Var:managementGroup)
+  select(Species, Rank, Score, Recruit_Variation:managementGroup)
 
 # Define UI for application that produces tables + description of variables
 shinyUI(
@@ -125,7 +125,7 @@ shinyUI(
                         checkboxGroupInput("rec_columns", "Select columns:",
                                            choices = colnames(joined_rec_df),
                                            selected = c("Species", "Rank",
-                                                        "Factor_Score", "Pseudo_CW")
+                                                        "Factor_Score", "Pseudo_Revenue_Coastwide")
                         ),
                         selectInput(
                           inputId = "rec_species_selector",
@@ -194,7 +194,7 @@ shinyUI(
                         checkboxGroupInput("cd_columns", "Select columns:",
                                            choices = colnames(joined_cd_df),
                                            selected = c("Species", "Rank",
-                                                        "Factor_Score", "Choke_Stock",
+                                                        "Factor_Score", "Choke_Stock_Adjustment",
                                                         "Commercial_Importance",
                                                         "Recreational_Importance",
                                                         "Landings_Constricted",
@@ -231,8 +231,8 @@ shinyUI(
                         solidHeader = TRUE, width = 3,
                         checkboxGroupInput("reb_columns", "Select columns:",
                                            choices = colnames(joined_reb_df),
-                                           selected = c("Species", "rebuilding",
-                                                        "target_year")
+                                           selected = c("Species", "Currently_Rebuilding",
+                                                        "Rebuilding_Target_Year")
                         ),
                         selectInput(
                           inputId = "reb_species_selector",
@@ -266,7 +266,7 @@ shinyUI(
                         checkboxGroupInput("ss_columns", "Select columns:",
                                            choices = colnames(joined_ss_df),
                                            selected = c("Species", "Rank",
-                                                        "Estimate", "PSA")
+                                                        "Fraction_Unfished", "PSA")
                         ),
                         selectInput(
                           inputId = "ss_species_selector",
@@ -301,8 +301,8 @@ shinyUI(
                                            choices = colnames(joined_fm_df),
                                            selected = c("Species", "Rank",
                                                         "Factor_Score",
-                                                        "Fishing_Mortality", "OFL",
-                                                        "OFL_Attain_Percent",
+                                                        "Average_Removals", "Average_OFL",
+                                                        "Average_OFL_Attainment",
                                                         "managementGroup")
                         ),
                         selectInput(
@@ -372,7 +372,7 @@ shinyUI(
                         checkboxGroupInput("ni_columns", "Select columns:",
                                            choices = colnames(joined_ni_df),
                                            selected = c("Species", "Rank",
-                                                        "notes")
+                                                        "Notes")
                         ),
                         selectInput(
                           inputId = "ni_species_selector",
@@ -406,7 +406,7 @@ shinyUI(
                         checkboxGroupInput("af_columns", "Select columns:",
                                            choices = colnames(joined_af_df),
                                            selected = c("Species", "Score",
-                                                        "Last_Assess", "MeanAge")
+                                                        "Last_Assessment_Year", "Target_Assessment_Frequency")
                         ),
                         selectInput(
                           inputId = "af_species_selector",
