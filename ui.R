@@ -53,7 +53,6 @@ shinyUI(
                                               icon = icon("dollar-sign")),
                                   menuSubItem("Recreational Importance", tabName = "rec_page",
                                               icon = icon("campground")),
-                                  # edit tribal icon!
                                   menuSubItem("Tribal Importance", tabName = "tribal_page"),
                                   menuSubItem("Constituent Demand", tabName = "cd_page",
                                               icon = icon("person")),
@@ -78,9 +77,11 @@ shinyUI(
         
         tabItems(
           
+          # home page (landing)
           tabItem(tabName = "home",
                   h1("Welcome!")),
           
+          # commercial importance page
           tabItem(tabName = "com_page",
                   h1("Commercial Importance"),
                   fluidRow(
@@ -117,6 +118,7 @@ shinyUI(
                   )
           ),
           
+          # recreational importance page
           tabItem(tabName = "rec_page",
                   h1("Recreational Importance"),
                   fluidRow(
@@ -186,6 +188,7 @@ shinyUI(
                   )
           ),
           
+          # constituent demand page
           tabItem(tabName = "cd_page",
                   h1("Constituent Demand"),
                   fluidRow(
@@ -224,6 +227,7 @@ shinyUI(
                   )
           ),
           
+          # rebuilding page
           tabItem(tabName = "rebuilding_page",
                   h1("Rebuilding"),
                   fluidRow(
@@ -258,6 +262,7 @@ shinyUI(
                   )
           ),
           
+          # stock status page
           tabItem(tabName = "ss_page",
                   h1("Stock Status"),
                   fluidRow(
@@ -292,6 +297,7 @@ shinyUI(
                   )
           ),
           
+          # fishing mortality page
           tabItem(tabName = "fm_page",
                   h1("Fishing Mortality"),
                   fluidRow(
@@ -329,6 +335,7 @@ shinyUI(
                   )
           ),
           
+          # ecosystem page
           tabItem(tabName = "eco_page",
                   h1("Ecosystem"),
                   fluidRow(
@@ -364,6 +371,7 @@ shinyUI(
                   )
           ),
           
+          # new information page
           tabItem(tabName = "ni_page",
                   h1("New Information"),
                   fluidRow(
@@ -398,6 +406,7 @@ shinyUI(
                   )
           ),
           
+          # assessment frequency page
           tabItem(tabName = "af_page",
                   h1("Assessment Frequency"),
                   fluidRow(

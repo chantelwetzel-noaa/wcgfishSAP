@@ -9,7 +9,7 @@
 #' @examples 
 #' \dontrun{ mort_adj <- rename_cryptic_names(x = mortality) }
 #' 
-format_species_names <- function(x, col_name = "Species"){
+format_species_names <- function(x, col_name = "speciesName"){
   
   x[, col_name] <- tolower(x[, col_name])
   cryptic_names <- rbind(

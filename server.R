@@ -13,7 +13,6 @@ library(viridis)
 ## const_demand, assessment_frequency, ecosystem, new_information,
 ## rebuilding use sentence case for both species names
 
-## rougheye rockfish has spelling error
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 
 rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
@@ -41,36 +40,35 @@ new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
 ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
 
 
-## load in species management groups 
+## load in species management groups, format cryptic species names
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
+species_groups <- format_species_names(x = species_groups)
 
 
 # replace species column
-com_rev_data$Species <- str_to_sentence(species_groups$speciesName)
-tribal_data$Species <- str_to_sentence(species_groups$speciesName)
-rebuilding_data$Species <- str_to_sentence(species_groups$speciesName)
-stock_stat_data$Species <- str_to_sentence(species_groups$speciesName)
-eco_data$Species <- str_to_sentence(species_groups$speciesName)
-ass_freq_data$Species <- str_to_sentence(species_groups$speciesName)
+com_rev_data$Species <- species_groups$speciesName
+tribal_data$Species <- species_groups$speciesName
+rebuilding_data$Species <- species_groups$speciesName
+stock_stat_data$Species <- species_groups$speciesName
+eco_data$Species <- species_groups$speciesName
+ass_freq_data$Species <- species_groups$speciesName
 
 
 # order species alphabetically, replace species column
 rec_data <- rec_data[order(rec_data$Species),]
-rec_data$Species <- str_to_sentence(species_groups$speciesName)
+rec_data$Species <- species_groups$speciesName
 
 fish_mort_data <- fish_mort_data[order(fish_mort_data$Species),]
-fish_mort_data$Species <- str_to_sentence(species_groups$speciesName)
+fish_mort_data$Species <- species_groups$speciesName
 
 const_dem_data <- const_dem_data[order(const_dem_data$Species),]
-const_dem_data$Species <- str_to_sentence(species_groups$speciesName)
+const_dem_data$Species <- species_groups$speciesName
 
 new_info_data <- new_info_data[order(new_info_data$Species),]
-new_info_data$Species <- str_to_sentence(species_groups$speciesName)
+new_info_data$Species <- species_groups$speciesName
 
 
 # join tables + species mgmt. groups
-species_groups$speciesName <- str_to_sentence(species_groups$speciesName)
-
 joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName")) %>%
   arrange(Rank)
 
@@ -191,7 +189,7 @@ shinyServer(function(input, output) {
     }
     
     rec_table %>%
-      fmt_currency(columns = contains("Pseudo"), decimals = 0) %>%
+      fmt_currency(columns = contains("Revenue"), decimals = 0) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
       opt_interactive(use_search = TRUE,
@@ -300,7 +298,9 @@ shinyServer(function(input, output) {
     
     cd_table %>%
       fmt_percent(columns = contains("Percent"), decimals = 1,
-                  scale_values = FALSE) %>%
+                  scale_values = TRUE) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = Species)) %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -338,10 +338,10 @@ shinyServer(function(input, output) {
         title = "Rebuilding"
       )
     
-    if("rebuilding" %in% input$reb_columns) {
+    if("Currently_Rebuilding" %in% input$reb_columns) {
       reb_table <- reb_table %>%
-        fmt_number(columns = -c("rebuilding"), decimals = 2) %>%
-        data_color(columns = rebuilding, method = "numeric", palette = "viridis")
+        fmt_number(columns = -c("Currently_Rebuilding"), decimals = 2) %>%
+        data_color(columns = Currently_Rebuilding, method = "numeric", palette = "viridis")
     } else {
       reb_table <- reb_table %>%
         fmt_number(columns = everything(), decimals = 2)
@@ -356,8 +356,8 @@ shinyServer(function(input, output) {
   })
   
   # rebuilding species ranking plot - uses rebuilding score
-  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = rebuilding)) +
-    geom_segment(aes(x = Species, xend = Species, y = 0, yend = rebuilding),
+  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = Currently_Rebuilding)) +
+    geom_segment(aes(x = Species, xend = Species, y = 0, yend = Currently_Rebuilding),
                  color = "gray") +
     geom_point(aes(color = managementGroup), size = 3) +
     ylim(NA, 10) +
@@ -391,14 +391,14 @@ shinyServer(function(input, output) {
                    reverse = TRUE)
     }
     
-    if("Estimate" %in% input$ss_columns) {
+    if("Fraction_Unfished" %in% input$ss_columns) {
       ss_table <- ss_table %>%
-        fmt_percent(columns = Estimate, decimals = 1)
+        fmt_percent(columns = Fraction_Unfished, decimals = 1)
     }
     
-    if("Target" %in% input$ss_columns) {
+    if("Target_Fraction_Unfised" %in% input$ss_columns) {
       ss_table <- ss_table %>%
-        fmt_percent(columns = Target, decimals = 1)
+        fmt_percent(columns = Target_Fraction_Unfised, decimals = 1)
     }
     
     if("MSST" %in% input$ss_columns) {
@@ -456,37 +456,40 @@ shinyServer(function(input, output) {
         fmt_number(columns = everything(), decimals = 2)
     }
     
-    if("OFL_Attain_Percent" %in% input$fm_columns) {
+    if("Average_OFL_Attainment" %in% input$fm_columns) {
       fm_table <- fm_table %>%
         tab_style(style = list(cell_fill(color = "red"),
                                cell_text(color = "white")),
-                  locations = cells_body(columns = OFL_Attain_Percent,
-                                         rows = OFL_Attain_Percent > 1.00)
+                  locations = cells_body(columns = Average_OFL_Attainment,
+                                         rows = Average_OFL_Attainment > 1.00)
         ) %>%
         tab_footnote(footnote = "Cells highlighted bright red indicate
                      high OFL attainment percentages.",
-                     locations = cells_column_labels(columns = OFL_Attain_Percent))
+                     locations = cells_column_labels(columns = Average_OFL_Attainment))
     }
     
+    if("Average_OFL" %in% input$fm_columns &
+       "managementGroup" %in% input$fm_columns) {
+      fm_table <- fm_table %>%
+        data_color(columns = managementGroup, target_columns = Average_OFL,
+                   method = "factor",
+                   domain = c("minor slope rockfish",
+                              "minor nearshore rockfish",
+                              "minor shelf rockfish",
+                              "other flatfish",
+                              "other groundfish"),
+                   palette = c("#F9E3D6"),
+                   na_color = "white") %>%
+        tab_footnote(footnote = "Cells highlighted light red indicate OFL contributions.",
+                     locations = cells_column_labels(columns = Average_OFL)
+        )
+    }
+      
+    # doesn't appear?
     fm_table %>%
-      fmt_percent(columns = contains("Percent"), decimals = 1) %>%
-      data_color(columns = managementGroup, target_columns = OFL,
-                 method = "factor",
-                 domain = c("minor slope rockfish",
-                            "minor nearshore rockfish",
-                            "minor shelf rockfish",
-                            "other flatfish",
-                            "other groundfish"),
-                 palette = c("#F9E3D6"),
-                 na_color = "white") %>%
+      fmt_percent(columns = contains("Attainment"), decimals = 1) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
-      
-      # doesn't appear?
-      tab_footnote(
-        footnote = "Cells highlighted light red indicate OFL contributions.",
-        locations = cells_column_labels(columns = OFL)
-      ) %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
