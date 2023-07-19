@@ -11,6 +11,7 @@
 #' 
 format_species_names <- function(x, col_name = "Species"){
   
+  x[, col_name] <- tolower(x[, col_name])
   cryptic_names <- rbind(
     c("rougheye rockfish", "blackspotted rockfish", "rougheye/Blackspotted rockfish"),
     c("vermilion rockfish", "sunset rockfish", "vermilion/Sunset rockfish"),
@@ -22,7 +23,7 @@ format_species_names <- function(x, col_name = "Species"){
     find <- c(grep(cryptic_names[a, "name1"], x[, col_name],  ignore.case = TRUE),
               grep(cryptic_names[a, "name2"], x[, col_name],  ignore.case = TRUE))
     if (length(find) > 0 ) {
-      x[unique(find), col_name] <- cryptic_names[a,"cryptic_name"]  
+      x[unique(find), col_name] <- cryptic_names[a, "cryptic_name"]  
     }
   }
   substr(x[, col_name], 1, 1) <- toupper(substr(x[, col_name], 1, 1))
