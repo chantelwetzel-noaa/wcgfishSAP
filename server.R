@@ -25,6 +25,7 @@ const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
 
 ## table has no rank column
 rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
+rebuilding_data <- replace(rebuilding_data, rebuilding_data == "", NA)
 
 stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
 
@@ -35,6 +36,7 @@ eco_data <- read.csv("tables/ecosystem.csv", header = TRUE) %>%
 eco_data$Factor_Score <- as.numeric(eco_data$Factor_Score)
 
 new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
+new_info_data <- replace(new_info_data, new_info_data == "", NA)
 
 ## rank column at end of table
 ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
@@ -366,13 +368,18 @@ shinyServer(function(input, output) {
         title = "Rebuilding"
       )
     
-    if("Currently_Rebuilding" %in% input$reb_columns) {
-      reb_table <- reb_table %>%
-        fmt_number(columns = -c("Currently_Rebuilding"), decimals = 2) %>%
-        data_color(columns = Currently_Rebuilding, method = "numeric", palette = "viridis")
-    } else {
-      reb_table <- reb_table %>%
-        fmt_number(columns = everything(), decimals = 2)
+    for(i in input$reb_colors) {
+      if(i == "Currently_Rebuilding" & "Currently_Rebuilding" %in% input$reb_columns) {
+        reb_table <- reb_table %>%
+          data_color(columns = Currently_Rebuilding, method = "numeric", palette = "viridis")
+      } else if(i == "Rebuilding_Target_Year" & "Rebuilding_Target_Year" %in% input$reb_columns) {
+        reb_table <- reb_table %>%
+          data_color(columns = Rebuilding_Target_Year, method = "auto", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        reb_table <- reb_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
     }
     
     reb_table %>%
@@ -631,10 +638,19 @@ shinyServer(function(input, output) {
         title = "New Information"
       )
     
-    if("Rank" %in% input$ni_columns) {
-      ni_table <- ni_table %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+    for(i in input$ni_colors) {
+      if(i == "Rank" & "Rank" %in% input$ni_columns) {
+        ni_table <- ni_table %>%
+          data_color(columns = Rank, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else if(i == "Year_Last_Assessed") {
+        ni_table <- ni_table %>%
+          data_color(columns = Year_Last_Assessed, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        ni_table <- ni_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
     }
     
     ni_table %>%
@@ -677,10 +693,18 @@ shinyServer(function(input, output) {
         title = "Assessment Frequency"
       )
     
-    if("Score" %in% input$af_columns) {
-      af_table <- af_table %>%
-        data_color(columns = Score, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+    for(i in input$af_colors) {
+      if(i == "Score" & "Score" %in% input$af_columns) {
+        af_table <- af_table %>%
+          data_color(columns = Score, method = "numeric", palette = "viridis")
+      } else if(i == "Last_Assessment_Year") {
+        af_table <- af_table %>%
+          data_color(columns = Last_Assessment_Year, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        af_table <- af_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
     }
     
     af_table %>%

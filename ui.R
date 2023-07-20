@@ -34,9 +34,12 @@ joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "spe
 joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName")) %>%
   select(Species, Rank, Score, Recruit_Variation:managementGroup)
 
-# narrowing down fishing mortality columns
-all_cols <- colnames(joined_fm_df)
-to_color <- all_cols[all_cols != "Average_OFL" & all_cols != "Average_OFL_Attainment"]
+# narrowing down columns
+all_fm_cols <- colnames(joined_fm_df)
+fm_to_color <- all_fm_cols[all_fm_cols != "Average_OFL" & all_fm_cols != "Average_OFL_Attainment"]
+
+all_ni_cols <- colnames(joined_ni_df)
+ni_to_color <- all_ni_cols[all_ni_cols != "Notes"]
 
 # Define UI for application that produces tables + description of variables
 shinyUI(
@@ -270,7 +273,8 @@ shinyUI(
                                                choices = colnames(joined_cd_df),
                                                selected = c("Rank")
                             ),
-                            em("**Selecting a column that is not in the table will cause an error.")
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
                           )
                         ),
                         br(),
@@ -305,11 +309,28 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("reb_columns", "Select columns:",
-                                           choices = colnames(joined_reb_df),
-                                           selected = c("Species", "Currently_Rebuilding",
-                                                        "Rebuilding_Target_Year")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("reb_columns", "Select columns to display:",
+                                               choices = colnames(joined_reb_df),
+                                               selected = c("Species", "Currently_Rebuilding",
+                                                            "Rebuilding_Target_Year")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("reb_colors", "Select columns to color:",
+                                               choices = colnames(joined_reb_df),
+                                               selected = c("Currently_Rebuilding")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
                         ),
+                        br(),
                         selectInput(
                           inputId = "reb_species_selector",
                           label = "Select a species management group:",
@@ -409,10 +430,11 @@ shinyUI(
                             "Coloring",
                             br(),
                             checkboxGroupInput("fm_colors", "Select columns to color:",
-                                               choices = to_color,
+                                               choices = fm_to_color,
                                                selected = c("Rank")
                             ),
-                            em("**Selecting a column that is not in the table will cause an error.")
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
                           )
                         ),
                         br(),
@@ -498,11 +520,28 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("ni_columns", "Select columns:",
-                                           choices = colnames(joined_ni_df),
-                                           selected = c("Species", "Rank",
-                                                        "Notes")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("ni_columns", "Select columns to display:",
+                                               choices = colnames(joined_ni_df),
+                                               selected = c("Species", "Rank",
+                                                            "Notes")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("ni_colors", "Select columns to color:",
+                                               choices = ni_to_color,
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
                         ),
+                        br(),
                         selectInput(
                           inputId = "ni_species_selector",
                           label = "Select a species management group:",
@@ -533,11 +572,29 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("af_columns", "Select columns:",
-                                           choices = colnames(joined_af_df),
-                                           selected = c("Species", "Score",
-                                                        "Last_Assessment_Year", "Target_Assessment_Frequency")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("af_columns", "Select columns to display:",
+                                               choices = colnames(joined_af_df),
+                                               selected = c("Species", "Score",
+                                                            "Last_Assessment_Year",
+                                                            "Target_Assessment_Frequency")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("af_colors", "Select columns to display:",
+                                               choices = colnames(joined_af_df),
+                                               selected = c("Score")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
                         ),
+                        br(),
                         selectInput(
                           inputId = "af_species_selector",
                           label = "Select a species management group:",
