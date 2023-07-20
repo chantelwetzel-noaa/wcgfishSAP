@@ -114,7 +114,7 @@ shinyServer(function(input, output) {
     # decimal_cols <- input$com_columns[sapply(input$com_columns, is.numeric)]
 
     # create commercial revenue gt table output, display in ascending order by rank
-    com_base_table <- joined_com_df %>%
+    com_table <- joined_com_df %>%
       select(input$com_columns) %>%
       gt() %>%
       tab_header(
@@ -122,19 +122,27 @@ shinyServer(function(input, output) {
         subtitle = "Measured by average ex-vessel revenue data
         between 2018-2021"
       )
-      # data_color(columns = -c("Species"), method = "auto", palette = "viridis")
+
+    for(i in input$com_colors) {
+      if(i == "Rank" & "Rank" %in% input$com_columns) {
+        com_table <- com_table %>%
+          data_color(columns = Rank, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        com_table <- com_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
+    }
     
     if("Rank" %in% input$com_columns) {
-      com_base_table <- com_base_table %>%
-        fmt_number(columns = -c("Rank"), decimals = 2) %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+      com_table <- com_table %>%
+        fmt_number(columns = -c("Rank"), decimals = 2)
     } else {
-      com_base_table <- com_base_table %>%
+      com_table <- com_table %>%
         fmt_number(columns = everything(), decimals = 2)
     }
     
-    com_base_table %>%
+    com_table %>%
       fmt_currency(columns = contains("Revenue"), decimals = 0) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
@@ -178,11 +186,20 @@ shinyServer(function(input, output) {
         title = "Recreational Importance"
       )
     
+    for(i in input$rec_colors) {
+      if(i == "Rank" & "Rank" %in% input$rec_columns) {
+        rec_table <- rec_table %>%
+          data_color(columns = Rank, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        rec_table <- rec_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
+    }
+    
     if("Rank" %in% input$rec_columns) {
       rec_table <- rec_table %>%
-        fmt_number(columns = -c("Rank"), decimals = 2) %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+        fmt_number(columns = -c("Rank"), decimals = 2)
     } else {
       rec_table <- rec_table %>%
         fmt_number(columns = everything(), decimals = 2)
@@ -232,11 +249,20 @@ shinyServer(function(input, output) {
         title = "Tribal Importance"
       )
     
+    for(i in input$tribal_colors) {
+      if(i == "Rank" & "Rank" %in% input$tribal_columns) {
+        tribal_table <- tribal_table %>%
+          data_color(columns = Rank, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        tribal_table <- tribal_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
+    }
+    
     if("Rank" %in% input$tribal_columns) {
       tribal_table <- tribal_table %>%
-        fmt_number(columns = -c("Rank"), decimals = 2) %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+        fmt_number(columns = -c("Rank"), decimals = 2)
     } else {
       tribal_table <- tribal_table %>%
         fmt_number(columns = everything(), decimals = 2)
@@ -273,6 +299,7 @@ shinyServer(function(input, output) {
   
   
   # constituent demand table
+  ## fix: coloring doesn't work for NA cells (Concern column)
   output$cd_gt_table <- render_gt({
     
     # filter data down to species selected
@@ -286,14 +313,15 @@ shinyServer(function(input, output) {
         title = "Constituent Demand"
       )
     
-    if("Rank" %in% input$cd_columns) {
-      cd_table <- cd_table %>%
-        fmt_number(columns = -c("Rank"), decimals = 2) %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
-    } else {
-      cd_table <- cd_table %>%
-        fmt_number(columns = everything(), decimals = 2)
+    for(i in input$cd_colors) {
+      if(i == "Rank" & "Rank" %in% input$cd_columns) {
+        cd_table <- cd_table %>%
+          data_color(columns = Rank, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        cd_table <- cd_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
     }
     
     cd_table %>%
@@ -385,10 +413,16 @@ shinyServer(function(input, output) {
         title = "Stock Status"
       )
     
-    if("Rank" %in% input$ss_columns) {
-      ss_table <- ss_table %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+    # reverse color scale for Fraction_Unfished?
+    for(i in input$ss_colors) {
+      if(i == "Rank" & "Rank" %in% input$ss_columns) {
+        ss_table <- ss_table %>%
+          data_color(columns = Rank, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        ss_table <- ss_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
     }
     
     if("Fraction_Unfished" %in% input$ss_columns) {
@@ -435,7 +469,9 @@ shinyServer(function(input, output) {
   })
   
   
-  # fishing mortality table - CREATE CONDITIONALS
+  # fishing mortality table
+  ## footnotes disappear if less than 2
+  ## have option to color Average_OFL and Average_OFL_Attainment?
   output$fm_gt_table <- render_gt({
     joined_fm_df <- joined_fm_df[joined_fm_df$managementGroup %in% input$fm_species_selector,]
     
@@ -446,11 +482,20 @@ shinyServer(function(input, output) {
         title = "Fishing Mortality"
       )
     
+    for(i in input$fm_colors) {
+      if(i == "Rank" & "Rank" %in% input$fm_columns) {
+        fm_table <- fm_table %>%
+          data_color(columns = Rank, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        fm_table <- fm_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
+    }
+    
     if("Rank" %in% input$fm_columns) {
       fm_table <- fm_table %>%
-        fmt_number(columns = -c("Rank"), decimals = 2) %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+        fmt_number(columns = -c("Rank"), decimals = 2)
     } else {
       fm_table <- fm_table %>%
         fmt_number(columns = everything(), decimals = 2)
@@ -484,8 +529,7 @@ shinyServer(function(input, output) {
                      locations = cells_column_labels(columns = Average_OFL)
         )
     }
-      
-    # doesn't appear?
+
     fm_table %>%
       fmt_percent(columns = contains("Attainment"), decimals = 1) %>%
       tab_style(style = list(cell_text(weight = "bold")),
@@ -527,10 +571,15 @@ shinyServer(function(input, output) {
         title = "Ecosystem"
       )
     
-    if("Rank" %in% input$eco_columns) {
-      eco_table <- eco_table %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+    for(i in input$eco_colors) {
+      if(i == "Rank" & "Rank" %in% input$eco_columns) {
+        eco_table <- eco_table %>%
+          data_color(columns = Rank, method = "numeric", palette = "viridis",
+                     reverse = TRUE)
+      } else {
+        eco_table <- eco_table %>%
+          data_color(columns = i, method = "auto", palette = "viridis")
+      }
     }
     
     if("Factor_Score" %in% input$eco_columns) {

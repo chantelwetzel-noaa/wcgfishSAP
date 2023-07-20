@@ -34,6 +34,10 @@ joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "spe
 joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName")) %>%
   select(Species, Rank, Score, Recruit_Variation:managementGroup)
 
+# narrowing down fishing mortality columns
+all_cols <- colnames(joined_fm_df)
+to_color <- all_cols[all_cols != "Average_OFL" & all_cols != "Average_OFL_Attainment"]
+
 # Define UI for application that produces tables + description of variables
 shinyUI(
  fluidPage(
@@ -87,11 +91,28 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("com_columns", "Select columns:",
-                                           choices = colnames(joined_com_df),
-                                           selected = c("Species", "Rank",
-                                                        "Factor_Score", "Revenue")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("com_columns", "Select columns to display:",
+                                               choices = colnames(joined_com_df),
+                                               selected = c("Species", "Rank",
+                                                            "Factor_Score", "Revenue")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("com_colors", "Select columns to color:",
+                                               choices = colnames(joined_com_df),
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
                         ),
+                        br(),
                         selectInput("com_species_selector",
                                     "Select a species management group:",
                                     choices = c(unique(as.character(species_groups$managementGroup))),
@@ -124,11 +145,28 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("rec_columns", "Select columns:",
-                                           choices = colnames(joined_rec_df),
-                                           selected = c("Species", "Rank",
-                                                        "Factor_Score", "Pseudo_Revenue_Coastwide")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("rec_columns", "Select columns to display:",
+                                               choices = colnames(joined_rec_df),
+                                               selected = c("Species", "Rank",
+                                                            "Factor_Score", "Pseudo_Revenue_Coastwide")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("rec_colors", "Select columns to color:",
+                                               choices = colnames(joined_rec_df),
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
                         ),
+                        br(),
                         selectInput(
                           inputId = "rec_species_selector",
                           label = "Select a species management group:",
@@ -159,11 +197,28 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("tribal_columns", "Select columns:",
-                                           choices = colnames(joined_tribal_df),
-                                           selected = c("Species", "Rank",
-                                                        "Factor_Score", "Revenue")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("tribal_columns", "Select columns to display:",
+                                               choices = colnames(joined_tribal_df),
+                                               selected = c("Species", "Rank",
+                                                            "Factor_Score", "Revenue")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("tribal_colors", "Select columns to color:",
+                                               choices = colnames(joined_tribal_df),
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
                         ),
+                        br(),
                         selectInput(
                           inputId = "tribal_species_selector",
                           label = "Select a species management group:",
@@ -194,15 +249,31 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("cd_columns", "Select columns:",
-                                           choices = colnames(joined_cd_df),
-                                           selected = c("Species", "Rank",
-                                                        "Factor_Score", "Choke_Stock_Adjustment",
-                                                        "Commercial_Importance",
-                                                        "Recreational_Importance",
-                                                        "Landings_Constricted",
-                                                        "Concern")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("cd_columns", "Select columns to display:",
+                                               choices = colnames(joined_cd_df),
+                                               selected = c("Species", "Rank",
+                                                            "Factor_Score", "Choke_Stock_Adjustment",
+                                                            "Commercial_Importance",
+                                                            "Recreational_Importance",
+                                                            "Landings_Constricted",
+                                                            "Concern")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("cd_colors", "Select columns to color:",
+                                               choices = colnames(joined_cd_df),
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.")
+                          )
                         ),
+                        br(),
                         selectInput(
                           inputId = "cd_species_selector",
                           label = "Select a species management group:",
@@ -228,6 +299,7 @@ shinyUI(
           ),
           
           # rebuilding page
+          ## option to color?
           tabItem(tabName = "rebuilding_page",
                   h1("Rebuilding"),
                   fluidRow(
@@ -268,11 +340,28 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("ss_columns", "Select columns:",
-                                           choices = colnames(joined_ss_df),
-                                           selected = c("Species", "Rank",
-                                                        "Fraction_Unfished", "PSA")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("ss_columns", "Select columns to display:",
+                                               choices = colnames(joined_ss_df),
+                                               selected = c("Species", "Rank",
+                                                            "Fraction_Unfished", "PSA")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("ss_colors", "Select columns to color:",
+                                               choices = colnames(joined_ss_df),
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
                         ),
+                        br(),
                         selectInput(
                           inputId = "ss_species_selector",
                           label = "Select a species management group:",
@@ -303,14 +392,30 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("fm_columns", "Select columns:",
-                                           choices = colnames(joined_fm_df),
-                                           selected = c("Species", "Rank",
-                                                        "Factor_Score",
-                                                        "Average_Removals", "Average_OFL",
-                                                        "Average_OFL_Attainment",
-                                                        "managementGroup")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("fm_columns", "Select columns to display:",
+                                               choices = colnames(joined_fm_df),
+                                               selected = c("Species", "Rank",
+                                                            "Factor_Score",
+                                                            "Average_Removals", "Average_OFL",
+                                                            "Average_OFL_Attainment",
+                                                            "managementGroup")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("fm_colors", "Select columns to color:",
+                                               choices = to_color,
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.")
+                          )
                         ),
+                        br(),
                         selectInput(
                           inputId = "fm_species_selector",
                           label = "Select a species management group:",
@@ -341,12 +446,28 @@ shinyUI(
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxGroupInput("eco_columns", "Select columns:",
-                                           choices = colnames(joined_eco_df),
-                                           selected = c("Species", "Rank",
-                                                        "Factor_Score",
-                                                        "Ecosystem_Score")
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("eco_columns", "Select columns to display:",
+                                               choices = colnames(joined_eco_df),
+                                               selected = c("Species", "Rank",
+                                                            "Factor_Score",
+                                                            "Ecosystem_Score")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("eco_colors", "Select columns to color:",
+                                               choices = colnames(joined_eco_df),
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.")
+                          )
                         ),
+                        br(),
                         selectInput(
                           inputId = "eco_species_selector",
                           label = "Select a species management group:",
