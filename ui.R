@@ -21,25 +21,60 @@ ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
 # load in species management groups
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
 
-# join data
+# join data + rename columns
 joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
+joined_com_df <- joined_com_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_com_df)))
+  
 joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName"))
+joined_rec_df <- joined_rec_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_rec_df)))
+
 joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
+joined_tribal_df <- joined_tribal_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_tribal_df)))
+
 joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "speciesName"))
+joined_cd_df <- joined_cd_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_cd_df)))
+
 joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
+joined_reb_df <- joined_reb_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_reb_df)))
+
 joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName"))
+joined_ss_df <- joined_ss_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_ss_df)))
+
 joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "speciesName"))
+joined_fm_df <- joined_fm_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_fm_df)))
+
 joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
+joined_eco_df <- joined_eco_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_eco_df)))
+
 joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName"))
-joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName")) %>%
-  select(Species, Rank, Score, Recruit_Variation:managementGroup)
+joined_ni_df <- joined_ni_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_ni_df)))
 
-# narrowing down columns
-all_fm_cols <- colnames(joined_fm_df)
-fm_to_color <- all_fm_cols[all_fm_cols != "Average_OFL" & all_fm_cols != "Average_OFL_Attainment"]
+joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName"))
+joined_af_df <- joined_af_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_af_df))) %>%
+  select(Species, Rank, Score, `Recruit Variation`:managementGroup)
 
-all_ni_cols <- colnames(joined_ni_df)
-ni_to_color <- all_ni_cols[all_ni_cols != "Notes"]
+# freezing species column when selecting
+com_cols <- colnames(joined_com_df)[colnames(joined_com_df) != "Species"]
+rec_cols <- colnames(joined_rec_df)[colnames(joined_rec_df) != "Species"]
+tribal_cols <- colnames(joined_tribal_df)[colnames(joined_tribal_df) != "Species"]
+cd_cols <- colnames(joined_cd_df)[colnames(joined_cd_df) != "Species"]
+reb_cols <- colnames(joined_reb_df)[colnames(joined_reb_df) != "Species"]
+ss_cols <- colnames(joined_ss_df)[colnames(joined_ss_df) != "Species"]
+fm_cols <- colnames(joined_fm_df)[colnames(joined_fm_df) != "Species"]
+eco_cols <- colnames(joined_eco_df)[colnames(joined_eco_df) != "Species"]
+ni_cols <- colnames(joined_ni_df)[colnames(joined_ni_df) != "Species"]
+ni_cols <- ni_cols[ni_cols != "Notes"]
+af_cols <- colnames(joined_af_df)[colnames(joined_af_df) != "Species"]
 
 # Define UI for application that produces tables + description of variables
 shinyUI(
@@ -76,7 +111,7 @@ shinyUI(
                                   menuSubItem("Assessment Frequency", tabName = "af_page",
                                               icon = icon("calendar-check"))
                          ),
-                         menuItem("Upload your own file", tabName = "test", icon = icon("upload"))
+                         menuItem("Upload file", tabName = "test", icon = icon("upload"))
                        )
       ),
       
@@ -99,16 +134,16 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("com_columns", "Select columns to display:",
-                                               choices = colnames(joined_com_df),
-                                               selected = c("Species", "Rank",
-                                                            "Factor_Score", "Revenue")
+                                               choices = com_cols,
+                                               selected = c("Rank", "Factor Score",
+                                                            "Revenue")
                             )
                           ),
                           tabPanel(
                             "Coloring",
                             br(),
                             checkboxGroupInput("com_colors", "Select columns to color:",
-                                               choices = colnames(joined_com_df),
+                                               choices = com_cols,
                                                selected = c("Rank")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
@@ -153,16 +188,16 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("rec_columns", "Select columns to display:",
-                                               choices = colnames(joined_rec_df),
-                                               selected = c("Species", "Rank",
-                                                            "Factor_Score", "Pseudo_Revenue_Coastwide")
+                                               choices = rec_cols,
+                                               selected = c("Rank", "Factor Score",
+                                                            "Pseudo Revenue Coastwide")
                             )
                           ),
                           tabPanel(
                             "Coloring",
                             br(),
                             checkboxGroupInput("rec_colors", "Select columns to color:",
-                                               choices = colnames(joined_rec_df),
+                                               choices = rec_cols,
                                                selected = c("Rank")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
@@ -205,16 +240,16 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("tribal_columns", "Select columns to display:",
-                                               choices = colnames(joined_tribal_df),
-                                               selected = c("Species", "Rank",
-                                                            "Factor_Score", "Revenue")
+                                               choices = tribal_cols,
+                                               selected = c("Rank", "Factor Score",
+                                                            "Revenue")
                             )
                           ),
                           tabPanel(
                             "Coloring",
                             br(),
                             checkboxGroupInput("tribal_colors", "Select columns to color:",
-                                               choices = colnames(joined_tribal_df),
+                                               choices = tribal_cols,
                                                selected = c("Rank")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
@@ -257,12 +292,12 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("cd_columns", "Select columns to display:",
-                                               choices = colnames(joined_cd_df),
-                                               selected = c("Species", "Rank",
-                                                            "Factor_Score", "Choke_Stock_Adjustment",
-                                                            "Commercial_Importance",
-                                                            "Recreational_Importance",
-                                                            "Landings_Constricted",
+                                               choices = cd_cols,
+                                               selected = c("Rank", "Factor Score",
+                                                            "Choke Stock Adjustment",
+                                                            "Commercial Importance",
+                                                            "Recreational Importance",
+                                                            "Landings Constricted",
                                                             "Concern")
                             )
                           ),
@@ -270,7 +305,7 @@ shinyUI(
                             "Coloring",
                             br(),
                             checkboxGroupInput("cd_colors", "Select columns to color:",
-                                               choices = colnames(joined_cd_df),
+                                               choices = cd_cols,
                                                selected = c("Rank")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
@@ -303,7 +338,6 @@ shinyUI(
           ),
           
           # rebuilding page
-          ## option to color?
           tabItem(tabName = "rebuilding_page",
                   h1("Rebuilding"),
                   fluidRow(
@@ -314,17 +348,17 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("reb_columns", "Select columns to display:",
-                                               choices = colnames(joined_reb_df),
-                                               selected = c("Species", "Currently_Rebuilding",
-                                                            "Rebuilding_Target_Year")
+                                               choices = reb_cols,
+                                               selected = c("Currently Rebuilding",
+                                                            "Rebuilding Target Year")
                             )
                           ),
                           tabPanel(
                             "Coloring",
                             br(),
                             checkboxGroupInput("reb_colors", "Select columns to color:",
-                                               choices = colnames(joined_reb_df),
-                                               selected = c("Currently_Rebuilding")
+                                               choices = reb_cols,
+                                               selected = c("Currently Rebuilding")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
                                style = "color:red")
@@ -366,16 +400,16 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("ss_columns", "Select columns to display:",
-                                               choices = colnames(joined_ss_df),
-                                               selected = c("Species", "Rank",
-                                                            "Fraction_Unfished", "PSA")
+                                               choices = ss_cols,
+                                               selected = c("Rank", "Fraction Unfished",
+                                                            "PSA")
                             )
                           ),
                           tabPanel(
                             "Coloring",
                             br(),
                             checkboxGroupInput("ss_colors", "Select columns to color:",
-                                               choices = colnames(joined_ss_df),
+                                               choices = ss_cols,
                                                selected = c("Rank")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
@@ -418,11 +452,10 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("fm_columns", "Select columns to display:",
-                                               choices = colnames(joined_fm_df),
-                                               selected = c("Species", "Rank",
-                                                            "Factor_Score",
-                                                            "Average_Removals", "Average_OFL",
-                                                            "Average_OFL_Attainment",
+                                               choices = fm_cols,
+                                               selected = c("Rank", "Factor Score",
+                                                            "Average Removals", "Average OFL",
+                                                            "Average OFL Attainment",
                                                             "managementGroup")
                             )
                           ),
@@ -430,7 +463,7 @@ shinyUI(
                             "Coloring",
                             br(),
                             checkboxGroupInput("fm_colors", "Select columns to color:",
-                                               choices = fm_to_color,
+                                               choices = fm_cols,
                                                selected = c("Rank")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
@@ -473,17 +506,16 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("eco_columns", "Select columns to display:",
-                                               choices = colnames(joined_eco_df),
-                                               selected = c("Species", "Rank",
-                                                            "Factor_Score",
-                                                            "Ecosystem_Score")
+                                               choices = eco_cols,
+                                               selected = c("Rank", "Factor Score",
+                                                            "Ecosystem Score")
                             )
                           ),
                           tabPanel(
                             "Coloring",
                             br(),
                             checkboxGroupInput("eco_colors", "Select columns to color:",
-                                               choices = colnames(joined_eco_df),
+                                               choices = eco_cols,
                                                selected = c("Rank")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.")
@@ -525,16 +557,15 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("ni_columns", "Select columns to display:",
-                                               choices = colnames(joined_ni_df),
-                                               selected = c("Species", "Rank",
-                                                            "Notes")
+                                               choices = ni_cols,
+                                               selected = c("Rank", "Notes")
                             )
                           ),
                           tabPanel(
                             "Coloring",
                             br(),
                             checkboxGroupInput("ni_colors", "Select columns to color:",
-                                               choices = ni_to_color,
+                                               choices = ni_cols,
                                                selected = c("Rank")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
@@ -577,17 +608,17 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("af_columns", "Select columns to display:",
-                                               choices = colnames(joined_af_df),
-                                               selected = c("Species", "Score",
-                                                            "Last_Assessment_Year",
-                                                            "Target_Assessment_Frequency")
+                                               choices = af_cols,
+                                               selected = c("Score",
+                                                            "Last Assessment Year",
+                                                            "Target Assessment Frequency")
                             )
                           ),
                           tabPanel(
                             "Coloring",
                             br(),
                             checkboxGroupInput("af_colors", "Select columns to display:",
-                                               choices = colnames(joined_af_df),
+                                               choices = af_cols,
                                                selected = c("Score")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
