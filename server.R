@@ -82,7 +82,7 @@ joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "sp
   arrange(Rank)
 
 joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName")) %>%
-  arrange(desc(Currently_Rebuilding))
+  arrange(desc(Factor_Score))
 
 joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName")) %>%
   arrange(Rank)
@@ -366,10 +366,10 @@ shinyServer(function(input, output) {
         title = "Rebuilding"
       )
     
-    if("Currently_Rebuilding" %in% input$reb_columns) {
+    if("Factor_Score" %in% input$reb_columns) {
       reb_table <- reb_table %>%
-        fmt_number(columns = -c("Currently_Rebuilding"), decimals = 2) %>%
-        data_color(columns = Currently_Rebuilding, method = "numeric", palette = "viridis")
+        fmt_number(columns = -c("Factor_Score"), decimals = 0) %>%
+        data_color(columns = Factor_Score, method = "numeric", palette = "viridis")
     } else {
       reb_table <- reb_table %>%
         fmt_number(columns = everything(), decimals = 2)
@@ -384,8 +384,8 @@ shinyServer(function(input, output) {
   })
   
   # rebuilding species ranking plot - uses rebuilding score
-  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = Currently_Rebuilding)) +
-    geom_segment(aes(x = Species, xend = Species, y = 0, yend = Currently_Rebuilding),
+  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = Factor_Score)) +
+    geom_segment(aes(x = Species, xend = Species, y = 0, yend = Factor_Score),
                  color = "gray") +
     geom_point(aes(color = managementGroup), size = 3) +
     ylim(NA, 10) +
