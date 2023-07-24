@@ -350,8 +350,10 @@ shinyUI(
                             br(),
                             checkboxGroupInput("reb_columns", "Select columns to display:",
                                                choices = reb_cols,
-                                               selected = c("Currently Rebuilding",
-                                                            "Rebuilding Target Year")
+                                               selected = c("Factor Score",
+                                                            "Currently Rebuilding",
+                                                            "Rebuilding Target Year",
+                                                            "Stock Trend")
                             )
                           ),
                           tabPanel(
@@ -359,7 +361,7 @@ shinyUI(
                             br(),
                             checkboxGroupInput("reb_colors", "Select columns to color:",
                                                choices = reb_cols,
-                                               selected = c("Currently Rebuilding")
+                                               selected = c("Factor Score")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
                                style = "color:red")

@@ -94,7 +94,7 @@ joined_cd_df <- joined_cd_df %>%
 joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
 joined_reb_df <- joined_reb_df %>%
   rename_with(~gsub("_", " ", colnames(joined_reb_df))) %>%
-  arrange(desc(`Currently Rebuilding`))
+  arrange(desc(`Factor Score`))
 
 joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName"))
 joined_ss_df <- joined_ss_df %>%
@@ -141,8 +141,8 @@ shinyServer(function(input, output) {
       gt() %>%
       tab_header(
         title = "Commercial Importance",
-        subtitle = "Measured by average ex-vessel revenue data
-        between 2018-2021"
+        subtitle = "Measured by total inflation adjusted ex-vessel revenue data ($1,000)
+        between 2018-2022 (source: PacFIN)"
       )
 
     for(i in input$com_colors) {
@@ -207,7 +207,9 @@ shinyServer(function(input, output) {
       select("Species", input$rec_columns) %>%
       gt() %>%
       tab_header(
-        title = "Recreational Importance"
+        title = "Recreational Importance",
+        subtitle = "Measured by total recreational catch
+        between 2018-2022 (source: GEMM)"
       )
     
     for(i in input$rec_colors) {
@@ -272,7 +274,9 @@ shinyServer(function(input, output) {
       select("Species", input$tribal_columns) %>%
       gt() %>%
       tab_header(
-        title = "Tribal Importance"
+        title = "Tribal Importance",
+        subtitle = "Measured by total inflation adjusted ex-vessel revenue data for tribal landings
+        between 2018-2022 (source: PacFIN)"
       )
     
     for(i in input$tribal_colors) {
@@ -396,10 +400,10 @@ shinyServer(function(input, output) {
         title = "Rebuilding"
       )
     
-    if("Currently_Rebuilding" %in% input$reb_columns) {
+    if("Factor Score" %in% input$reb_columns) {
       reb_table <- reb_table %>%
-        fmt_number(columns = -c("Currently_Rebuilding"), decimals = 2) %>%
-        data_color(columns = Currently_Rebuilding, method = "numeric", palette = "viridis")
+        #fmt_number(columns = -c("Factor Score"), decimals = 2) %>%
+        data_color(columns = "Factor Score", method = "numeric", palette = "viridis")
     } else {
       reb_table <- reb_table %>%
         fmt_number(columns = everything(), decimals = 2)
@@ -414,8 +418,8 @@ shinyServer(function(input, output) {
   })
   
   # rebuilding species ranking plot - uses rebuilding score
-  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = Currently_Rebuilding)) +
-    geom_segment(aes(x = Species, xend = Species, y = 0, yend = Currently_Rebuilding),
+  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = Factor_Score)) +
+    geom_segment(aes(x = Species, xend = Species, y = 0, yend = Factor_Score),
                  color = "gray") +
     geom_point(aes(color = managementGroup), size = 3) +
     ylim(NA, 10) +
@@ -440,7 +444,9 @@ shinyServer(function(input, output) {
       select("Species", input$ss_columns) %>%
       gt() %>%
       tab_header(
-        title = "Stock Status"
+        title = "Stock Status",
+        subtitle = "Measured by the estimated fraction unfished at the time of the most
+        recent assessment or the PSA score for un-assessed species"
       )
     
     # reverse color scale for Fraction_Unfished?
@@ -510,7 +516,9 @@ shinyServer(function(input, output) {
       select("Species", input$fm_columns) %>%
       gt() %>%
       tab_header(
-        title = "Fishing Mortality"
+        title = "Fishing Mortality",
+        subtitle = "Measured by average removals, OFLs, and ACLs
+        between 2020-2022 (source: GEMM)"
       )
     
     for(i in input$fm_colors) {
