@@ -25,6 +25,7 @@ const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
 
 ## table has no rank column
 rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
+rebuilding_data <- replace(rebuilding_data, rebuilding_data == "", NA)
 
 stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
 
@@ -35,6 +36,7 @@ eco_data <- read.csv("tables/ecosystem.csv", header = TRUE) %>%
 eco_data$Factor_Score <- as.numeric(eco_data$Factor_Score)
 
 new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
+new_info_data <- replace(new_info_data, new_info_data == "", NA)
 
 ## rank column at end of table
 ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
@@ -68,36 +70,56 @@ new_info_data <- new_info_data[order(new_info_data$Species),]
 new_info_data$Species <- species_groups$speciesName
 
 
-# join tables + species mgmt. groups
-joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName")) %>%
+# join tables + species mgmt. groups, rename columns
+joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
+joined_com_df <- joined_com_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_com_df))) %>%
   arrange(Rank)
 
-joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName")) %>%
+joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName"))
+joined_rec_df <- joined_rec_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_rec_df))) %>%
   arrange(Rank)
 
-joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName")) %>%
+joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
+joined_tribal_df <- joined_tribal_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_tribal_df))) %>%
   arrange(Rank)
 
-joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "speciesName")) %>%
+joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "speciesName"))
+joined_cd_df <- joined_cd_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_cd_df))) %>%
   arrange(Rank)
 
-joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName")) %>%
-  arrange(desc(Factor_Score))
+joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
+joined_reb_df <- joined_reb_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_reb_df))) %>%
+  arrange(desc(`Currently Rebuilding`))
 
-joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName")) %>%
+joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName"))
+joined_ss_df <- joined_ss_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_ss_df))) %>%
   arrange(Rank)
 
-joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "speciesName")) %>%
+joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "speciesName"))
+joined_fm_df <- joined_fm_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_fm_df))) %>%
   arrange(Rank)
 
-joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName")) %>%
+joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
+joined_eco_df <- joined_eco_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_eco_df))) %>%
   arrange(Rank)
 
-joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName")) %>%
+joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName"))
+joined_ni_df <- joined_ni_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_ni_df))) %>%
   arrange(Rank)
 
-joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName")) %>%
-  select(Species, Rank, Score, Recruit_Variation:managementGroup) %>%
+joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName"))
+joined_af_df <- joined_af_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_af_df))) %>%
+  select(Species, Rank, Score, `Recruit Variation`:managementGroup) %>%
   arrange(Rank)
 
 
@@ -115,7 +137,7 @@ shinyServer(function(input, output) {
 
     # create commercial revenue gt table output, display in ascending order by rank
     com_table <- joined_com_df %>%
-      select(input$com_columns) %>%
+      select("Species", input$com_columns) %>%
       gt() %>%
       tab_header(
         title = "Commercial Importance",
@@ -124,13 +146,15 @@ shinyServer(function(input, output) {
       )
 
     for(i in input$com_colors) {
-      if(i == "Rank" & "Rank" %in% input$com_columns) {
-        com_table <- com_table %>%
-          data_color(columns = Rank, method = "numeric", palette = "viridis",
-                     reverse = TRUE)
-      } else {
-        com_table <- com_table %>%
-          data_color(columns = i, method = "auto", palette = "viridis")
+      if(i %in% input$com_columns) {
+        if(i == "Rank") {
+          com_table <- com_table %>%
+            data_color(columns = Rank, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          com_table <- com_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
       }
     }
     
@@ -153,7 +177,7 @@ shinyServer(function(input, output) {
   
   # commercial importance species ranking plot
   com_plot <- ggplot(joined_com_df, aes(x = Species, y = Rank,
-                                        Factor_Score = Factor_Score)) +
+                                        factor_score = `Factor Score`)) +
     geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                  color = "gray") +
     geom_hline(yintercept = 65, color = "gray") +
@@ -168,7 +192,7 @@ shinyServer(function(input, output) {
     scale_color_viridis(discrete = TRUE)
   
   output$com_ranking <- renderPlotly({
-    ggplotly(com_plot, tooltip = c("x", "y", "Factor_Score", "color"))
+    ggplotly(com_plot, tooltip = c("x", "y", "factor_score", "color"))
   })
   
   
@@ -180,20 +204,22 @@ shinyServer(function(input, output) {
     
     # create recreational gt table output, display in ascending order by rank
     rec_table <- joined_rec_df %>%
-      select(input$rec_columns) %>%
+      select("Species", input$rec_columns) %>%
       gt() %>%
       tab_header(
         title = "Recreational Importance"
       )
     
     for(i in input$rec_colors) {
-      if(i == "Rank" & "Rank" %in% input$rec_columns) {
-        rec_table <- rec_table %>%
-          data_color(columns = Rank, method = "numeric", palette = "viridis",
-                     reverse = TRUE)
-      } else {
-        rec_table <- rec_table %>%
-          data_color(columns = i, method = "auto", palette = "viridis")
+      if(i %in% input$rec_columns) {
+        if(i == "Rank") {
+          rec_table <- rec_table %>%
+            data_color(columns = Rank, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          rec_table <- rec_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
       }
     }
     
@@ -216,7 +242,7 @@ shinyServer(function(input, output) {
   
   # recreational importance species ranking plot
   rec_plot <- ggplot(joined_rec_df, aes(x = Species, y = Rank,
-                                        Factor_Score = Factor_Score)) +
+                                        factor_score = `Factor Score`)) +
     geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                  color = "gray") +
     geom_hline(yintercept = 65, color = "gray") +
@@ -231,7 +257,7 @@ shinyServer(function(input, output) {
     scale_color_viridis(discrete = TRUE)
   
   output$rec_species_ranking <- renderPlotly({
-    ggplotly(rec_plot, tooltip = c("x", "y", "Factor_Score", "color"))
+    ggplotly(rec_plot, tooltip = c("x", "y", "factor_score", "color"))
   })
   
   
@@ -243,20 +269,22 @@ shinyServer(function(input, output) {
     
     # create tribal revenue gt table output, display in ascending order by rank
     tribal_table <- joined_tribal_df %>%
-      select(input$tribal_columns) %>%
+      select("Species", input$tribal_columns) %>%
       gt() %>%
       tab_header(
         title = "Tribal Importance"
       )
     
     for(i in input$tribal_colors) {
-      if(i == "Rank" & "Rank" %in% input$tribal_columns) {
-        tribal_table <- tribal_table %>%
-          data_color(columns = Rank, method = "numeric", palette = "viridis",
-                     reverse = TRUE)
-      } else {
-        tribal_table <- tribal_table %>%
-          data_color(columns = i, method = "auto", palette = "viridis")
+      if(i %in% input$tribal_columns) {
+        if(i == "Rank") {
+          tribal_table <- tribal_table %>%
+            data_color(columns = Rank, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          tribal_table <- tribal_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
       }
     }
     
@@ -279,7 +307,7 @@ shinyServer(function(input, output) {
   
   # tribal importance species ranking plot
   tribal_plot <- ggplot(joined_tribal_df, aes(x = Species, y = Rank,
-                                              Factor_Score = Factor_Score)) +
+                                              factor_score = `Factor Score`)) +
     geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                  color = "gray") +
     geom_hline(yintercept = 65, color = "gray") +
@@ -294,7 +322,7 @@ shinyServer(function(input, output) {
     scale_color_viridis(discrete = TRUE)
   
   output$tribal_species_ranking <- renderPlotly({
-    ggplotly(tribal_plot, tooltip = c("x", "y", "Factor_Score", "color"))
+    ggplotly(tribal_plot, tooltip = c("x", "y", "factor_score", "color"))
   })
   
   
@@ -307,20 +335,22 @@ shinyServer(function(input, output) {
     
     # create recreational gt table output, display in ascending order by rank
     cd_table <- joined_cd_df %>%
-      select(input$cd_columns) %>%
+      select("Species", input$cd_columns) %>%
       gt() %>%
       tab_header(
         title = "Constituent Demand"
       )
     
     for(i in input$cd_colors) {
-      if(i == "Rank" & "Rank" %in% input$cd_columns) {
-        cd_table <- cd_table %>%
-          data_color(columns = Rank, method = "numeric", palette = "viridis",
-                     reverse = TRUE)
-      } else {
-        cd_table <- cd_table %>%
-          data_color(columns = i, method = "auto", palette = "viridis")
+      if(i %in% input$cd_columns) {
+        if(i == "Rank") {
+          cd_table <- cd_table %>%
+            data_color(columns = Rank, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          cd_table <- cd_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
       }
     }
     
@@ -336,7 +366,7 @@ shinyServer(function(input, output) {
   
   # constituent demand species ranking plot
   cd_plot <- ggplot(joined_cd_df, aes(x = Species, y = Rank,
-                                      Factor_Score = Factor_Score)) +
+                                      factor_score = `Factor Score`)) +
     geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                  color = "gray") +
     geom_hline(yintercept = 65, color = "gray") +
@@ -351,7 +381,7 @@ shinyServer(function(input, output) {
     scale_color_viridis(discrete = TRUE)
   
   output$cd_species_ranking <- renderPlotly({
-    ggplotly(cd_plot, tooltip = c("x", "y", "Factor_Score", "color"))
+    ggplotly(cd_plot, tooltip = c("x", "y", "factor_score", "color"))
   })
   
   
@@ -360,16 +390,16 @@ shinyServer(function(input, output) {
     joined_reb_df <- joined_reb_df[joined_reb_df$managementGroup %in% input$reb_species_selector,]
 
     reb_table <- joined_reb_df %>%
-      select(input$reb_columns) %>%
+      select("Species", input$reb_columns) %>%
       gt() %>%
       tab_header(
         title = "Rebuilding"
       )
     
-    if("Factor_Score" %in% input$reb_columns) {
+    if("Currently_Rebuilding" %in% input$reb_columns) {
       reb_table <- reb_table %>%
-        fmt_number(columns = -c("Factor_Score"), decimals = 0) %>%
-        data_color(columns = Factor_Score, method = "numeric", palette = "viridis")
+        fmt_number(columns = -c("Currently_Rebuilding"), decimals = 2) %>%
+        data_color(columns = Currently_Rebuilding, method = "numeric", palette = "viridis")
     } else {
       reb_table <- reb_table %>%
         fmt_number(columns = everything(), decimals = 2)
@@ -384,8 +414,8 @@ shinyServer(function(input, output) {
   })
   
   # rebuilding species ranking plot - uses rebuilding score
-  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = Factor_Score)) +
-    geom_segment(aes(x = Species, xend = Species, y = 0, yend = Factor_Score),
+  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = Currently_Rebuilding)) +
+    geom_segment(aes(x = Species, xend = Species, y = 0, yend = Currently_Rebuilding),
                  color = "gray") +
     geom_point(aes(color = managementGroup), size = 3) +
     ylim(NA, 10) +
@@ -407,7 +437,7 @@ shinyServer(function(input, output) {
     joined_ss_df <- joined_ss_df[joined_ss_df$managementGroup %in% input$ss_species_selector,]
 
     ss_table <- joined_ss_df %>%
-      select(input$ss_columns) %>%
+      select("Species", input$ss_columns) %>%
       gt() %>%
       tab_header(
         title = "Stock Status"
@@ -415,24 +445,26 @@ shinyServer(function(input, output) {
     
     # reverse color scale for Fraction_Unfished?
     for(i in input$ss_colors) {
-      if(i == "Rank" & "Rank" %in% input$ss_columns) {
-        ss_table <- ss_table %>%
-          data_color(columns = Rank, method = "numeric", palette = "viridis",
-                     reverse = TRUE)
-      } else {
-        ss_table <- ss_table %>%
-          data_color(columns = i, method = "auto", palette = "viridis")
+      if(i %in% input$ss_columns) {
+        if(i == "Rank") {
+          ss_table <- ss_table %>%
+            data_color(columns = Rank, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          ss_table <- ss_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
       }
     }
     
-    if("Fraction_Unfished" %in% input$ss_columns) {
+    if("Fraction Unfished" %in% input$ss_columns) {
       ss_table <- ss_table %>%
-        fmt_percent(columns = Fraction_Unfished, decimals = 1)
+        fmt_percent(columns = `Fraction Unfished`, decimals = 1)
     }
     
-    if("Target_Fraction_Unfised" %in% input$ss_columns) {
+    if("Target Fraction Unfised" %in% input$ss_columns) {
       ss_table <- ss_table %>%
-        fmt_percent(columns = Target_Fraction_Unfised, decimals = 1)
+        fmt_percent(columns = `Target Fraction Unfised`, decimals = 1)
     }
     
     if("MSST" %in% input$ss_columns) {
@@ -450,7 +482,7 @@ shinyServer(function(input, output) {
   
   # stock status species ranking plot
   ss_plot <- ggplot(joined_ss_df, aes(x = Species, y = Rank,
-                                      Score = Score)) +
+                                      factor_score = Score)) +
     geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                  color = "gray") +
     geom_hline(yintercept = 65, color = "gray") +
@@ -465,31 +497,32 @@ shinyServer(function(input, output) {
     scale_color_viridis(discrete = TRUE)
   
   output$ss_species_ranking <- renderPlotly({
-    ggplotly(ss_plot, tooltip = c("x", "y", "Score", "color"))
+    ggplotly(ss_plot, tooltip = c("x", "y", "factor_score", "color"))
   })
   
   
   # fishing mortality table
   ## footnotes disappear if less than 2
-  ## have option to color Average_OFL and Average_OFL_Attainment?
   output$fm_gt_table <- render_gt({
     joined_fm_df <- joined_fm_df[joined_fm_df$managementGroup %in% input$fm_species_selector,]
     
     fm_table <- joined_fm_df %>%
-      select(input$fm_columns) %>%
+      select("Species", input$fm_columns) %>%
       gt() %>%
       tab_header(
         title = "Fishing Mortality"
       )
     
     for(i in input$fm_colors) {
-      if(i == "Rank" & "Rank" %in% input$fm_columns) {
-        fm_table <- fm_table %>%
-          data_color(columns = Rank, method = "numeric", palette = "viridis",
-                     reverse = TRUE)
-      } else {
-        fm_table <- fm_table %>%
-          data_color(columns = i, method = "auto", palette = "viridis")
+      if(i %in% input$fm_columns) {
+        if(i == "Rank") {
+          fm_table <- fm_table %>%
+            data_color(columns = Rank, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          fm_table <- fm_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
       }
     }
     
@@ -501,32 +534,30 @@ shinyServer(function(input, output) {
         fmt_number(columns = everything(), decimals = 2)
     }
     
-    if("Average_OFL_Attainment" %in% input$fm_columns) {
+    if("Average OFL Attainment" %in% input$fm_columns) {
       fm_table <- fm_table %>%
-        tab_style(style = list(cell_fill(color = "red"),
-                               cell_text(color = "white")),
-                  locations = cells_body(columns = Average_OFL_Attainment,
-                                         rows = Average_OFL_Attainment > 1.00)
+        tab_style(style = cell_text(color = "red", weight = "bold"),
+                  locations = cells_body(
+                    columns = `Average OFL Attainment`,
+                    rows = `Average OFL Attainment` > 1.00
+                  )
         ) %>%
-        tab_footnote(footnote = "Cells highlighted bright red indicate
+        tab_footnote(footnote = "Cells highlighted red indicate
                      high OFL attainment percentages.",
-                     locations = cells_column_labels(columns = Average_OFL_Attainment))
+                     locations = cells_column_labels(columns = `Average OFL Attainment`))
     }
-    
-    if("Average_OFL" %in% input$fm_columns &
+  
+    if("Average OFL" %in% input$fm_columns &
        "managementGroup" %in% input$fm_columns) {
       fm_table <- fm_table %>%
-        data_color(columns = managementGroup, target_columns = Average_OFL,
-                   method = "factor",
-                   domain = c("minor slope rockfish",
-                              "minor nearshore rockfish",
-                              "minor shelf rockfish",
-                              "other flatfish",
-                              "other groundfish"),
-                   palette = c("#F9E3D6"),
-                   na_color = "white") %>%
-        tab_footnote(footnote = "Cells highlighted light red indicate OFL contributions.",
-                     locations = cells_column_labels(columns = Average_OFL)
+        tab_style(style = cell_text(style = "italic"),
+                  locations = cells_body(
+                    columns = `Average OFL`,
+                    rows = managementGroup != "species specific"
+                  )
+        ) %>%
+        tab_footnote(footnote = "Cells with italic text indicate OFL contributions.",
+                     locations = cells_column_labels(columns = `Average OFL`)
         )
     }
 
@@ -541,7 +572,7 @@ shinyServer(function(input, output) {
   
   # fishing mortality species ranking plot
   fm_plot <- ggplot(joined_fm_df, aes(x = Species, y = Rank,
-                                      Factor_Score = Factor_Score)) +
+                                      factor_score = `Factor Score`)) +
     geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                  color = "gray") +
     geom_hline(yintercept = 65, color = "gray") +
@@ -556,7 +587,7 @@ shinyServer(function(input, output) {
     scale_color_viridis(discrete = TRUE)
   
   output$fm_species_ranking <- renderPlotly({
-    ggplotly(fm_plot, tooltip = c("x", "y", "Factor_Score", "color"))
+    ggplotly(fm_plot, tooltip = c("x", "y", "factor_score", "color"))
   })
   
   
@@ -565,26 +596,28 @@ shinyServer(function(input, output) {
     joined_eco_df <- joined_eco_df[joined_eco_df$managementGroup %in% input$eco_species_selector,]
     
     eco_table <- joined_eco_df %>%
-      select(input$eco_columns) %>%
+      select("Species", input$eco_columns) %>%
       gt() %>%
       tab_header(
         title = "Ecosystem"
       )
     
     for(i in input$eco_colors) {
-      if(i == "Rank" & "Rank" %in% input$eco_columns) {
-        eco_table <- eco_table %>%
-          data_color(columns = Rank, method = "numeric", palette = "viridis",
-                     reverse = TRUE)
-      } else {
-        eco_table <- eco_table %>%
-          data_color(columns = i, method = "auto", palette = "viridis")
+      if(i %in% input$eco_columns) {
+        if(i == "Rank") {
+          eco_table <- eco_table %>%
+            data_color(columns = Rank, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          eco_table <- eco_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
       }
     }
     
-    if("Factor_Score" %in% input$eco_columns) {
+    if("Factor Score" %in% input$eco_columns) {
       eco_table <- eco_table %>%
-        fmt_number(columns = Factor_Score, decimals = 2)
+        fmt_number(columns = `Factor Score`, decimals = 2)
     }
     
     eco_table %>%
@@ -601,7 +634,7 @@ shinyServer(function(input, output) {
   
   # ecosystem species ranking plot
   eco_plot <- ggplot(joined_eco_df, aes(x = Species, y = Rank,
-                                        Factor_Score = Factor_Score)) +
+                                        factor_score = `Factor Score`)) +
     geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                  color = "gray") +
     geom_hline(yintercept = 65, color = "gray") +
@@ -616,7 +649,7 @@ shinyServer(function(input, output) {
     scale_color_viridis(discrete = TRUE)
   
   output$eco_species_ranking <- renderPlotly({
-    ggplotly(eco_plot, tooltip = c("x", "y", "Factor_Score", "color"))
+    ggplotly(eco_plot, tooltip = c("x", "y", "factor_score", "color"))
   })
   
   
@@ -625,16 +658,27 @@ shinyServer(function(input, output) {
     joined_ni_df <- joined_ni_df[joined_ni_df$managementGroup %in% input$ni_species_selector,]
     
     ni_table <- joined_ni_df %>%
-      select(input$ni_columns) %>%
+      select("Species", input$ni_columns) %>%
       gt() %>%
       tab_header(
         title = "New Information"
       )
     
-    if("Rank" %in% input$ni_columns) {
-      ni_table <- ni_table %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+    for(i in input$ni_colors) {
+      if(i %in% input$ni_columns) {
+        if(i == "Rank") {
+          ni_table <- ni_table %>%
+            data_color(columns = Rank, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else if(i == "Year Last Assessed") {
+          ni_table <- ni_table %>%
+            data_color(columns = `Year Last Assessed`, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          ni_table <- ni_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
+      }
     }
     
     ni_table %>%
@@ -647,7 +691,7 @@ shinyServer(function(input, output) {
   
   # new information species ranking plot
   ni_plot <- ggplot(joined_ni_df, aes(x = Species, y = Rank,
-                                      Factor_score = Factor_score)) +
+                                      factor_score = `Factor score`)) +
     geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                  color = "gray") +
     geom_hline(yintercept = 65, color = "gray") +
@@ -662,7 +706,7 @@ shinyServer(function(input, output) {
     scale_color_viridis(discrete = TRUE)
   
   output$ni_species_ranking <- renderPlotly({
-    ggplotly(ni_plot, tooltip = c("x", "y", "Factor_score", "color"))
+    ggplotly(ni_plot, tooltip = c("x", "y", "factor_score", "color"))
   })
   
   
@@ -671,16 +715,26 @@ shinyServer(function(input, output) {
     joined_af_df <- joined_af_df[joined_af_df$managementGroup %in% input$af_species_selector,]
     
     af_table <- joined_af_df %>%
-      select(input$af_columns) %>%
+      select("Species", input$af_columns) %>%
       gt() %>%
       tab_header(
         title = "Assessment Frequency"
       )
     
-    if("Score" %in% input$af_columns) {
-      af_table <- af_table %>%
-        data_color(columns = Score, method = "numeric", palette = "viridis",
-                   reverse = TRUE)
+    for(i in input$af_colors) {
+      if(i %in% input$af_columns) {
+        if(i == "Score") {
+          af_table <- af_table %>%
+            data_color(columns = Score, method = "numeric", palette = "viridis")
+        } else if(i == "Last Assessment Year") {
+          af_table <- af_table %>%
+            data_color(columns = `Last Assessment Year`, method = "numeric", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          af_table <- af_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
+      }
     }
     
     af_table %>%
@@ -694,7 +748,7 @@ shinyServer(function(input, output) {
   
   # assessment frequency species ranking plot
   af_plot <- ggplot(joined_af_df, aes(x = Species, y = Rank,
-                                      Score = Score)) +
+                                      factor_score = Score)) +
     geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                  color = "gray") +
     geom_hline(yintercept = 65, color = "gray") +
@@ -709,7 +763,7 @@ shinyServer(function(input, output) {
     scale_color_viridis(discrete = TRUE)
   
   output$af_species_ranking <- renderPlotly({
-    ggplotly(af_plot, tooltip = c("x", "y", "Score", "color"))
+    ggplotly(af_plot, tooltip = c("x", "y", "factor_score", "color"))
   })
   
   # tab where user can input own .csv file, create gt table
