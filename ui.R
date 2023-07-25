@@ -5,6 +5,7 @@ library(shinycssloaders)
 library(dplyr)
 library(gt)
 library(plotly)
+source("format_species_names.R")
 
 # load in data (10 factors)
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
