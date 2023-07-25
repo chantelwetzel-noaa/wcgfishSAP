@@ -14,6 +14,7 @@ const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE)
 rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
 stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
 fish_mort_data <- read.csv("tables/fishing_mortality.csv", header = TRUE)
+future_data <- read.csv("tables/future_spex.csv", header = TRUE)
 eco_data <- read.csv("tables/ecosystem.csv", header = TRUE)
 new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
 ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE) 
@@ -50,6 +51,10 @@ joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "sp
 joined_fm_df <- joined_fm_df %>%
   rename_with(~gsub("_", " ", colnames(joined_fm_df)))
 
+joined_fut_df <- left_join(future_data, species_groups, by = c("Species" = "speciesName"))
+joined_fut_df <- joined_fut_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_fut_df)))
+
 joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
 joined_eco_df <- joined_eco_df %>%
   rename_with(~gsub("_", " ", colnames(joined_eco_df)))
@@ -71,6 +76,7 @@ cd_cols <- colnames(joined_cd_df)[colnames(joined_cd_df) != "Species"]
 reb_cols <- colnames(joined_reb_df)[colnames(joined_reb_df) != "Species"]
 ss_cols <- colnames(joined_ss_df)[colnames(joined_ss_df) != "Species"]
 fm_cols <- colnames(joined_fm_df)[colnames(joined_fm_df) != "Species"]
+fut_cols <- colnames(joined_fut_df)[colnames(joined_fut_df) != "Species"]
 eco_cols <- colnames(joined_eco_df)[colnames(joined_eco_df) != "Species"]
 ni_cols <- colnames(joined_ni_df)[colnames(joined_ni_df) != "Species"]
 ni_cols <- ni_cols[ni_cols != "Notes"]
@@ -91,25 +97,25 @@ shinyUI(
                        sidebarMenu(
                          menuItem("Home", tabName = "home", icon = icon("home")),
                          menuItem("Factors", tabName = "factors", icon = icon("table"),
-                                  menuSubItem("Commercial Importance", tabName = "com_page",
-                                              icon = icon("dollar-sign")),
-                                  menuSubItem("Recreational Importance", tabName = "rec_page",
-                                              icon = icon("campground")),
-                                  menuSubItem("Tribal Importance", tabName = "tribal_page"),
-                                  menuSubItem("Constituent Demand", tabName = "cd_page",
-                                              icon = icon("person")),
-                                  menuSubItem("Rebuilding", tabName = "rebuilding_page",
-                                              icon = icon("hammer")),
-                                  menuSubItem("Stock Status", tabName = "ss_page",
-                                              icon = icon("fish")),
                                   menuSubItem("Fishing Mortality", tabName = "fm_page",
                                               icon = icon("ship")),
+                                  menuSubItem("Commercial Importance", tabName = "com_page",
+                                              icon = icon("dollar-sign")),
+                                  menuSubItem("Tribal Importance", tabName = "tribal_page"),
+                                  menuSubItem("Recreational Importance", tabName = "rec_page",
+                                              icon = icon("campground")),
+                                  menuSubItem("Constituent Demand", tabName = "cd_page",
+                                              icon = icon("person")),
+                                  menuSubItem("Stock Status", tabName = "ss_page",
+                                              icon = icon("fish")),
+                                  menuSubItem("Rebuilding", tabName = "rebuilding_page",
+                                              icon = icon("hammer")),
                                   menuSubItem("Ecosystem", tabName = "eco_page",
                                               icon = icon("water")),
-                                  menuSubItem("New Information", tabName = "ni_page",
-                                              icon = icon("info")),
                                   menuSubItem("Assessment Frequency", tabName = "af_page",
-                                              icon = icon("calendar-check"))
+                                              icon = icon("calendar-check")),
+                                  menuSubItem("New Information", tabName = "ni_page",
+                                              icon = icon("info"))
                          ),
                          menuItem("Upload file", tabName = "test", icon = icon("upload"))
                        )
@@ -122,6 +128,62 @@ shinyUI(
           # home page (landing)
           tabItem(tabName = "home",
                   h1("Welcome!")),
+          
+          # fishing mortality page
+          tabItem(tabName = "fm_page",
+                  h1("Fishing Mortality"),
+                  fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        checkboxInput("show_fut", "Show rankings based on future
+                                      projections", value = FALSE),
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("fm_columns", "Select columns to display:",
+                                               choices = fm_cols,
+                                               selected = c("Rank", "Factor Score",
+                                                            "Average Removals", "Average OFL",
+                                                            "Average OFL Attainment",
+                                                            "managementGroup")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("fm_colors", "Select columns to color:",
+                                               choices = fm_cols,
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
+                        ),
+                        br(),
+                        selectInput(
+                          inputId = "fm_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, width = 9,
+                        uiOutput("fm_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
+                  ),
+                  fluidRow(
+                    box(title = "Fishing Mortality Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("fm_species_ranking") %>% withSpinner(),
+                        width = 12)
+                  )
+          ),
           
           # commercial importance page
           tabItem(tabName = "com_page",
@@ -177,6 +239,58 @@ shinyUI(
                   )
           ),
           
+          # tribal importance page
+          tabItem(tabName = "tribal_page",
+                  h1("Tribal Importance"),
+                  fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("tribal_columns", "Select columns to display:",
+                                               choices = tribal_cols,
+                                               selected = c("Rank", "Factor Score",
+                                                            "Revenue")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("tribal_colors", "Select columns to color:",
+                                               choices = tribal_cols,
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
+                        ),
+                        br(),
+                        selectInput(
+                          inputId = "tribal_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, width = 9,
+                        gt_output("tribal_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
+                  ),
+                  fluidRow(
+                    box(title = "Tribal Importance Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("tribal_species_ranking") %>% withSpinner(),
+                        width = 12)
+                  )
+          ),
+          
           # recreational importance page
           tabItem(tabName = "rec_page",
                   h1("Recreational Importance"),
@@ -226,57 +340,6 @@ shinyUI(
                     box(title = "Recreational Importance Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE, 
                         plotlyOutput("rec_species_ranking") %>% withSpinner(),
-                        width = 12)
-                  )
-          ),
-          
-          tabItem(tabName = "tribal_page",
-                  h1("Tribal Importance"),
-                  fluidRow(
-                    box(title = "Controls", status = "warning",
-                        solidHeader = TRUE, width = 3,
-                        tabsetPanel(
-                          tabPanel(
-                            "Columns",
-                            br(),
-                            checkboxGroupInput("tribal_columns", "Select columns to display:",
-                                               choices = tribal_cols,
-                                               selected = c("Rank", "Factor Score",
-                                                            "Revenue")
-                            )
-                          ),
-                          tabPanel(
-                            "Coloring",
-                            br(),
-                            checkboxGroupInput("tribal_colors", "Select columns to color:",
-                                               choices = tribal_cols,
-                                               selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
-                          )
-                        ),
-                        br(),
-                        selectInput(
-                          inputId = "tribal_species_selector",
-                          label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
-                          multiple = TRUE
-                        ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
-                        br(),
-                        br()
-                    ),
-                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, width = 9,
-                        gt_output("tribal_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
-                  ),
-                  fluidRow(
-                    box(title = "Tribal Importance Ranking Plot", status = "primary",
-                        solidHeader = TRUE, collapsible = TRUE,
-                        plotlyOutput("tribal_species_ranking") %>% withSpinner(),
                         width = 12)
                   )
           ),
@@ -337,58 +400,6 @@ shinyUI(
                   )
           ),
           
-          # rebuilding page
-          tabItem(tabName = "rebuilding_page",
-                  h1("Rebuilding"),
-                  fluidRow(
-                    box(title = "Controls", status = "warning",
-                        solidHeader = TRUE, width = 3,
-                        tabsetPanel(
-                          tabPanel(
-                            "Columns",
-                            br(),
-                            checkboxGroupInput("reb_columns", "Select columns to display:",
-                                               choices = reb_cols,
-                                               selected = c("Currently Rebuilding",
-                                                            "Rebuilding Target Year")
-                            )
-                          ),
-                          tabPanel(
-                            "Coloring",
-                            br(),
-                            checkboxGroupInput("reb_colors", "Select columns to color:",
-                                               choices = reb_cols,
-                                               selected = c("Currently Rebuilding")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
-                          )
-                        ),
-                        br(),
-                        selectInput(
-                          inputId = "reb_species_selector",
-                          label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
-                          multiple = TRUE
-                        ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
-                        br(),
-                        br()
-                    ),
-                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, width = 9,
-                        gt_output("reb_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
-                  ),
-                  fluidRow(
-                    box(title = "Rebuilding Ranking Plot", status = "primary",
-                        solidHeader = TRUE, collapsible = TRUE,
-                        plotlyOutput("reb_species_ranking") %>% withSpinner(),
-                        width = 12)
-                  )
-          ),
-          
           # stock status page
           tabItem(tabName = "ss_page",
                   h1("Stock Status"),
@@ -441,9 +452,9 @@ shinyUI(
                   )
           ),
           
-          # fishing mortality page
-          tabItem(tabName = "fm_page",
-                  h1("Fishing Mortality"),
+          # rebuilding page
+          tabItem(tabName = "rebuilding_page",
+                  h1("Rebuilding"),
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
@@ -451,20 +462,18 @@ shinyUI(
                           tabPanel(
                             "Columns",
                             br(),
-                            checkboxGroupInput("fm_columns", "Select columns to display:",
-                                               choices = fm_cols,
-                                               selected = c("Rank", "Factor Score",
-                                                            "Average Removals", "Average OFL",
-                                                            "Average OFL Attainment",
-                                                            "managementGroup")
+                            checkboxGroupInput("reb_columns", "Select columns to display:",
+                                               choices = reb_cols,
+                                               selected = c("Currently Rebuilding",
+                                                            "Rebuilding Target Year")
                             )
                           ),
                           tabPanel(
                             "Coloring",
                             br(),
-                            checkboxGroupInput("fm_colors", "Select columns to color:",
-                                               choices = fm_cols,
-                                               selected = c("Rank")
+                            checkboxGroupInput("reb_colors", "Select columns to color:",
+                                               choices = reb_cols,
+                                               selected = c("Currently Rebuilding")
                             ),
                             em("**Selecting a column that is not in the table will cause an error.",
                                style = "color:red")
@@ -472,7 +481,7 @@ shinyUI(
                         ),
                         br(),
                         selectInput(
-                          inputId = "fm_species_selector",
+                          inputId = "reb_species_selector",
                           label = "Select a species management group:",
                           choices = c(unique(as.character(species_groups$managementGroup))),
                           selected = c(unique(as.character(species_groups$managementGroup))),
@@ -484,13 +493,13 @@ shinyUI(
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
-                        gt_output("fm_gt_table") %>% withSpinner(),
+                        gt_output("reb_gt_table") %>% withSpinner(),
                         p("See descriptions of each column here."))
                   ),
                   fluidRow(
-                    box(title = "Fishing Mortality Ranking Plot", status = "primary",
+                    box(title = "Rebuilding Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
-                        plotlyOutput("fm_species_ranking") %>% withSpinner(),
+                        plotlyOutput("reb_species_ranking") %>% withSpinner(),
                         width = 12)
                   )
           ),
@@ -542,57 +551,6 @@ shinyUI(
                     box(title = "Ecosystem Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("eco_species_ranking") %>% withSpinner(),
-                        width = 12)
-                  )
-          ),
-          
-          # new information page
-          tabItem(tabName = "ni_page",
-                  h1("New Information"),
-                  fluidRow(
-                    box(title = "Controls", status = "warning",
-                        solidHeader = TRUE, width = 3,
-                        tabsetPanel(
-                          tabPanel(
-                            "Columns",
-                            br(),
-                            checkboxGroupInput("ni_columns", "Select columns to display:",
-                                               choices = ni_cols,
-                                               selected = c("Rank", "Notes")
-                            )
-                          ),
-                          tabPanel(
-                            "Coloring",
-                            br(),
-                            checkboxGroupInput("ni_colors", "Select columns to color:",
-                                               choices = ni_cols,
-                                               selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
-                          )
-                        ),
-                        br(),
-                        selectInput(
-                          inputId = "ni_species_selector",
-                          label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
-                          multiple = TRUE
-                        ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
-                        br(),
-                        br()
-                    ),
-                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
-                        collapsible = TRUE, width = 9,
-                        gt_output("ni_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
-                  ),
-                  fluidRow(
-                    box(title = "New Information Ranking Plot", status = "primary",
-                        solidHeader = TRUE, collapsible = TRUE,
-                        plotlyOutput("ni_species_ranking") %>% withSpinner(),
                         width = 12)
                   )
           ),
@@ -650,6 +608,58 @@ shinyUI(
                   )
           ),
           
+          # new information page
+          tabItem(tabName = "ni_page",
+                  h1("New Information"),
+                  fluidRow(
+                    box(title = "Controls", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        tabsetPanel(
+                          tabPanel(
+                            "Columns",
+                            br(),
+                            checkboxGroupInput("ni_columns", "Select columns to display:",
+                                               choices = ni_cols,
+                                               selected = c("Rank", "Notes")
+                            )
+                          ),
+                          tabPanel(
+                            "Coloring",
+                            br(),
+                            checkboxGroupInput("ni_colors", "Select columns to color:",
+                                               choices = ni_cols,
+                                               selected = c("Rank")
+                            ),
+                            em("**Selecting a column that is not in the table will cause an error.",
+                               style = "color:red")
+                          )
+                        ),
+                        br(),
+                        selectInput(
+                          inputId = "ni_species_selector",
+                          label = "Select a species management group:",
+                          choices = c(unique(as.character(species_groups$managementGroup))),
+                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          multiple = TRUE
+                        ),
+                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        br(),
+                        br()
+                    ),
+                    box(title = "Factor Table", status = "primary", solidHeader = TRUE,
+                        collapsible = TRUE, width = 9,
+                        gt_output("ni_gt_table") %>% withSpinner(),
+                        p("See descriptions of each column here."))
+                  ),
+                  fluidRow(
+                    box(title = "New Information Ranking Plot", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        plotlyOutput("ni_species_ranking") %>% withSpinner(),
+                        width = 12)
+                  )
+          ),
+          
+          # upload file page
           tabItem(tabName = "test",
                   sidebarLayout(
                     sidebarPanel(

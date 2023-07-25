@@ -23,6 +23,8 @@ const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
   mutate_at(c("Commercial_Importance", "Recreational_Importance",
               "Landings_Constricted"), ~replace_na(., 0))
 
+future_data <- read.csv("tables/future_spex.csv", header = TRUE)
+
 ## table has no rank column
 rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
 rebuilding_data <- replace(rebuilding_data, rebuilding_data == "", NA)
@@ -54,6 +56,7 @@ rebuilding_data$Species <- species_groups$speciesName
 stock_stat_data$Species <- species_groups$speciesName
 eco_data$Species <- species_groups$speciesName
 ass_freq_data$Species <- species_groups$speciesName
+future_data$Species <- species_groups$speciesName
 
 
 # order species alphabetically, replace species column
@@ -91,6 +94,11 @@ joined_cd_df <- joined_cd_df %>%
   rename_with(~gsub("_", " ", colnames(joined_cd_df))) %>%
   arrange(Rank)
 
+joined_fut_df <- left_join(future_data, species_groups, by = c("Species" = "speciesName"))
+joined_fut_df <- joined_fut_df %>%
+  rename_with(~gsub("_", " ", colnames(joined_fut_df))) %>%
+  arrange(Rank)
+
 joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
 joined_reb_df <- joined_reb_df %>%
   rename_with(~gsub("_", " ", colnames(joined_reb_df))) %>%
@@ -124,17 +132,14 @@ joined_af_df <- joined_af_df %>%
 
 
 # define server logic to display user inputs
-shinyServer(function(input, output) {
-  
-  
+shinyServer(function(input, output, session) {
+
   # commercial revenue table
   output$com_gt_table <- render_gt({
     
     # filter data down to species selected
     joined_com_df <- joined_com_df[joined_com_df$managementGroup %in% input$com_species_selector,]
-    
-    # decimal_cols <- input$com_columns[sapply(input$com_columns, is.numeric)]
-
+  
     # create commercial revenue gt table output, display in ascending order by rank
     com_table <- joined_com_df %>%
       select("Species", input$com_columns) %>%
@@ -510,71 +515,138 @@ shinyServer(function(input, output) {
   
   # fishing mortality table
   ## footnotes disappear if less than 2
-  output$fm_gt_table <- render_gt({
-    joined_fm_df <- joined_fm_df[joined_fm_df$managementGroup %in% input$fm_species_selector,]
-    
-    fm_table <- joined_fm_df %>%
-      select("Species", input$fm_columns) %>%
-      gt() %>%
-      tab_header(
-        title = "Fishing Mortality"
+  output$fm_gt_table <- renderUI({
+    if(input$show_fut) {
+      fut_cols <- colnames(joined_fut_df)[colnames(joined_fut_df) != "Species"]
+  
+      # update column names
+      updateCheckboxGroupInput(session, "fm_columns",
+                               "Select columns to display:",
+                               choices = fut_cols,
+                               selected = c("Rank", "Factor Score",
+                                            "Average Removals", "Future OFL",
+                                            "OFL Attainment")
       )
-    
-    for(i in input$fm_colors) {
-      if(i %in% input$fm_columns) {
-        if(i == "Rank") {
-          fm_table <- fm_table %>%
-            data_color(columns = Rank, method = "numeric", palette = "viridis",
-                       reverse = TRUE)
-        } else {
-          fm_table <- fm_table %>%
-            data_color(columns = i, method = "auto", palette = "viridis")
+      
+      updateCheckboxGroupInput(session, "fm_colors", "Select columns to color:",
+                               choices = fut_cols, selected = c("Rank")
+      )
+      
+      joined_fut_df <- joined_fut_df[joined_fut_df$managementGroup %in% input$fm_species_selector,]
+      
+      fm_table <- joined_fut_df %>%
+        select("Species", input$fm_columns) %>%
+        gt() %>%
+        tab_header(
+          title = "Fishing Mortality"
+        )
+      
+      for(i in input$fm_colors) {
+        if(i %in% input$fm_columns) {
+          if(i == "Rank") {
+            fm_table <- fm_table %>%
+              data_color(columns = Rank, method = "numeric", palette = "viridis",
+                         reverse = TRUE)
+          } else {
+            fm_table <- fm_table %>%
+              data_color(columns = i, method = "auto", palette = "viridis")
+          }
         }
       }
-    }
-    
-    if("Rank" %in% input$fm_columns) {
+      
       fm_table <- fm_table %>%
-        fmt_number(columns = -c("Rank"), decimals = 2)
+        data_color(columns = Rank, method = "numeric", palette = "viridis",
+                   reverse = TRUE) %>%
+        fmt_number(columns = contains(c("OFL", "ACL", "Average")),
+                   decimals = 2) %>%
+        fmt_percent(columns = contains("Attainment"), decimals = 1) %>%
+        tab_style(style = list(cell_text(weight = "bold")),
+                  locations = cells_body(columns = Species)) %>%
+        opt_interactive(use_search = TRUE,
+                        use_highlight = TRUE,
+                        use_page_size_select = TRUE)
     } else {
-      fm_table <- fm_table %>%
-        fmt_number(columns = everything(), decimals = 2)
-    }
-    
-    if("Average OFL Attainment" %in% input$fm_columns) {
-      fm_table <- fm_table %>%
-        tab_style(style = cell_text(color = "red", weight = "bold"),
-                  locations = cells_body(
-                    columns = `Average OFL Attainment`,
-                    rows = `Average OFL Attainment` > 1.00
-                  )
-        ) %>%
-        tab_footnote(footnote = "Cells highlighted red indicate
-                     high OFL attainment percentages.",
-                     locations = cells_column_labels(columns = `Average OFL Attainment`))
-    }
-  
-    if("Average OFL" %in% input$fm_columns &
-       "managementGroup" %in% input$fm_columns) {
-      fm_table <- fm_table %>%
-        tab_style(style = cell_text(style = "italic"),
-                  locations = cells_body(
-                    columns = `Average OFL`,
-                    rows = managementGroup != "species specific"
-                  )
-        ) %>%
-        tab_footnote(footnote = "Cells with italic text indicate OFL contributions.",
-                     locations = cells_column_labels(columns = `Average OFL`)
+      fm_cols <- colnames(joined_fm_df)[colnames(joined_fm_df) != "Species"]
+      
+      # update column names
+      updateCheckboxGroupInput(session, "fm_columns",
+                               "Select columns to display:",
+                               choices = fm_cols,
+                               selected = c("Rank", "Factor Score",
+                                            "Average Removals", "Average OFL",
+                                            "Average OFL Attainment",
+                                            "managementGroup")
+      )
+      
+      updateCheckboxGroupInput(session, "fm_colors", "Select columns to color:",
+                               choices = fm_cols, selected = c("Rank")
+      )
+      
+      joined_fm_df <- joined_fm_df[joined_fm_df$managementGroup %in% input$fm_species_selector,]
+      
+      fm_table <- joined_fm_df %>%
+        select("Species", input$fm_columns) %>%
+        gt() %>%
+        tab_header(
+          title = "Fishing Mortality"
         )
+      
+      for(i in input$fm_colors) {
+        if(i %in% input$fm_columns) {
+          if(i == "Rank") {
+            fm_table <- fm_table %>%
+              data_color(columns = Rank, method = "numeric", palette = "viridis",
+                         reverse = TRUE)
+          } else {
+            fm_table <- fm_table %>%
+              data_color(columns = i, method = "auto", palette = "viridis")
+          }
+        }
+      }
+      
+      if("Rank" %in% input$fm_columns) {
+        fm_table <- fm_table %>%
+          fmt_number(columns = -c("Rank"), decimals = 2)
+      } else {
+        fm_table <- fm_table %>%
+          fmt_number(columns = everything(), decimals = 2)
+      }
+      
+      if("Average OFL Attainment" %in% input$fm_columns) {
+        fm_table <- fm_table %>%
+          tab_style(style = cell_text(color = "red", weight = "bold"),
+                    locations = cells_body(
+                      columns = `Average OFL Attainment`,
+                      rows = `Average OFL Attainment` > 1.00
+                    )
+          ) %>%
+          tab_footnote(footnote = "Cells highlighted red indicate
+                     high OFL attainment percentages.",
+                       locations = cells_column_labels(columns = `Average OFL Attainment`))
+      }
+      
+      if("Average OFL" %in% input$fm_columns &
+         "managementGroup" %in% input$fm_columns) {
+        fm_table <- fm_table %>%
+          tab_style(style = cell_text(style = "italic"),
+                    locations = cells_body(
+                      columns = `Average OFL`,
+                      rows = managementGroup != "species specific"
+                    )
+          ) %>%
+          tab_footnote(footnote = "Cells with italic text indicate OFL contributions.",
+                       locations = cells_column_labels(columns = `Average OFL`)
+          )
+      }
+      
+      fm_table %>%
+        fmt_percent(columns = contains("Attainment"), decimals = 1) %>%
+        tab_style(style = list(cell_text(weight = "bold")),
+                  locations = cells_body(columns = Species)) %>%
+        opt_interactive(use_search = TRUE,
+                        use_highlight = TRUE,
+                        use_page_size_select = TRUE)
     }
-
-    fm_table %>%
-      fmt_percent(columns = contains("Attainment"), decimals = 1) %>%
-      tab_style(style = list(cell_text(weight = "bold")),
-                locations = cells_body(columns = Species)) %>%
-      opt_interactive(use_search = TRUE,
-                      use_highlight = TRUE,
-                      use_page_size_select = TRUE)
   })
   
   # fishing mortality species ranking plot
