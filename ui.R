@@ -172,7 +172,10 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         uiOutput("fm_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('Fishing Mortality Definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here."))
+                    )
                   ),
                   fluidRow(
                     box(title = "Fishing Mortality Ranking Plot", status = "primary",
@@ -224,7 +227,7 @@ shinyUI(
                         collapsible = TRUE, width = 9,
                         gt_output("com_gt_table") %>% withSpinner(),
                         p("See descriptions of each column",
-                          tags$a(href="javascript:window.open('Commercial_importance_definitions.html',
+                          tags$a(href="javascript:window.open('Commercial Importance Definitions.html',
                           '_blank', 'width = 600, height = 400')", "here."))
                     )
                   ),
@@ -278,7 +281,10 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("tribal_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('Tribal Importance Definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here."))
+                    )
                   ),
                   fluidRow(
                     box(title = "Tribal Importance Ranking Plot", status = "primary",
@@ -330,7 +336,9 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("rec_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here.")
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('Recreational Importance Definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here."))
                     )
                   ),
                   fluidRow(
@@ -341,7 +349,7 @@ shinyUI(
                   )
           ),
           
-          # constituent demand page
+          # constituent demand page - ADD HYPERLINK TO DEFINITIONS
           tabItem(tabName = "cd_page",
                   h1("Constituent Demand"),
                   fluidRow(
@@ -439,7 +447,10 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("ss_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('Stock Status Definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here."))
+                    )
                   ),
                   fluidRow(
                     box(title = "Stock Status Ranking Plot", status = "primary",
@@ -491,7 +502,9 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("reb_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('Rebuilding Definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here.")))
                   ),
                   fluidRow(
                     box(title = "Rebuilding Ranking Plot", status = "primary",
@@ -501,7 +514,7 @@ shinyUI(
                   )
           ),
           
-          # ecosystem page
+          # ecosystem page - ADD HYPERLINK TO DEFINITIONS
           tabItem(tabName = "eco_page",
                   h1("Ecosystem"),
                   fluidRow(
@@ -595,7 +608,10 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("af_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('Assessment Frequency Definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here."))
+                    )
                   ),
                   fluidRow(
                     box(title = "Assessment Frequency Ranking Plot", status = "primary",
@@ -605,7 +621,7 @@ shinyUI(
                   )
           ),
           
-          # new information page
+          # new information page - ADD HYPERLINK TO DEFINITIONS
           tabItem(tabName = "ni_page",
                   h1("New Information"),
                   fluidRow(

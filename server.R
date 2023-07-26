@@ -405,13 +405,17 @@ shinyServer(function(input, output, session) {
         title = "Rebuilding"
       )
     
-    if("Factor Score" %in% input$reb_columns) {
-      reb_table <- reb_table %>%
-        #fmt_number(columns = -c("Factor Score"), decimals = 2) %>%
-        data_color(columns = "Factor Score", method = "numeric", palette = "viridis")
-    } else {
-      reb_table <- reb_table %>%
-        fmt_number(columns = everything(), decimals = 2)
+    for(i in input$reb_colors) {
+      if(i %in% input$reb_columns) {
+        if(i == "Rebuilding Target Year") {
+          reb_table <- reb_table %>%
+            data_color(columns = `Rebuilding Target Year`, method = "auto", palette = "viridis",
+                       reverse = TRUE)
+        } else {
+          reb_table <- reb_table %>%
+            data_color(columns = i, method = "auto", palette = "viridis")
+        }
+      }
     }
     
     reb_table %>%
@@ -423,8 +427,8 @@ shinyServer(function(input, output, session) {
   })
   
   # rebuilding species ranking plot - uses rebuilding score
-  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = Factor_Score)) +
-    geom_segment(aes(x = Species, xend = Species, y = 0, yend = Factor_Score),
+  reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = `Factor Score`)) +
+    geom_segment(aes(x = Species, xend = Species, y = 0, yend = `Factor Score`),
                  color = "gray") +
     geom_point(aes(color = managementGroup), size = 3) +
     ylim(NA, 10) +
