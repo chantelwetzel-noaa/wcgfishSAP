@@ -97,6 +97,8 @@ shinyUI(
       dashboardSidebar(width = 300,
                        sidebarMenu(
                          menuItem("Home", tabName = "home", icon = icon("home")),
+                         menuItem("2024 Overall Ranking",
+                                  tabName = "overall_ranking", icon = icon("ranking-star")),
                          menuItem("Factors", tabName = "factors", icon = icon("table"),
                                   menuSubItem("Fishing Mortality", tabName = "fm_page",
                                               icon = icon("ship")),
@@ -130,20 +132,35 @@ shinyUI(
           tabItem(tabName = "home",
                   h1("Welcome!")),
           
+          # overall ranking page
+          tabItem(tabName = "overall_ranking",
+                  h1("2024 Stock Assessment Prioritization Ranking"),
+                  fluidRow(
+                    box(title = "Factor Summary", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        width = 12,
+                        gt_output("overall_gt_table") %>% withSpinner()
+                    )
+                  )
+          ),
+          
           # fishing mortality page
           tabItem(tabName = "fm_page",
                   h1("Fishing Mortality"),
                   fluidRow(
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
-                        checkboxInput("show_fut", "Show rankings based on future
-                                      projections", value = FALSE),
                         tabsetPanel(
                           tabPanel(
                             "Columns",
                             br(),
                             checkboxGroupInput("fm_columns", "Select columns to display:",
-                                               choices = fm_cols
+                                               choices = fm_cols,
+                                               selected = c("Rank", "Factor Score",
+                                                            "Average Removals",
+                                                            "Average OFL",
+                                                            "Average OFL Attainment",
+                                                            "managementGroup")
                             )
                           ),
                           tabPanel(
@@ -171,10 +188,10 @@ shinyUI(
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
-                        uiOutput("fm_gt_table") %>% withSpinner(),
+                        gt_output("fm_gt_table") %>% withSpinner(),
                         p("See descriptions of each column",
-                          tags$a(href="javascript:window.open('Fishing Mortality Definitions.html',
-                          '_blank', 'width = 600, height = 400')", "here."))
+                        tags$a(href="javascript:window.open('Fishing Mortality Definitions.html',
+                        '_blank', 'width = 600, height = 400')", "here."))
                     )
                   ),
                   fluidRow(

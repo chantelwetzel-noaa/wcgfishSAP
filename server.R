@@ -23,8 +23,6 @@ const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
   mutate_at(c("Commercial_Importance", "Recreational_Importance",
               "Landings_Constricted"), ~replace_na(., 0))
 
-future_data <- read.csv("tables/future_spex.csv", header = TRUE)
-
 ## table has no rank column
 rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
 rebuilding_data <- replace(rebuilding_data, rebuilding_data == "", NA)
@@ -33,9 +31,8 @@ stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
 
 fish_mort_data <- read.csv("tables/fishing_mortality.csv", header = TRUE)
 
-eco_data <- read.csv("tables/ecosystem.csv", header = TRUE) %>%
-  mutate(Factor_Score = na_if(Factor_Score, " -   "))
-eco_data$Factor_Score <- as.numeric(eco_data$Factor_Score)
+eco_data <- read.csv("tables/ecosystem.csv", header = TRUE)
+# eco_data$Factor_Score <- as.numeric(eco_data$Factor_Score)
 
 new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
 new_info_data <- replace(new_info_data, new_info_data == "", NA)
@@ -56,7 +53,6 @@ rebuilding_data$Species <- species_groups$speciesName
 stock_stat_data$Species <- species_groups$speciesName
 eco_data$Species <- species_groups$speciesName
 ass_freq_data$Species <- species_groups$speciesName
-future_data$Species <- species_groups$speciesName
 
 
 # order species alphabetically, replace species column
@@ -94,11 +90,6 @@ joined_cd_df <- joined_cd_df %>%
   rename_with(~gsub("_", " ", colnames(joined_cd_df))) %>%
   arrange(Rank)
 
-joined_fut_df <- left_join(future_data, species_groups, by = c("Species" = "speciesName"))
-joined_fut_df <- joined_fut_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_fut_df))) %>%
-  arrange(Rank)
-
 joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
 joined_reb_df <- joined_reb_df %>%
   rename_with(~gsub("_", " ", colnames(joined_reb_df))) %>%
@@ -133,6 +124,57 @@ joined_af_df <- joined_af_df %>%
 
 # define server logic to display user inputs
 shinyServer(function(input, output, session) {
+  
+  # overall ranking table
+  output$overall_gt_table <- render_gt({
+    results <- data.frame(species_groups$speciesName,
+                          com_rev_data$Factor_Score,
+                          rec_data$Factor_Score,
+                          tribal_data$Factor_Score,
+                          const_dem_data$Factor_Score,
+                          rebuilding_data$Factor_Score,
+                          stock_stat_data$Score,
+                          fish_mort_data$Factor_Score,
+                          eco_data$Factor_Score,
+                          new_info_data$Factor_score,
+                          ass_freq_data$Score)
+    
+    # multiply factor scores with weights
+    results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * 0.21
+    results$rec_data.Factor_Score <- results$rec_data.Factor_Score * 0.09
+    results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * 0.05
+    results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * 0.11
+    results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * 0.10
+    results$stock_stat_data.Score <- results$stock_stat_data.Score * 0.08
+    results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * 0.08
+    results$eco_data.Factor_Score <- results$eco_data.Factor_Score * 0.05
+    results$new_info_data.Factor_score <- results$new_info_data.Factor_score * 0.05
+    results$ass_freq_data.Score <- results$ass_freq_data.Score * 0.18
+    
+    # create column with weighted sum
+    results$total <- rowSums(results[2:11])
+    
+    results <- results %>%
+      arrange(desc(total))
+  
+    results %>%
+      select(species_groups.speciesName, total,
+             com_rev_data.Factor_Score:ass_freq_data.Score) %>%
+      gt() %>%
+      fmt_number(columns = everything(), decimals = 2) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = species_groups.speciesName)) %>%
+      tab_style(style = list(cell_text(weight = "bold")),
+                locations = cells_body(columns = total)) %>%
+      data_color(columns = com_rev_data.Factor_Score:ass_freq_data.Score,
+                 method = "numeric", palette = c("RdYlBu"),
+                 domain = c(-0.54, 2.10),
+                 reverse = TRUE
+      ) %>%
+      opt_interactive(use_search = TRUE,
+                      use_highlight = TRUE,
+                      use_page_size_select = TRUE)
+  })
 
   # commercial revenue table
   output$com_gt_table <- render_gt({
@@ -356,7 +398,7 @@ shinyServer(function(input, output, session) {
           cd_table <- cd_table %>%
             data_color(columns = Rank, method = "numeric", palette = "viridis",
                        reverse = TRUE)
-        } else {
+        } else if(i != "Concern") {
           cd_table <- cd_table %>%
             data_color(columns = i, method = "auto", palette = "viridis")
         }
@@ -519,71 +561,7 @@ shinyServer(function(input, output, session) {
   # fishing mortality table
   ## footnotes disappear if less than 2
   output$fm_gt_table <- renderUI({
-    if(input$show_fut) {
-      fut_cols <- colnames(joined_fut_df)[colnames(joined_fut_df) != "Species"]
-      
-      # update column names
-      updateCheckboxGroupInput(session, "fm_columns",
-                               "Select columns to display:",
-                               choices = fut_cols,
-                               selected = c("Rank", "Factor Score",
-                                            "Average Removals", "Future OFL",
-                                            "OFL Attainment")
-      )
-      
-      updateCheckboxGroupInput(session, "fm_colors", "Select columns to color:",
-                               choices = fut_cols, selected = c("Rank")
-      )
-      
-      joined_fut_df <- joined_fut_df[joined_fut_df$managementGroup %in% input$fm_species_selector,]
-      
-      fm_table <- joined_fut_df %>%
-        select("Species", input$fm_columns) %>%
-        gt() %>%
-        tab_header(
-          title = "Fishing Mortality"
-        )
-      
-      for(i in input$fm_colors) {
-        if(i %in% input$fm_columns) {
-          if(i == "Rank") {
-            fm_table <- fm_table %>%
-              data_color(columns = Rank, method = "numeric", palette = "viridis",
-                         reverse = TRUE)
-          } else {
-            fm_table <- fm_table %>%
-              data_color(columns = i, method = "auto", palette = "viridis")
-          }
-        }
-      }
-      
-      fm_table <- fm_table %>%
-        data_color(columns = Rank, method = "numeric", palette = "viridis",
-                   reverse = TRUE) %>%
-        fmt_number(columns = contains(c("OFL", "ACL", "Average")),
-                   decimals = 2) %>%
-        fmt_percent(columns = contains("Attainment"), decimals = 1) %>%
-        tab_style(style = list(cell_text(weight = "bold")),
-                  locations = cells_body(columns = Species)) %>%
-        opt_interactive(use_search = TRUE,
-                        use_highlight = TRUE,
-                        use_page_size_select = TRUE)
-    } else {
       fm_cols <- colnames(joined_fm_df)[colnames(joined_fm_df) != "Species"]
-      
-      # update column names
-      updateCheckboxGroupInput(session, "fm_columns",
-                               "Select columns to display:",
-                               choices = fm_cols,
-                               selected = c("Rank", "Factor Score",
-                                            "Average Removals", "Average OFL",
-                                            "Average OFL Attainment",
-                                            "managementGroup")
-      )
-      
-      updateCheckboxGroupInput(session, "fm_colors", "Select columns to color:",
-                               choices = fm_cols, selected = c("Rank")
-      )
       
       joined_fm_df <- joined_fm_df[joined_fm_df$managementGroup %in% input$fm_species_selector,]
       
@@ -649,7 +627,6 @@ shinyServer(function(input, output, session) {
         opt_interactive(use_search = TRUE,
                         use_highlight = TRUE,
                         use_page_size_select = TRUE)
-    }
   })
   
   # fishing mortality species ranking plot
