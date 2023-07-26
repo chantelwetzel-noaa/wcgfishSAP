@@ -517,7 +517,7 @@ shinyServer(function(input, output, session) {
   output$fm_gt_table <- renderUI({
     if(input$show_fut) {
       fut_cols <- colnames(joined_fut_df)[colnames(joined_fut_df) != "Species"]
-  
+      
       # update column names
       updateCheckboxGroupInput(session, "fm_columns",
                                "Select columns to display:",
@@ -620,7 +620,7 @@ shinyServer(function(input, output, session) {
                     )
           ) %>%
           tab_footnote(footnote = "Cells highlighted red indicate
-                     high OFL attainment percentages.",
+                       high OFL attainment percentages.",
                        locations = cells_column_labels(columns = `Average OFL Attainment`))
       }
       

@@ -143,11 +143,7 @@ shinyUI(
                             "Columns",
                             br(),
                             checkboxGroupInput("fm_columns", "Select columns to display:",
-                                               choices = fm_cols,
-                                               selected = c("Rank", "Factor Score",
-                                                            "Average Removals", "Average OFL",
-                                                            "Average OFL Attainment",
-                                                            "managementGroup")
+                                               choices = fm_cols
                             )
                           ),
                           tabPanel(
