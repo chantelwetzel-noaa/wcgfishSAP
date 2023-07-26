@@ -827,49 +827,49 @@ shinyServer(function(input, output, session) {
   
   # tab where user can input own .csv file, create gt table
   # upload file
-  data <- reactive({
-    req(input$upload)
-    ext <- tools::file_ext(input$upload$name)
-    switch(ext,
-           csv = vroom::vroom(input$upload$datapath, delim = ","),
-           validate("Invalid file; Please upload a .csv file")
-    )
-  })
-  
-  # clean file
-  tidied <- reactive({
-    out <- data()
-    if(input$rename) {
-      names(out) <- gsub("_", " ", names(out))
-    }
-
-    out
-  })
-  
-  # produce gt table of selected file
-  output$table <- render_gt({
-    tidied() %>%
-      arrange(Rank) %>%
-      gt() %>%
-      fmt_number(columns = -c("Rank"), decimals = 2) %>%
-      data_color(columns = Rank, method = "numeric", palette = "viridis",
-                 reverse = TRUE) %>%
-      tab_style(style = list(cell_text(weight = "bold")),
-                locations = cells_body(columns = Species)) %>%
-      opt_interactive(use_search = TRUE,
-                      use_highlight = TRUE,
-                      use_page_size_select = TRUE)
-  })
-  
-  # interactive ranking plot of selected file
-  output$test_species_ranking <- renderPlotly({
-    ggplot(tidied(), aes(x = Species, y = Rank, size = Rank)
-           ) + geom_point() +
-      labs(
-        title = "Fish Species Ranking",
-        caption = "Click points to view more information about selected entries.",
-        x = "Species (in alphabetical order)", y = "Rank") +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
-      scale_color_viridis(discrete = TRUE)
-  })
+  # data <- reactive({
+  #   req(input$upload)
+  #   ext <- tools::file_ext(input$upload$name)
+  #   switch(ext,
+  #          csv = vroom::vroom(input$upload$datapath, delim = ","),
+  #          validate("Invalid file; Please upload a .csv file")
+  #   )
+  # })
+  # 
+  # # clean file
+  # tidied <- reactive({
+  #   out <- data()
+  #   if(input$rename) {
+  #     names(out) <- gsub("_", " ", names(out))
+  #   }
+  # 
+  #   out
+  # })
+  # 
+  # # produce gt table of selected file
+  # output$table <- render_gt({
+  #   tidied() %>%
+  #     arrange(Rank) %>%
+  #     gt() %>%
+  #     fmt_number(columns = -c("Rank"), decimals = 2) %>%
+  #     data_color(columns = Rank, method = "numeric", palette = "viridis",
+  #                reverse = TRUE) %>%
+  #     tab_style(style = list(cell_text(weight = "bold")),
+  #               locations = cells_body(columns = Species)) %>%
+  #     opt_interactive(use_search = TRUE,
+  #                     use_highlight = TRUE,
+  #                     use_page_size_select = TRUE)
+  # })
+  # 
+  # # interactive ranking plot of selected file
+  # output$test_species_ranking <- renderPlotly({
+  #   ggplot(tidied(), aes(x = Species, y = Rank, size = Rank)
+  #          ) + geom_point() +
+  #     labs(
+  #       title = "Fish Species Ranking",
+  #       caption = "Click points to view more information about selected entries.",
+  #       x = "Species (in alphabetical order)", y = "Rank") +
+  #     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+  #     scale_color_viridis(discrete = TRUE)
+  # })
 })

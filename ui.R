@@ -15,7 +15,6 @@ const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE)
 rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
 stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
 fish_mort_data <- read.csv("tables/fishing_mortality.csv", header = TRUE)
-future_data <- read.csv("tables/future_spex.csv", header = TRUE)
 eco_data <- read.csv("tables/ecosystem.csv", header = TRUE)
 new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
 ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE) 
@@ -52,10 +51,6 @@ joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "sp
 joined_fm_df <- joined_fm_df %>%
   rename_with(~gsub("_", " ", colnames(joined_fm_df)))
 
-joined_fut_df <- left_join(future_data, species_groups, by = c("Species" = "speciesName"))
-joined_fut_df <- joined_fut_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_fut_df)))
-
 joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
 joined_eco_df <- joined_eco_df %>%
   rename_with(~gsub("_", " ", colnames(joined_eco_df)))
@@ -77,7 +72,6 @@ cd_cols <- colnames(joined_cd_df)[colnames(joined_cd_df) != "Species"]
 reb_cols <- colnames(joined_reb_df)[colnames(joined_reb_df) != "Species"]
 ss_cols <- colnames(joined_ss_df)[colnames(joined_ss_df) != "Species"]
 fm_cols <- colnames(joined_fm_df)[colnames(joined_fm_df) != "Species"]
-fut_cols <- colnames(joined_fut_df)[colnames(joined_fut_df) != "Species"]
 eco_cols <- colnames(joined_eco_df)[colnames(joined_eco_df) != "Species"]
 ni_cols <- colnames(joined_ni_df)[colnames(joined_ni_df) != "Species"]
 ni_cols <- ni_cols[ni_cols != "Notes"]
@@ -120,7 +114,8 @@ shinyUI(
                                   menuSubItem("New Information", tabName = "ni_page",
                                               icon = icon("info"))
                          ),
-                         menuItem("Upload file", tabName = "test", icon = icon("upload"))
+                         # menuItem("Upload file", tabName = "test", icon = icon("upload")),
+                         menuItem("Contact", tabName = "contact", icon = icon("envelope"))
                        )
       ),
       
@@ -690,18 +685,39 @@ shinyUI(
           ),
           
           # upload file page
-          tabItem(tabName = "test",
-                  sidebarLayout(
-                    sidebarPanel(
-                      fileInput("upload", "Upload file here:", accept = ".csv"),
-                      tags$hr(),
-                      checkboxInput("rename", "Rename columns?", value = TRUE)
-                    ),
-                    mainPanel(
-                      gt_output("table") %>% withSpinner()
+          # tabItem(tabName = "test",
+          #         sidebarLayout(
+          #           sidebarPanel(
+          #             fileInput("upload", "Upload file here:", accept = ".csv"),
+          #             tags$hr(),
+          #             checkboxInput("rename", "Rename columns?", value = TRUE)
+          #           ),
+          #           mainPanel(
+          #             gt_output("table") %>% withSpinner()
+          #           )
+          #         ),
+          #         plotlyOutput("test_species_ranking")
+          # )
+          
+          # contact us page
+          tabItem(tabName = "contact",
+                  h1("Contact Us"),
+                  h4("We look forward to hearing your feedback and questions."),
+                  h4("If you encounter any issues or have suggestions for
+                     improvement, please visit the", tags$q("Issues"), "tab in our",
+                     tags$a(href="https://github.com/chantelwetzel-noaa/wcgfishSAP/issues",
+                            target = "_blank", "repository"), "to report them."),
+                  br(),
+                  fluidRow(
+                    box(
+                      width = 12,
+                      h4(strong("Chantel Wetzel"), style = "color:#002B7B"),
+                      h4("Mathematical Statistician"),
+                      h4(strong("Office:"), "(206) 302-1753"),
+                      h4(strong("Email:"), "chantel.wetzel@noaa.gov"),
+                      h4("Northwest Fisheries Science Center"),
                     )
-                  ),
-                  plotlyOutput("test_species_ranking")
+                  )
           )
         )
       )  # end dashboardBody
