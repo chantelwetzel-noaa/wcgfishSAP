@@ -126,7 +126,7 @@ joined_af_df <- joined_af_df %>%
 shinyServer(function(input, output, session) {
   
   # overall ranking table
-  output$overall_gt_table <- render_gt({
+  output$overall_gt_table <- renderUI({
     results <- data.frame(species_groups$speciesName,
                           com_rev_data$Factor_Score,
                           rec_data$Factor_Score,
@@ -139,31 +139,75 @@ shinyServer(function(input, output, session) {
                           new_info_data$Factor_score,
                           ass_freq_data$Score)
     
+    # reset weights if button is pressed
+    observeEvent(input$reset, {
+      updateNumericInput(session, "comm_weight", value = 0.21)
+      updateNumericInput(session, "rec_weight", value = 0.09)
+      updateNumericInput(session, "tribal_weight", value = 0.05)
+      updateNumericInput(session, "cd_weight", value = 0.11)
+      updateNumericInput(session, "reb_weight", value = 0.10)
+      updateNumericInput(session, "ss_weight", value = 0.08)
+      updateNumericInput(session, "fm_weight", value = 0.08)
+      updateNumericInput(session, "eco_weight", value = 0.05)
+      updateNumericInput(session, "ni_weight", value = 0.05)
+      updateNumericInput(session, "af_weight", value = 0.18)
+    }, ignoreInit = TRUE)
+    
     # multiply factor scores with weights
-    results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * 0.21
-    results$rec_data.Factor_Score <- results$rec_data.Factor_Score * 0.09
-    results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * 0.05
-    results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * 0.11
-    results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * 0.10
-    results$stock_stat_data.Score <- results$stock_stat_data.Score * 0.08
-    results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * 0.08
-    results$eco_data.Factor_Score <- results$eco_data.Factor_Score * 0.05
-    results$new_info_data.Factor_score <- results$new_info_data.Factor_score * 0.05
-    results$ass_freq_data.Score <- results$ass_freq_data.Score * 0.18
+    results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * input$comm_weight
+    results$rec_data.Factor_Score <- results$rec_data.Factor_Score * input$rec_weight
+    results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * input$tribal_weight
+    results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * input$cd_weight
+    results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * input$reb_weight
+    results$stock_stat_data.Score <- results$stock_stat_data.Score * input$ss_weight
+    results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * input$fm_weight
+    results$eco_data.Factor_Score <- results$eco_data.Factor_Score * input$eco_weight
+    results$new_info_data.Factor_score <- results$new_info_data.Factor_score * input$ni_weight
+    results$ass_freq_data.Score <- results$ass_freq_data.Score * input$af_weight
     
     # create column with weighted sum
     results$total <- rowSums(results[2:11])
     
     results <- results %>%
       arrange(desc(total))
+    
+    # create rank column
+    results$rank <- NA
+    order_totals <- order(results$total, results$species_groups.speciesName,
+                          decreasing = TRUE)
+    results$rank[order_totals] <- 1:nrow(results)
+    
+    # create min/max variables for coloring cells
+    target_cols <- com_rev_data.Factor_Score:ass_freq_data.Score
   
+    # create table
     results %>%
-      select(species_groups.speciesName, total,
+      select(species_groups.speciesName, rank, total,
              com_rev_data.Factor_Score:ass_freq_data.Score) %>%
       gt() %>%
-      fmt_number(columns = everything(), decimals = 2) %>%
+      tab_header(
+        title = "Overall Factor Summary"
+      ) %>%
+      cols_label(
+        species_groups.speciesName = "Species",
+        rank = "Rank",
+        total = "Wt.'d Total Score",
+        com_rev_data.Factor_Score = "Comm. Factor Score",
+        rec_data.Factor_Score = "Rec. Factor Score",
+        tribal_data.Factor_Score = "Tribal Factor Score",
+        const_dem_data.Factor_Score = "Const. Dem. Factor Score",
+        rebuilding_data.Factor_Score = "Rebuild Factor Score",
+        stock_stat_data.Score = "Stock Status Factor Score",
+        fish_mort_data.Factor_Score = "Fishing Mort. Factor Score",
+        eco_data.Factor_Score = "Eco. Factor Score",
+        new_info_data.Factor_score = "New Info Factor Score",
+        ass_freq_data.Score = "Assess. Freq. Factor Score"
+      ) %>%
+      fmt_number(columns = -c("rank"), decimals = 2) %>%
       tab_style(style = list(cell_text(weight = "bold")),
-                locations = cells_body(columns = species_groups.speciesName)) %>%
+                locations = cells_body(columns = c("species_groups.speciesName",
+                                                   "rank"))
+      ) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = total)) %>%
       data_color(columns = com_rev_data.Factor_Score:ass_freq_data.Score,

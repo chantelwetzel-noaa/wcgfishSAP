@@ -131,10 +131,35 @@ shinyUI(
           tabItem(tabName = "overall_ranking",
                   h1("2024 Stock Assessment Prioritization Ranking"),
                   fluidRow(
+                    box(title = "Weights", status = "warning",
+                        solidHeader = TRUE, width = 3,
+                        numericInput("comm_weight", "Comm. Factor Weight:",
+                                     value = 0.21, min = 0, max = 1),
+                        numericInput("rec_weight", "Rec. Factor Weight:",
+                                     value = 0.09, min = 0, max = 1),
+                        numericInput("tribal_weight", "Tribal Factor Weight:",
+                                     value = 0.05, min = 0, max = 1),
+                        numericInput("cd_weight", "Const. Dem. Factor Weight:",
+                                     value = 0.11, min = 0, max = 1),
+                        numericInput("reb_weight", "Rebuild Factor Weight:",
+                                     value = 0.10, min = 0, max = 1),
+                        numericInput("ss_weight", "Stock Status Factor Weight:",
+                                     value = 0.08, min = 0, max = 1),
+                        numericInput("fm_weight", "Fishing Mort. Factor Weight:",
+                                     value = 0.08, min = 0, max = 1),
+                        numericInput("eco_weight", "Eco. Factor Weight:",
+                                     value = 0.05, min = 0, max = 1),
+                        numericInput("ni_weight", "New Info Factor Weight:",
+                                     value = 0.05, min = 0, max = 1),
+                        numericInput("af_weight", "Assess. Freq. Factor Weight:",
+                                     value = 0.18, min = 0, max = 1),
+                        # div(style="display:inline-block", submitButton("Apply weights")),
+                        actionButton("reset", "Reset weights")
+                    ),
                     box(title = "Factor Summary", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
-                        width = 12,
-                        gt_output("overall_gt_table") %>% withSpinner()
+                        width = 9,
+                        uiOutput("overall_gt_table") %>% withSpinner()
                     )
                   )
           ),
