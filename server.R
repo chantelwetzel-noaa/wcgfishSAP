@@ -126,61 +126,90 @@ joined_af_df <- joined_af_df %>%
 shinyServer(function(input, output, session) {
   
   # overall ranking table
+  results <- data.frame(species_groups$speciesName,
+                        com_rev_data$Factor_Score,
+                        rec_data$Factor_Score,
+                        tribal_data$Factor_Score,
+                        const_dem_data$Factor_Score,
+                        rebuilding_data$Factor_Score,
+                        stock_stat_data$Score,
+                        fish_mort_data$Factor_Score,
+                        eco_data$Factor_Score,
+                        new_info_data$Factor_score,
+                        ass_freq_data$Score)
+  
+  # add factor weights
+  comm_weight <- reactive(input$comm_weight)
+  rec_weight <- reactive(input$rec_weight)
+  tribal_weight <- reactive(input$tribal_weight)
+  cd_weight <- reactive(input$cd_weight)
+  reb_weight <- reactive(input$reb_weight)
+  ss_weight <- reactive(input$ss_weight)
+  fm_weight <- reactive(input$fm_weight)
+  eco_weight <- reactive(input$eco_weight)
+  ni_weight <- reactive(input$ni_weight)
+  af_weight <- reactive(input$af_weight)
+  sum <- reactive(comm_weight() + rec_weight() + tribal_weight() +
+                  cd_weight() + reb_weight() + ss_weight() + fm_weight() +
+                  eco_weight() + ni_weight() + af_weight())
+  
+  # display sum of factor weights
+  output$weights_sum <- renderText({
+    paste("Sum of weights:", sum())
+  })
+  
+  # warning if sum is > 1.00
+  output$warning <- renderText({
+    if(sum() != 1.00) {
+      paste("<span style=\"color:red\">WARNING: Ensure all weights add up to 1.</span>")
+    }
+  })
+  
+  # reset weights if button is pressed
+  observeEvent(input$reset, {
+    updateNumericInput(session, "comm_weight", value = 0.21)
+    updateNumericInput(session, "rec_weight", value = 0.09)
+    updateNumericInput(session, "tribal_weight", value = 0.05)
+    updateNumericInput(session, "cd_weight", value = 0.11)
+    updateNumericInput(session, "reb_weight", value = 0.10)
+    updateNumericInput(session, "ss_weight", value = 0.08)
+    updateNumericInput(session, "fm_weight", value = 0.08)
+    updateNumericInput(session, "eco_weight", value = 0.05)
+    updateNumericInput(session, "ni_weight", value = 0.05)
+    updateNumericInput(session, "af_weight", value = 0.18)
+  }, ignoreInit = TRUE)
+  
+  # rescale weights if button is pressed
+  observeEvent(input$rescale, {
+    rem <- (1 - sum()) / 10
+    updateNumericInput(session, "comm_weight", value = comm_weight() + rem)
+    updateNumericInput(session, "rec_weight", value = rec_weight() + rem)
+    updateNumericInput(session, "tribal_weight", value = tribal_weight() + rem)
+    updateNumericInput(session, "cd_weight", value = cd_weight() + rem)
+    updateNumericInput(session, "reb_weight", value = reb_weight() + rem)
+    updateNumericInput(session, "ss_weight", value = ss_weight() + rem)
+    updateNumericInput(session, "fm_weight", value = fm_weight() + rem)
+    updateNumericInput(session, "eco_weight", value = eco_weight() + rem)
+    updateNumericInput(session, "ni_weight", value = ni_weight() + rem)
+    updateNumericInput(session, "af_weight", value = af_weight() + rem)
+  }, ignoreInit = TRUE)
+  
+  # create overall ranking table
   output$overall_gt_table <- renderUI({
-    results <- data.frame(species_groups$speciesName,
-                          com_rev_data$Factor_Score,
-                          rec_data$Factor_Score,
-                          tribal_data$Factor_Score,
-                          const_dem_data$Factor_Score,
-                          rebuilding_data$Factor_Score,
-                          stock_stat_data$Score,
-                          fish_mort_data$Factor_Score,
-                          eco_data$Factor_Score,
-                          new_info_data$Factor_score,
-                          ass_freq_data$Score)
-    
-    # reset weights if button is pressed
-    observeEvent(input$reset, {
-      updateNumericInput(session, "comm_weight", value = 0.21)
-      updateNumericInput(session, "rec_weight", value = 0.09)
-      updateNumericInput(session, "tribal_weight", value = 0.05)
-      updateNumericInput(session, "cd_weight", value = 0.11)
-      updateNumericInput(session, "reb_weight", value = 0.10)
-      updateNumericInput(session, "ss_weight", value = 0.08)
-      updateNumericInput(session, "fm_weight", value = 0.08)
-      updateNumericInput(session, "eco_weight", value = 0.05)
-      updateNumericInput(session, "ni_weight", value = 0.05)
-      updateNumericInput(session, "af_weight", value = 0.18)
-    }, ignoreInit = TRUE)
-    
-    # display sum of weights
-    sum <- input$comm_weight + input$rec_weight + input$tribal_weight +
-      input$cd_weight + input$reb_weight + input$ss_weight + input$fm_weight +
-      input$eco_weight + input$ni_weight + input$af_weight
-    
-    output$weights_sum <- renderText({
-      paste("Sum of weights:", sum)
-    })
-    
-    output$warning <- renderText({
-      if(sum != 1.00) {
-        paste("<span style=\"color:red\">WARNING: Ensure all weights add up to 1.</span>")
-      }
-    })
     
     # create table if weights sum to 1
-    if(sum == 1.00) {
+    if(sum() == 1.00) {
       # multiply factor scores with weights
-      results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * input$comm_weight
-      results$rec_data.Factor_Score <- results$rec_data.Factor_Score * input$rec_weight
-      results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * input$tribal_weight
-      results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * input$cd_weight
-      results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * input$reb_weight
-      results$stock_stat_data.Score <- results$stock_stat_data.Score * input$ss_weight
-      results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * input$fm_weight
-      results$eco_data.Factor_Score <- results$eco_data.Factor_Score * input$eco_weight
-      results$new_info_data.Factor_score <- results$new_info_data.Factor_score * input$ni_weight
-      results$ass_freq_data.Score <- results$ass_freq_data.Score * input$af_weight
+      results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * comm_weight()
+      results$rec_data.Factor_Score <- results$rec_data.Factor_Score * rec_weight()
+      results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * tribal_weight()
+      results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * cd_weight()
+      results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * reb_weight()
+      results$stock_stat_data.Score <- results$stock_stat_data.Score * ss_weight()
+      results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * fm_weight()
+      results$eco_data.Factor_Score <- results$eco_data.Factor_Score * eco_weight()
+      results$new_info_data.Factor_score <- results$new_info_data.Factor_score * ni_weight()
+      results$ass_freq_data.Score <- results$ass_freq_data.Score * af_weight()
       
       # create column with weighted sum
       results$total <- rowSums(results[2:11])
@@ -195,7 +224,7 @@ shinyServer(function(input, output, session) {
       results$rank[order_totals] <- 1:nrow(results)
       
       # create table
-      results %>%
+      overall_table <- results %>%
         select(species_groups.speciesName, rank, total,
                com_rev_data.Factor_Score:ass_freq_data.Score) %>%
         gt() %>%
@@ -224,16 +253,37 @@ shinyServer(function(input, output, session) {
         ) %>%
         tab_style(style = list(cell_text(weight = "bold")),
                   locations = cells_body(columns = total)) %>%
-        data_color(columns = com_rev_data.Factor_Score:ass_freq_data.Score,
-                   method = "numeric", palette = c("RdYlBu"),
-                   domain = c(-0.54, 2.10),
-                   reverse = TRUE
-        ) %>%
         opt_interactive(use_search = TRUE,
                         use_highlight = TRUE,
                         use_page_size_select = TRUE)
+      
+      # color cells of columns
+      to_color <- setNames(
+        nm = matches <- grep("Score", colnames(results),
+                             ignore.case = TRUE),
+        colnames(results)[matches]
+      )
+      
+      for(i in to_color) {
+        overall_table <- overall_table %>%
+          data_color(columns = i, method = "numeric",
+                     palette = c("Greys"), reverse = TRUE
+          )
+      }
+      
+      overall_table
     }
   })
+  
+  # overall ranking plot
+  # top10 <- head(results, 10)
+  # top10_plot <- ggplot(results, aes(x = species_groups$speciesName,
+  #                                   y = total)) +
+  #   geom_bar(stat = "identity") + coord_flip()
+  # output$overall_plot <- renderPlotly({
+  #   ggplotly(top10_plot)
+  # })
+  
 
   # commercial revenue table
   output$com_gt_table <- render_gt({
