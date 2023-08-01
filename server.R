@@ -153,71 +153,86 @@ shinyServer(function(input, output, session) {
       updateNumericInput(session, "af_weight", value = 0.18)
     }, ignoreInit = TRUE)
     
-    # multiply factor scores with weights
-    results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * input$comm_weight
-    results$rec_data.Factor_Score <- results$rec_data.Factor_Score * input$rec_weight
-    results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * input$tribal_weight
-    results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * input$cd_weight
-    results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * input$reb_weight
-    results$stock_stat_data.Score <- results$stock_stat_data.Score * input$ss_weight
-    results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * input$fm_weight
-    results$eco_data.Factor_Score <- results$eco_data.Factor_Score * input$eco_weight
-    results$new_info_data.Factor_score <- results$new_info_data.Factor_score * input$ni_weight
-    results$ass_freq_data.Score <- results$ass_freq_data.Score * input$af_weight
+    # display sum of weights
+    sum <- input$comm_weight + input$rec_weight + input$tribal_weight +
+      input$cd_weight + input$reb_weight + input$ss_weight + input$fm_weight +
+      input$eco_weight + input$ni_weight + input$af_weight
     
-    # create column with weighted sum
-    results$total <- rowSums(results[2:11])
+    output$weights_sum <- renderText({
+      paste("Sum of weights:", sum)
+    })
     
-    results <- results %>%
-      arrange(desc(total))
+    output$warning <- renderText({
+      if(sum != 1.00) {
+        paste("<span style=\"color:red\">WARNING: Ensure all weights add up to 1.</span>")
+      }
+    })
     
-    # create rank column
-    results$rank <- NA
-    order_totals <- order(results$total, results$species_groups.speciesName,
-                          decreasing = TRUE)
-    results$rank[order_totals] <- 1:nrow(results)
-    
-    # create min/max variables for coloring cells
-    target_cols <- com_rev_data.Factor_Score:ass_freq_data.Score
-  
-    # create table
-    results %>%
-      select(species_groups.speciesName, rank, total,
-             com_rev_data.Factor_Score:ass_freq_data.Score) %>%
-      gt() %>%
-      tab_header(
-        title = "Overall Factor Summary"
-      ) %>%
-      cols_label(
-        species_groups.speciesName = "Species",
-        rank = "Rank",
-        total = "Wt.'d Total Score",
-        com_rev_data.Factor_Score = "Comm. Factor Score",
-        rec_data.Factor_Score = "Rec. Factor Score",
-        tribal_data.Factor_Score = "Tribal Factor Score",
-        const_dem_data.Factor_Score = "Const. Dem. Factor Score",
-        rebuilding_data.Factor_Score = "Rebuild Factor Score",
-        stock_stat_data.Score = "Stock Status Factor Score",
-        fish_mort_data.Factor_Score = "Fishing Mort. Factor Score",
-        eco_data.Factor_Score = "Eco. Factor Score",
-        new_info_data.Factor_score = "New Info Factor Score",
-        ass_freq_data.Score = "Assess. Freq. Factor Score"
-      ) %>%
-      fmt_number(columns = -c("rank"), decimals = 2) %>%
-      tab_style(style = list(cell_text(weight = "bold")),
-                locations = cells_body(columns = c("species_groups.speciesName",
-                                                   "rank"))
-      ) %>%
-      tab_style(style = list(cell_text(weight = "bold")),
-                locations = cells_body(columns = total)) %>%
-      data_color(columns = com_rev_data.Factor_Score:ass_freq_data.Score,
-                 method = "numeric", palette = c("RdYlBu"),
-                 domain = c(-0.54, 2.10),
-                 reverse = TRUE
-      ) %>%
-      opt_interactive(use_search = TRUE,
-                      use_highlight = TRUE,
-                      use_page_size_select = TRUE)
+    # create table if weights sum to 1
+    if(sum == 1.00) {
+      # multiply factor scores with weights
+      results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * input$comm_weight
+      results$rec_data.Factor_Score <- results$rec_data.Factor_Score * input$rec_weight
+      results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * input$tribal_weight
+      results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * input$cd_weight
+      results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * input$reb_weight
+      results$stock_stat_data.Score <- results$stock_stat_data.Score * input$ss_weight
+      results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * input$fm_weight
+      results$eco_data.Factor_Score <- results$eco_data.Factor_Score * input$eco_weight
+      results$new_info_data.Factor_score <- results$new_info_data.Factor_score * input$ni_weight
+      results$ass_freq_data.Score <- results$ass_freq_data.Score * input$af_weight
+      
+      # create column with weighted sum
+      results$total <- rowSums(results[2:11])
+      
+      results <- results %>%
+        arrange(desc(total))
+      
+      # create rank column
+      results$rank <- NA
+      order_totals <- order(results$total, results$species_groups.speciesName,
+                            decreasing = TRUE)
+      results$rank[order_totals] <- 1:nrow(results)
+      
+      # create table
+      results %>%
+        select(species_groups.speciesName, rank, total,
+               com_rev_data.Factor_Score:ass_freq_data.Score) %>%
+        gt() %>%
+        tab_header(
+          title = "Overall Factor Summary"
+        ) %>%
+        cols_label(
+          species_groups.speciesName = "Species",
+          rank = "Rank",
+          total = "Wt.'d Total Score",
+          com_rev_data.Factor_Score = "Comm. Factor Score",
+          rec_data.Factor_Score = "Rec. Factor Score",
+          tribal_data.Factor_Score = "Tribal Factor Score",
+          const_dem_data.Factor_Score = "Const. Dem. Factor Score",
+          rebuilding_data.Factor_Score = "Rebuild Factor Score",
+          stock_stat_data.Score = "Stock Status Factor Score",
+          fish_mort_data.Factor_Score = "Fishing Mort. Factor Score",
+          eco_data.Factor_Score = "Eco. Factor Score",
+          new_info_data.Factor_score = "New Info Factor Score",
+          ass_freq_data.Score = "Assess. Freq. Factor Score"
+        ) %>%
+        fmt_number(columns = -c("rank"), decimals = 2) %>%
+        tab_style(style = list(cell_text(weight = "bold")),
+                  locations = cells_body(columns = c("species_groups.speciesName",
+                                                     "rank"))
+        ) %>%
+        tab_style(style = list(cell_text(weight = "bold")),
+                  locations = cells_body(columns = total)) %>%
+        data_color(columns = com_rev_data.Factor_Score:ass_freq_data.Score,
+                   method = "numeric", palette = c("RdYlBu"),
+                   domain = c(-0.54, 2.10),
+                   reverse = TRUE
+        ) %>%
+        opt_interactive(use_search = TRUE,
+                        use_highlight = TRUE,
+                        use_page_size_select = TRUE)
+    }
   })
 
   # commercial revenue table
@@ -629,14 +644,6 @@ shinyServer(function(input, output, session) {
         }
       }
       
-      if("Rank" %in% input$fm_columns) {
-        fm_table <- fm_table %>%
-          fmt_number(columns = -c("Rank"), decimals = 2)
-      } else {
-        fm_table <- fm_table %>%
-          fmt_number(columns = everything(), decimals = 2)
-      }
-      
       if("Average OFL Attainment" %in% input$fm_columns) {
         fm_table <- fm_table %>%
           tab_style(style = cell_text(color = "red", weight = "bold"),
@@ -665,6 +672,7 @@ shinyServer(function(input, output, session) {
       }
       
       fm_table %>%
+        fmt_number(columns = contains("Average"), decimals = 2) %>%
         fmt_percent(columns = contains("Attainment"), decimals = 1) %>%
         tab_style(style = list(cell_text(weight = "bold")),
                   locations = cells_body(columns = Species)) %>%

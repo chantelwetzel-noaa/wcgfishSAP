@@ -153,6 +153,9 @@ shinyUI(
                                      value = 0.05, min = 0, max = 1),
                         numericInput("af_weight", "Assess. Freq. Factor Weight:",
                                      value = 0.18, min = 0, max = 1),
+                        textOutput("weights_sum"),
+                        htmlOutput("warning"),
+                        br(),
                         # div(style="display:inline-block", submitButton("Apply weights")),
                         actionButton("reset", "Reset weights")
                     ),
@@ -386,7 +389,7 @@ shinyUI(
                   )
           ),
           
-          # constituent demand page - ADD HYPERLINK TO DEFINITIONS
+          # constituent demand page
           tabItem(tabName = "cd_page",
                   h1("Constituent Demand"),
                   fluidRow(
@@ -432,7 +435,10 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("cd_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('Constituent Demand Definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here."))
+                    )
                   ),
                   fluidRow(
                     box(title = "Constituent Demand Ranking Plot", status = "primary",
@@ -541,7 +547,8 @@ shinyUI(
                         gt_output("reb_gt_table") %>% withSpinner(),
                         p("See descriptions of each column",
                           tags$a(href="javascript:window.open('Rebuilding Definitions.html',
-                          '_blank', 'width = 600, height = 400')", "here.")))
+                          '_blank', 'width = 600, height = 400')", "here."))
+                    )
                   ),
                   fluidRow(
                     box(title = "Rebuilding Ranking Plot", status = "primary",
@@ -551,7 +558,7 @@ shinyUI(
                   )
           ),
           
-          # ecosystem page - ADD HYPERLINK TO DEFINITIONS
+          # ecosystem page
           tabItem(tabName = "eco_page",
                   h1("Ecosystem"),
                   fluidRow(
@@ -592,7 +599,10 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("eco_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('Ecosystem Definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here."))
+                    )
                   ),
                   fluidRow(
                     box(title = "Ecosystem Ranking Plot", status = "primary",
@@ -658,7 +668,7 @@ shinyUI(
                   )
           ),
           
-          # new information page - ADD HYPERLINK TO DEFINITIONS
+          # new information page
           tabItem(tabName = "ni_page",
                   h1("New Information"),
                   fluidRow(
@@ -699,7 +709,10 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("ni_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column here."))
+                        p("See descriptions of each column",
+                          tags$a(href="javascript:window.open('New Information Definitions.html',
+                          '_blank', 'width = 600, height = 400')", "here."))
+                    )
                   ),
                   fluidRow(
                     box(title = "New Information Ranking Plot", status = "primary",
