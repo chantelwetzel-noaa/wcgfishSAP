@@ -4,6 +4,7 @@ library(ggplot2)
 library(gt)
 library(gtExtras)
 library(plotly)
+library(plyr)
 library(stringr)
 library(tidyr)
 library(viridis)
@@ -149,18 +150,18 @@ shinyServer(function(input, output, session) {
   eco_weight <- reactive(input$eco_weight)
   ni_weight <- reactive(input$ni_weight)
   af_weight <- reactive(input$af_weight)
-  sum <- reactive(comm_weight() + rec_weight() + tribal_weight() +
-                  cd_weight() + reb_weight() + ss_weight() + fm_weight() +
-                  eco_weight() + ni_weight() + af_weight())
+  sum_weights <- reactive(round_any(comm_weight() + rec_weight() + tribal_weight() +
+                                    cd_weight() + reb_weight() + ss_weight() + fm_weight() +
+                                    eco_weight() + ni_weight() + af_weight(), 0.001))
   
   # display sum of factor weights
   output$weights_sum <- renderText({
-    paste("Sum of weights:", sum())
+    paste("Sum of weights:", sum_weights())
   })
   
   # warning if sum is > 1.00
   output$warning <- renderText({
-    if(sum() != 1.00) {
+    if(sum_weights() != 1.00) {
       paste("<span style=\"color:red\">WARNING: Ensure all weights add up to 1.</span>")
     }
   })
@@ -179,26 +180,51 @@ shinyServer(function(input, output, session) {
     updateNumericInput(session, "af_weight", value = 0.18)
   }, ignoreInit = TRUE)
   
+  
+  # function to rescale weights
+  rescale_weights <- function(factor_weights) {
+    # count non-zero weights
+    count <- length(factor_weights[factor_weights > 0])
+    
+    # avoid zero division
+    if(count == 0) {
+      rescaled_weights <- rep(1 / length(factor_weights), length(factor_weights))
+    } else {
+      rescaled_weights <- factor_weights
+      rem <- (1.000 - sum_weights()) / count
+      rescaled_weights[factor_weights > 0] <- factor_weights[factor_weights > 0] + rem
+    }
+    return(rescaled_weights)
+  }
+  
   # rescale weights if button is pressed
   observeEvent(input$rescale, {
-    rem <- (1 - sum()) / 10
-    updateNumericInput(session, "comm_weight", value = comm_weight() + rem)
-    updateNumericInput(session, "rec_weight", value = rec_weight() + rem)
-    updateNumericInput(session, "tribal_weight", value = tribal_weight() + rem)
-    updateNumericInput(session, "cd_weight", value = cd_weight() + rem)
-    updateNumericInput(session, "reb_weight", value = reb_weight() + rem)
-    updateNumericInput(session, "ss_weight", value = ss_weight() + rem)
-    updateNumericInput(session, "fm_weight", value = fm_weight() + rem)
-    updateNumericInput(session, "eco_weight", value = eco_weight() + rem)
-    updateNumericInput(session, "ni_weight", value = ni_weight() + rem)
-    updateNumericInput(session, "af_weight", value = af_weight() + rem)
+    # store factor weights
+    factor_weights <- reactiveVal(c(comm_weight(), rec_weight(),
+                                    tribal_weight(), cd_weight(),
+                                    reb_weight(), ss_weight(),
+                                    fm_weight(), eco_weight(),
+                                    ni_weight(), af_weight()))
+    
+    factor_weights(rescale_weights(factor_weights()))
+    updateNumericInput(session, "comm_weight", value = factor_weights()[1])
+    updateNumericInput(session, "rec_weight", value = factor_weights()[2])
+    updateNumericInput(session, "tribal_weight", value = factor_weights()[3])
+    updateNumericInput(session, "cd_weight", value = factor_weights()[4])
+    updateNumericInput(session, "reb_weight", value = factor_weights()[5])
+    updateNumericInput(session, "ss_weight", value = factor_weights()[6])
+    updateNumericInput(session, "fm_weight", value = factor_weights()[7])
+    updateNumericInput(session, "eco_weight", value = factor_weights()[8])
+    updateNumericInput(session, "ni_weight", value = factor_weights()[9])
+    updateNumericInput(session, "af_weight", value = factor_weights()[10])
   }, ignoreInit = TRUE)
+  
   
   # create overall ranking table
   output$overall_gt_table <- renderUI({
     
     # create table if weights sum to 1
-    if(sum() == 1.00) {
+    if(sum_weights() == 1.00) {
       # multiply factor scores with weights
       results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * comm_weight()
       results$rec_data.Factor_Score <- results$rec_data.Factor_Score * rec_weight()
