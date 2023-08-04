@@ -130,13 +130,13 @@ shinyUI(
           # overall ranking page
           tabItem(tabName = "overall_ranking",
                   h1("2024 Stock Assessment Prioritization Ranking"),
-                  # fluidRow(
-                  #   box(title = "Overall Ranking", status = "primary",
-                  #       solidHeader = TRUE, collapsible = TRUE,
-                  #       width = 12,
-                  #       plotlyOutput("overall_plot") %>% withSpinner()
-                  #   )
-                  # ),
+                  fluidRow(
+                    box(title = "Overall Ranking", status = "primary",
+                        solidHeader = TRUE, collapsible = TRUE,
+                        width = 12,
+                        plotlyOutput("overall_ranking") %>% withSpinner()
+                    )
+                  ),
                   fluidRow(
                     box(title = "Weights", status = "warning",
                         solidHeader = TRUE, width = 12,

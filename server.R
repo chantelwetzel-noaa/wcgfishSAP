@@ -180,7 +180,6 @@ shinyServer(function(input, output, session) {
     updateNumericInput(session, "af_weight", value = 0.18)
   }, ignoreInit = TRUE)
   
-  
   # function to rescale weights
   rescale_weights <- function(factor_weights) {
     # count non-zero weights
@@ -220,37 +219,42 @@ shinyServer(function(input, output, session) {
   }, ignoreInit = TRUE)
   
   
+  # create reactive dataframe (used for table + plot)
+  overall_data <- reactive({
+    # multiply factor scores with weights
+    results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * comm_weight()
+    results$rec_data.Factor_Score <- results$rec_data.Factor_Score * rec_weight()
+    results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * tribal_weight()
+    results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * cd_weight()
+    results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * reb_weight()
+    results$stock_stat_data.Score <- results$stock_stat_data.Score * ss_weight()
+    results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * fm_weight()
+    results$eco_data.Factor_Score <- results$eco_data.Factor_Score * eco_weight()
+    results$new_info_data.Factor_score <- results$new_info_data.Factor_score * ni_weight()
+    results$ass_freq_data.Score <- results$ass_freq_data.Score * af_weight()
+    
+    # create column with weighted sum
+    results$total <- rowSums(results[2:11])
+    
+    results <- results %>%
+      arrange(desc(total))
+    
+    # create rank column
+    results$rank <- NA
+    order_totals <- order(results$total, results$species_groups.speciesName,
+                          decreasing = TRUE)
+    results$rank[order_totals] <- 1:nrow(results)
+    
+    results
+  })
+  
+  
   # create overall ranking table
   output$overall_gt_table <- renderUI({
     
     # create table if weights sum to 1
     if(sum_weights() == 1.00) {
-      # multiply factor scores with weights
-      results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * comm_weight()
-      results$rec_data.Factor_Score <- results$rec_data.Factor_Score * rec_weight()
-      results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * tribal_weight()
-      results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * cd_weight()
-      results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * reb_weight()
-      results$stock_stat_data.Score <- results$stock_stat_data.Score * ss_weight()
-      results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * fm_weight()
-      results$eco_data.Factor_Score <- results$eco_data.Factor_Score * eco_weight()
-      results$new_info_data.Factor_score <- results$new_info_data.Factor_score * ni_weight()
-      results$ass_freq_data.Score <- results$ass_freq_data.Score * af_weight()
-      
-      # create column with weighted sum
-      results$total <- rowSums(results[2:11])
-      
-      results <- results %>%
-        arrange(desc(total))
-      
-      # create rank column
-      results$rank <- NA
-      order_totals <- order(results$total, results$species_groups.speciesName,
-                            decreasing = TRUE)
-      results$rank[order_totals] <- 1:nrow(results)
-      
-      # create table
-      overall_table <- results %>%
+      overall_table <- overall_data() %>%
         select(species_groups.speciesName, rank, total,
                com_rev_data.Factor_Score:ass_freq_data.Score) %>%
         gt() %>%
@@ -289,7 +293,6 @@ shinyServer(function(input, output, session) {
                              ignore.case = TRUE),
         colnames(results)[matches]
       )
-      
       for(i in to_color) {
         overall_table <- overall_table %>%
           data_color(columns = i, method = "numeric",
@@ -302,13 +305,34 @@ shinyServer(function(input, output, session) {
   })
   
   # overall ranking plot
-  # top10 <- head(results, 10)
-  # top10_plot <- ggplot(results, aes(x = species_groups$speciesName,
-  #                                   y = total)) +
-  #   geom_bar(stat = "identity") + coord_flip()
-  # output$overall_plot <- renderPlotly({
-  #   ggplotly(top10_plot)
-  # })
+  output$overall_ranking <- renderPlotly({
+    if(sum_weights() == 1.00) {
+      # reshape dataframe
+      for_plot <- overall_data() %>%
+        pivot_longer(
+          cols = com_rev_data.Factor_Score:ass_freq_data.Score,
+          names_to = "factor",
+          values_to = "score"
+        )
+      
+      top_10 <- head(for_plot, 100)
+      
+      # create plot
+      overall_plot <- ggplot(top_10, aes(x = reorder(species_groups.speciesName, total),
+                                         y = score, fill = factor)) +
+        geom_bar(position = "stack", stat = "identity") +
+        coord_flip() +
+        labs(
+          title = "Overall Fish Species Ranking",
+          y = "Overall Weighted Factor Score", x = "Species",
+          fill = "Factors"
+        ) +
+        theme_light() +
+        scale_fill_viridis(discrete = TRUE)
+      
+      ggplotly(overall_plot)
+    }
+  })
   
 
   # commercial revenue table
