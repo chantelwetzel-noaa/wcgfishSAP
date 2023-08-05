@@ -23,6 +23,9 @@ tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
 const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
   mutate_at(c("Commercial_Importance", "Recreational_Importance",
               "Landings_Constricted"), ~replace_na(., 0))
+# adjust negative scores
+cd_adj <- -min(const_dem_data[, 3])
+const_dem_data$Factor_Score <- const_dem_data[, 3] + cd_adj
 
 ## table has no rank column
 rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
@@ -33,13 +36,15 @@ stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
 fish_mort_data <- read.csv("tables/fishing_mortality.csv", header = TRUE)
 
 eco_data <- read.csv("tables/ecosystem.csv", header = TRUE)
-# eco_data$Factor_Score <- as.numeric(eco_data$Factor_Score)
 
 new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
 new_info_data <- replace(new_info_data, new_info_data == "", NA)
 
 ## rank column at end of table
 ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
+# adjust negative scores
+af_adj <- -min(ass_freq_data[, 3])
+ass_freq_data$Score <- ass_freq_data[, 3] + af_adj
 
 
 ## load in species management groups, format cryptic species names
@@ -150,7 +155,7 @@ shinyServer(function(input, output, session) {
   eco_weight <- reactive(input$eco_weight)
   ni_weight <- reactive(input$ni_weight)
   af_weight <- reactive(input$af_weight)
-  sum_weights <- reactive(round_any(comm_weight() + rec_weight() + tribal_weight() +
+  sum_weights <- reactive(round_any(input$comm_weight + rec_weight() + tribal_weight() +
                                     cd_weight() + reb_weight() + ss_weight() + fm_weight() +
                                     eco_weight() + ni_weight() + af_weight(), 0.001))
   
@@ -249,7 +254,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # create overall ranking table
+  # overall ranking table
   output$overall_gt_table <- renderUI({
     
     # create table if weights sum to 1
@@ -315,10 +320,12 @@ shinyServer(function(input, output, session) {
           values_to = "score"
         )
       
-      top_10 <- head(for_plot, 100)
+      for_plot$rank_species <- paste0(for_plot$rank, ". ", for_plot$species_groups.speciesName)
+      
+      top_species <- head(for_plot, as.numeric(input$num_col) * 10)
       
       # create plot
-      overall_plot <- ggplot(top_10, aes(x = reorder(species_groups.speciesName, total),
+      overall_plot <- ggplot(top_species, aes(x = reorder(rank_species, total),
                                          y = score, fill = factor)) +
         geom_bar(position = "stack", stat = "identity") +
         coord_flip() +
@@ -330,7 +337,7 @@ shinyServer(function(input, output, session) {
         theme_light() +
         scale_fill_viridis(discrete = TRUE)
       
-      ggplotly(overall_plot)
+      ggplotly(overall_plot, dynamicTicks = TRUE)
     }
   })
   
@@ -537,7 +544,7 @@ shinyServer(function(input, output, session) {
   
   
   # constituent demand table
-  ## fix: coloring doesn't work for NA cells (Concern column)
+  ## negative scores adjusted
   output$cd_gt_table <- render_gt({
     
     # filter data down to species selected

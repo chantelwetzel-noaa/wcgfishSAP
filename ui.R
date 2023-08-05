@@ -134,8 +134,16 @@ shinyUI(
                     box(title = "Overall Ranking", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         width = 12,
-                        plotlyOutput("overall_ranking") %>% withSpinner()
-                    )
+                        plotlyOutput("overall_ranking") %>% withSpinner(),
+                        div(style = "display:inline-block", p("Show")),
+                        div(style = "display:inline-block",
+                            selectInput("num_col", label = NULL,
+                                        choices = c(10, 20, 30, 40, 50, 65),
+                                        selected = 10,
+                                        width = "75px")
+                        ),
+                        div(style = "display:inline-block", p("rows"))
+                    ),
                   ),
                   fluidRow(
                     box(title = "Weights", status = "warning",
