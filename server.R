@@ -155,9 +155,9 @@ shinyServer(function(input, output, session) {
   eco_weight <- reactive(input$eco_weight)
   ni_weight <- reactive(input$ni_weight)
   af_weight <- reactive(input$af_weight)
-  sum_weights <- reactive(round_any(input$comm_weight + rec_weight() + tribal_weight() +
-                                    cd_weight() + reb_weight() + ss_weight() + fm_weight() +
-                                    eco_weight() + ni_weight() + af_weight(), 0.001))
+  sum_weights <- reactive(round(comm_weight() + rec_weight() + tribal_weight() +
+                                cd_weight() + reb_weight() + ss_weight() + fm_weight() +
+                                eco_weight() + ni_weight() + af_weight(), 3))
   
   # display sum of factor weights
   output$weights_sum <- renderText({
@@ -211,16 +211,16 @@ shinyServer(function(input, output, session) {
                                     ni_weight(), af_weight()))
     
     factor_weights(rescale_weights(factor_weights()))
-    updateNumericInput(session, "comm_weight", value = factor_weights()[1])
-    updateNumericInput(session, "rec_weight", value = factor_weights()[2])
-    updateNumericInput(session, "tribal_weight", value = factor_weights()[3])
-    updateNumericInput(session, "cd_weight", value = factor_weights()[4])
-    updateNumericInput(session, "reb_weight", value = factor_weights()[5])
-    updateNumericInput(session, "ss_weight", value = factor_weights()[6])
-    updateNumericInput(session, "fm_weight", value = factor_weights()[7])
-    updateNumericInput(session, "eco_weight", value = factor_weights()[8])
-    updateNumericInput(session, "ni_weight", value = factor_weights()[9])
-    updateNumericInput(session, "af_weight", value = factor_weights()[10])
+    updateNumericInput(session, "comm_weight", value = round(factor_weights()[1], 4))
+    updateNumericInput(session, "rec_weight", value = round(factor_weights()[2], 4))
+    updateNumericInput(session, "tribal_weight", value = round(factor_weights()[3], 4))
+    updateNumericInput(session, "cd_weight", value = round(factor_weights()[4], 4))
+    updateNumericInput(session, "reb_weight", value = round(factor_weights()[5], 4))
+    updateNumericInput(session, "ss_weight", value = round(factor_weights()[6], 4))
+    updateNumericInput(session, "fm_weight", value = round(factor_weights()[7], 4))
+    updateNumericInput(session, "eco_weight", value = round(factor_weights()[8], 4))
+    updateNumericInput(session, "ni_weight", value = round(factor_weights()[9], 4))
+    updateNumericInput(session, "af_weight", value = round(factor_weights()[10], 4))
   }, ignoreInit = TRUE)
   
   
