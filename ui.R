@@ -116,6 +116,7 @@ shinyUI(
                                               icon = icon("info"))
                          ),
                          # menuItem("Upload file", tabName = "test", icon = icon("upload")),
+                         menuItem("Resources", tabName = "resources", icon = icon("book")),
                          menuItem("Contact", tabName = "contact", icon = icon("envelope"))
                        )
       ),
@@ -786,6 +787,54 @@ shinyUI(
           #         ),
           #         plotlyOutput("test_species_ranking")
           # )
+          
+          # resources page
+          tabItem(tabName = "resources",
+                  h1("Resources"),
+                  fluidRow(
+                    box(
+                      width = 12,
+                      tabsetPanel(
+                        tabPanel(
+                          "Background Information",
+                          br(),
+                          tags$ul(
+                            tags$li(
+                              tags$a(href="https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf",
+                                     target = "_blank", "Prioritizing Fish Stock Assessments")
+                            )
+                          )
+                        ),
+                        tabPanel(
+                          "PFMC Decisions",
+                          br(),
+                          tags$ul(
+                            tags$li(
+                              tags$a(href="https://www.pcouncil.org/september-2022-decision-summary-document/",
+                                     target = "_blank", "September 2022 Decision Summary Document")
+                            ),
+                            tags$li(
+                              tags$a(href="https://www.pcouncil.org/documents/2022/09/g-7-a-supplemental-gmt-report-1-2.pdf/#page=2",
+                                     target = "_blank", "Final Recommendations of Species to be Assessed in 2023")
+                            )
+                          )
+                        ),
+                        tabPanel(
+                          "References",
+                          br(),
+                          tags$ul(
+                            tags$li(
+                              tags$a(href="https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1080/02755947.2011.591264",
+                                     target = "_blank", "An Approach to Defining Stock Complexes for U.S. West
+                                     Coast Groundfishes Using Vulnerabilities and Ecological Distributions"),
+                              "(Cope et al., 2011)"
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+          ),
           
           # contact us page
           tabItem(tabName = "contact",
