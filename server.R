@@ -1,10 +1,11 @@
 library(shiny)
+library(shinyBS)
+library(plyr)
 library(dplyr)
 library(ggplot2)
 library(gt)
 library(gtExtras)
 library(plotly)
-library(plyr)
 library(stringr)
 library(tidyr)
 library(viridis)
@@ -41,10 +42,10 @@ new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
 new_info_data <- replace(new_info_data, new_info_data == "", NA)
 
 ## rank column at end of table
-ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
+assess_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
 # adjust negative scores
-af_adj <- -min(ass_freq_data[, 3])
-ass_freq_data$Score <- ass_freq_data[, 3] + af_adj
+af_adj <- -min(assess_freq_data[, 3])
+assess_freq_data$Score <- assess_freq_data[, 3] + af_adj
 
 
 ## load in species management groups, format cryptic species names
@@ -58,7 +59,7 @@ tribal_data$Species <- species_groups$speciesName
 rebuilding_data$Species <- species_groups$speciesName
 stock_stat_data$Species <- species_groups$speciesName
 eco_data$Species <- species_groups$speciesName
-ass_freq_data$Species <- species_groups$speciesName
+assess_freq_data$Species <- species_groups$speciesName
 
 
 # order species alphabetically, replace species column
@@ -121,7 +122,7 @@ joined_ni_df <- joined_ni_df %>%
   rename_with(~gsub("_", " ", colnames(joined_ni_df))) %>%
   arrange(Rank)
 
-joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName"))
+joined_af_df <- left_join(assess_freq_data, species_groups, by = c("Species" = "speciesName"))
 joined_af_df <- joined_af_df %>%
   rename_with(~gsub("_", " ", colnames(joined_af_df))) %>%
   select(Species, Rank, Score, `Recruit Variation`:managementGroup) %>%
@@ -142,7 +143,7 @@ shinyServer(function(input, output, session) {
                         fish_mort_data$Factor_Score,
                         eco_data$Factor_Score,
                         new_info_data$Factor_score,
-                        ass_freq_data$Score)
+                        assess_freq_data$Score)
   
   # add factor weights
   comm_weight <- reactive(input$comm_weight)
@@ -201,6 +202,12 @@ shinyServer(function(input, output, session) {
     return(rescaled_weights)
   }
   
+  # add popover to rescale button
+  addPopover(session, "rescale", title = "What happens here?",
+             placement = "top",
+             content = "Rescaling the weights will distribute the remainder
+             evenly to all non-zero weights.")
+  
   # rescale weights if button is pressed
   observeEvent(input$rescale, {
     # store factor weights
@@ -236,7 +243,7 @@ shinyServer(function(input, output, session) {
     results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * fm_weight()
     results$eco_data.Factor_Score <- results$eco_data.Factor_Score * eco_weight()
     results$new_info_data.Factor_score <- results$new_info_data.Factor_score * ni_weight()
-    results$ass_freq_data.Score <- results$ass_freq_data.Score * af_weight()
+    results$assess_freq_data.Score <- results$assess_freq_data.Score * af_weight()
     
     # create column with weighted sum
     results$total <- rowSums(results[2:11])
@@ -262,7 +269,7 @@ shinyServer(function(input, output, session) {
     if(sum_weights() == 1.00) {
       overall_table <- overall_data() %>%
         select(species_groups.speciesName, rank, total,
-               com_rev_data.Factor_Score:ass_freq_data.Score) %>%
+               com_rev_data.Factor_Score:assess_freq_data.Score) %>%
         gt() %>%
         tab_header(
           title = "Overall Factor Summary"
@@ -280,7 +287,7 @@ shinyServer(function(input, output, session) {
           fish_mort_data.Factor_Score = "Fishing Mort. Factor Score",
           eco_data.Factor_Score = "Eco. Factor Score",
           new_info_data.Factor_score = "New Info Factor Score",
-          ass_freq_data.Score = "Assess. Freq. Factor Score"
+          assess_freq_data.Score = "Assess. Freq. Factor Score"
         ) %>%
         fmt_number(columns = -c("rank"), decimals = 2) %>%
         tab_style(style = list(cell_text(weight = "bold")),
@@ -295,9 +302,9 @@ shinyServer(function(input, output, session) {
       
       # color cells of columns
       to_color <- setNames(
-        nm = matches <- grep("Score", colnames(results),
+        nm = matches <- grep("Score", colnames(overall_data()),
                              ignore.case = TRUE),
-        colnames(results)[matches]
+        colnames(overall_data())[matches]
       )
       for(i in to_color) {
         overall_table <- overall_table %>%
@@ -310,6 +317,25 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  # download overall ranking table
+  output$overall_csv <- downloadHandler(
+    filename = function() {
+      paste("overall_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(overall_data(), file)
+    }
+  )
+  
+  # output$overall_r <- downloadHandler(
+  #   filename = function() {
+  #     paste("overall_table_", Sys.Date(), ".RData", sep = "")
+  #   },
+  #   content = function(file) {
+  #     save(output$overall_gt_table, file = file)
+  #   }
+  # )
+  
   # overall ranking plot
   output$overall_ranking <- renderPlotly({
     req(overall_data())
@@ -318,7 +344,7 @@ shinyServer(function(input, output, session) {
       # reshape dataframe
       for_plot <- overall_data() %>%
         pivot_longer(
-          cols = com_rev_data.Factor_Score:ass_freq_data.Score,
+          cols = com_rev_data.Factor_Score:assess_freq_data.Score,
           names_to = "factor",
           values_to = "score"
         )
@@ -331,8 +357,8 @@ shinyServer(function(input, output, session) {
       overall_plot <- ggplot(top_species, aes(x = reorder(rank_species, score, sum),
                                               y = score, total = total, fill = factor,
                                               text = paste0("Species: ", species_groups.speciesName,
-                                                            "\nFactor Score: ", score,
-                                                            "\nOverall Wt'd. Factor Score: ", total))
+                                                            "\nWt'd. Factor Score: ", score,
+                                                            "\nTotal Wt'd. Factor Score: ", total))
         ) +
         geom_col() +
         coord_flip() +

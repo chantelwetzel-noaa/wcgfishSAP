@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyBS)
 library(shinydashboard)
 library(shinyWidgets)
 library(shinycssloaders)
@@ -141,8 +142,7 @@ shinyUI(
                                         choices = c(10, 20, 30, 40, 50, 65),
                                         selected = 10,
                                         width = "75px")
-                        ),
-                        div(style = "display:inline-block", p("rows"))
+                        )
                     ),
                   ),
                   fluidRow(
@@ -150,8 +150,12 @@ shinyUI(
                         solidHeader = TRUE, width = 12,
                         column(2, textOutput("weights_sum"), htmlOutput("warning"),
                                br(),
-                               actionButton("rescale", " Rescale weights",
-                                            icon = icon("scale-balanced")),
+                               bsButton("rescale", " Rescale weights",
+                                        icon = icon("scale-balanced")),
+                               bsPopover("rescale", title = "What happens here?",
+                                         content = "Rescaling the weights will
+                                         distribute the remainder evenly to all
+                                         non-zero weights."),
                                actionButton("reset", " Reset weights",
                                             icon = icon("arrow-rotate-right"))
                         ),
@@ -204,7 +208,11 @@ shinyUI(
                     box(title = "Factor Summary", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         width = 12,
-                        uiOutput("overall_gt_table") %>% withSpinner()
+                        uiOutput("overall_gt_table") %>% withSpinner(),
+                        div(style = "display:inline-block",
+                            downloadButton("overall_csv", "Download CSV"))
+                        # div(style = "display:inline-block",
+                        #     downloadButton("overall_r", "Download R object"))
                     )
                   )
           ),
