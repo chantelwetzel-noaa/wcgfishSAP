@@ -324,12 +324,12 @@ shinyServer(function(input, output, session) {
     }
   )
   
-  # output$overall_r <- downloadHandler(
+  # output$overall_xls <- downloadHandler(
   #   filename = function() {
-  #     paste("overall_table_", Sys.Date(), ".RData", sep = "")
+  #     paste("overall_table_", Sys.Date(), ".xls", sep = "")
   #   },
   #   content = function(file) {
-  #     save(output$overall_gt_table, file = file)
+  #     save(overall_data(), file = file)
   #   }
   # )
   
@@ -348,7 +348,15 @@ shinyServer(function(input, output, session) {
       
       for_plot$rank_species <- paste0(for_plot$Rank, ". ", for_plot$Species)
       
-      top_species <- head(for_plot, as.numeric(input$num_col) * 10)
+      if(input$num_col == "10" | input$num_col == "20") {
+        top_species <- head(for_plot, as.numeric(input$num_col) * 10)
+      } else if(input$num_col == "21-40") {
+        top_species <- for_plot[201:400, ]
+      } else if(input$num_col == "41-60") {
+        top_species <- for_plot[401:600, ]
+      } else {
+        top_species <- for_plot[601:650, ]
+      }
       
       # create plot
       overall_plot <- ggplot(top_species, aes(x = reorder(rank_species, score, sum),
@@ -394,9 +402,9 @@ shinyServer(function(input, output, session) {
       tab_header(
         title = "Commercial Importance",
         subtitle = "Measured by total inflation adjusted ex-vessel revenue data ($1,000)
-        between 2018-2022 (source: PacFIN)"
+      between 2018-2022 (source: PacFIN)"
       )
-
+    
     for(i in input$com_colors) {
       if(i %in% input$com_columns) {
         if(i == "Rank") {

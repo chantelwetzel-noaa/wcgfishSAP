@@ -140,8 +140,8 @@ shinyUI(
                         div(style = "display:inline-block", p("Show")),
                         div(style = "display:inline-block",
                             selectInput("num_col", label = NULL,
-                                        choices = c(10, 20, 30, 40, 50, 65),
-                                        selected = 10,
+                                        choices = c("10", "20", "21-40", "41-60", "61-65"),
+                                        selected = "10",
                                         width = "75px")
                         )
                     ),
@@ -211,9 +211,9 @@ shinyUI(
                         width = 12,
                         uiOutput("overall_gt_table") %>% withSpinner(),
                         div(style = "display:inline-block",
-                            downloadButton("overall_csv", "Download CSV"))
+                            downloadButton("overall_csv", "Download CSV")),
                         # div(style = "display:inline-block",
-                        #     downloadButton("overall_r", "Download R object"))
+                        #     downloadButton("overall_xls", "Download Excel spreadsheet"))
                     )
                   )
           ),
