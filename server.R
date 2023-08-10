@@ -257,6 +257,15 @@ shinyServer(function(input, output, session) {
                           decreasing = TRUE)
     results$rank[order_totals] <- 1:nrow(results)
     
+    results <- results %>%
+      select(species_groups.speciesName, rank, total,
+             com_rev_data.Factor_Score:assess_freq_data.Score)
+    
+    colnames(results) <- c("Species", "Rank", "Total",
+                           "Comm.", "Rec.", "Tribal", "Const. Dem.",
+                           "Rebuild", "Stock Status", "Fishing Mort.",
+                           "Ecosystem", "New Info", "Assess. Freq.")
+    
     results
   })
   
@@ -268,50 +277,38 @@ shinyServer(function(input, output, session) {
     # create table if weights sum to 1
     if(sum_weights() == 1.00) {
       overall_table <- overall_data() %>%
-        select(species_groups.speciesName, rank, total,
-               com_rev_data.Factor_Score:assess_freq_data.Score) %>%
         gt() %>%
         tab_header(
           title = "Overall Factor Summary"
         ) %>%
         cols_label(
-          species_groups.speciesName = "Species",
-          rank = "Rank",
-          total = "Wt.'d Total Score",
-          com_rev_data.Factor_Score = "Comm. Factor Score",
-          rec_data.Factor_Score = "Rec. Factor Score",
-          tribal_data.Factor_Score = "Tribal Factor Score",
-          const_dem_data.Factor_Score = "Const. Dem. Factor Score",
-          rebuilding_data.Factor_Score = "Rebuild Factor Score",
-          stock_stat_data.Score = "Stock Status Factor Score",
-          fish_mort_data.Factor_Score = "Fishing Mort. Factor Score",
-          eco_data.Factor_Score = "Eco. Factor Score",
-          new_info_data.Factor_score = "New Info Factor Score",
-          assess_freq_data.Score = "Assess. Freq. Factor Score"
+          Total = "Wt.'d Total Score",
+          `Comm.` = "Comm. Factor Score",
+          `Rec.` = "Rec. Factor Score",
+          `Tribal` = "Tribal Factor Score",
+          `Const. Dem.` = "Const. Dem. Factor Score",
+          Rebuild = "Rebuild Factor Score",
+          `Stock Status` = "Stock Status Factor Score",
+          `Fishing Mort.` = "Fishing Mort. Factor Score",
+          Ecosystem = "Eco. Factor Score",
+          `New Info` = "New Info Factor Score",
+          `Assess. Freq.` = "Assess. Freq. Factor Score"
         ) %>%
-        fmt_number(columns = -c("rank"), decimals = 2) %>%
+        fmt_number(columns = -c("Rank"), decimals = 2) %>%
         tab_style(style = list(cell_text(weight = "bold")),
-                  locations = cells_body(columns = c("species_groups.speciesName",
-                                                     "rank"))
+                  locations = cells_body(columns = c("Species", "Rank"))
         ) %>%
         tab_style(style = list(cell_text(weight = "bold")),
-                  locations = cells_body(columns = total)) %>%
+                  locations = cells_body(columns = Total)) %>%
         opt_interactive(use_search = TRUE,
                         use_highlight = TRUE,
                         use_page_size_select = TRUE)
       
       # color cells of columns
-      to_color <- setNames(
-        nm = matches <- grep("Score", colnames(overall_data()),
-                             ignore.case = TRUE),
-        colnames(overall_data())[matches]
-      )
-      for(i in to_color) {
-        overall_table <- overall_table %>%
-          data_color(columns = i, method = "numeric",
-                     palette = c("Greys"), reverse = TRUE
-          )
-      }
+      overall_table <- overall_table %>%
+        data_color(columns = 4:13, method = "numeric",
+                   palette = c("Greys"), reverse = TRUE
+        )
       
       overall_table
     }
@@ -344,21 +341,29 @@ shinyServer(function(input, output, session) {
       # reshape dataframe
       for_plot <- overall_data() %>%
         pivot_longer(
-          cols = com_rev_data.Factor_Score:assess_freq_data.Score,
+          cols = `Comm.`:`Assess. Freq.`,
           names_to = "factor",
           values_to = "score"
         )
       
-      for_plot$rank_species <- paste0(for_plot$rank, ". ", for_plot$species_groups.speciesName)
+      for_plot$rank_species <- paste0(for_plot$Rank, ". ", for_plot$Species)
       
       top_species <- head(for_plot, as.numeric(input$num_col) * 10)
       
       # create plot
       overall_plot <- ggplot(top_species, aes(x = reorder(rank_species, score, sum),
-                                              y = score, total = total, fill = factor,
-                                              text = paste0("Species: ", species_groups.speciesName,
-                                                            "\nWt'd. Factor Score: ", score,
-                                                            "\nTotal Wt'd. Factor Score: ", total))
+                                              y = score,
+                                              fill = factor,
+                                              text = paste0("Species: ", Species,
+                                                            "\nFactor: ", factor,
+                                                            "\nWt'd. Factor Score: ",
+                                                            paste0(round(score, digits = 2),
+                                                                   " (",
+                                                                  round((score / Total) * 100,
+                                                                        digits = 1),
+                                                                  "%)"),
+                                                            "\nTotal Wt'd. Factor Score: ",
+                                                            round(Total, digits = 2)))
         ) +
         geom_col() +
         coord_flip() +
@@ -429,7 +434,8 @@ shinyServer(function(input, output, session) {
     com_plot <- ggplot(joined_com_df, aes(x = Species, y = Rank,
                                           text = paste0("Species: ", Species,
                                                         "\nRank: ", Rank,
-                                                        "\nFactor Score: ", `Factor Score`,
+                                                        "\nFactor Score: ",
+                                                        round(`Factor Score`, digits = 2),
                                                         "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
@@ -503,7 +509,8 @@ shinyServer(function(input, output, session) {
     rec_plot <- ggplot(joined_rec_df, aes(x = Species, y = Rank,
                                           text = paste0("Species: ", Species,
                                                         "\nRank: ", Rank,
-                                                        "\nFactor Score: ", `Factor Score`,
+                                                        "\nFactor Score: ",
+                                                        round(`Factor Score`, digits = 2),
                                                         "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
@@ -577,7 +584,8 @@ shinyServer(function(input, output, session) {
     tribal_plot <- ggplot(joined_tribal_df, aes(x = Species, y = Rank,
                                                 text = paste0("Species: ", Species,
                                                               "\nRank: ", Rank,
-                                                              "\nFactor Score: ", `Factor Score`,
+                                                              "\nFactor Score: ",
+                                                              round(`Factor Score`, digits = 2),
                                                               "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
@@ -643,7 +651,8 @@ shinyServer(function(input, output, session) {
     cd_plot <- ggplot(joined_cd_df, aes(x = Species, y = Rank,
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
-                                                      "\nFactor Score: ", `Factor Score`,
+                                                      "\nFactor Score: ",
+                                                      round(`Factor Score`, digits = 2),
                                                       "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
@@ -703,7 +712,8 @@ shinyServer(function(input, output, session) {
     
     reb_plot <- ggplot(joined_reb_df, aes(x = Species, y = `Factor Score`,
                                           text = paste0("Species: ", Species,
-                                                        "\nFactor Score: ", `Factor Score`,
+                                                        "\nFactor Score: ",
+                                                        round(`Factor Score`, digits = 2),
                                                         "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = 0, yend = `Factor Score`),
@@ -781,7 +791,8 @@ shinyServer(function(input, output, session) {
     ss_plot <- ggplot(joined_ss_df, aes(x = Species, y = Rank,
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
-                                                      "\nFactor Score: ", Score,
+                                                      "\nFactor Score: ",
+                                                      round(Score, digits = 2),
                                                       "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
@@ -874,7 +885,8 @@ shinyServer(function(input, output, session) {
     fm_plot <- ggplot(joined_fm_df, aes(x = Species, y = Rank,
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
-                                                      "\nFactor Score: ", `Factor Score`,
+                                                      "\nFactor Score: ",
+                                                      round(`Factor Score`, digits = 2),
                                                       "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
@@ -944,7 +956,8 @@ shinyServer(function(input, output, session) {
     eco_plot <- ggplot(joined_eco_df, aes(x = Species, y = Rank,
                                           text = paste0("Species: ", Species,
                                                         "\nRank: ", Rank,
-                                                        "\nFactor Score: ", `Factor Score`,
+                                                        "\nFactor Score: ",
+                                                        round(`Factor Score`, digits = 2),
                                                         "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
@@ -1009,7 +1022,8 @@ shinyServer(function(input, output, session) {
     ni_plot <- ggplot(joined_ni_df, aes(x = Species, y = Rank,
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
-                                                      "\nFactor Score: ", `Factor score`,
+                                                      "\nFactor Score: ",
+                                                      round(`Factor score`, digits = 2),
                                                       "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
@@ -1074,7 +1088,8 @@ shinyServer(function(input, output, session) {
     af_plot <- ggplot(joined_af_df, aes(x = Species, y = Rank,
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
-                                                      "\nFactor Score: ", Score,
+                                                      "\nFactor Score: ",
+                                                      round(Score, digits = 2),
                                                       "\nManagement Group: ", managementGroup))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
