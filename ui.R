@@ -840,10 +840,14 @@ shinyUI(
           tabItem(tabName = "contact",
                   h1("Contact Us"),
                   h4("We look forward to hearing your feedback and questions."),
-                  h4("If you encounter any issues or have suggestions for
-                     improvement, please visit the", tags$q("Issues"), "tab in our",
+                  h4("If you encounter any bugs or functionality issues, please visit the",
+                     tags$q("Issues"), "tab in our",
                      tags$a(href="https://github.com/chantelwetzel-noaa/wcgfishSAP/issues",
-                            target = "_blank", "repository"), "to report them."),
+                            target = "_blank", "repository"), "to report them.",
+                     "If you would like to provide suggestions or feedback, feel free to visit the",
+                     tags$q("Discussions"),
+                     tags$a(href="https://github.com/chantelwetzel-noaa/wcgfishSAP/discussions",
+                            target = "_blank", "tab"), "to report them."),
                   br(),
                   fluidRow(
                     box(
