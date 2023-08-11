@@ -243,9 +243,7 @@ shinyUI(
                             checkboxGroupInput("fm_colors", "Select columns to color:",
                                                choices = fm_cols,
                                                selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
+                            )
                           )
                         ),
                         br(),
@@ -298,9 +296,7 @@ shinyUI(
                             checkboxGroupInput("com_colors", "Select columns to color:",
                                                choices = com_cols,
                                                selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
+                            )
                           )
                         ),
                         br(),
@@ -352,9 +348,7 @@ shinyUI(
                             checkboxGroupInput("tribal_colors", "Select columns to color:",
                                                choices = tribal_cols,
                                                selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
+                            )
                           )
                         ),
                         br(),
@@ -407,9 +401,7 @@ shinyUI(
                             checkboxGroupInput("rec_colors", "Select columns to color:",
                                                choices = rec_cols,
                                                selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
+                            )
                           )
                         ),
                         br(),
@@ -466,9 +458,7 @@ shinyUI(
                             checkboxGroupInput("cd_colors", "Select columns to color:",
                                                choices = cd_cols,
                                                selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
+                            )
                           )
                         ),
                         br(),
@@ -521,9 +511,7 @@ shinyUI(
                             checkboxGroupInput("ss_colors", "Select columns to color:",
                                                choices = ss_cols,
                                                selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
+                            )
                           )
                         ),
                         br(),
@@ -576,9 +564,7 @@ shinyUI(
                             checkboxGroupInput("reb_colors", "Select columns to color:",
                                                choices = reb_cols,
                                                selected = c("Currently Rebuilding")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
+                            )
                           )
                         ),
                         br(),
@@ -631,8 +617,7 @@ shinyUI(
                             checkboxGroupInput("eco_colors", "Select columns to color:",
                                                choices = eco_cols,
                                                selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.")
+                            )
                           )
                         ),
                         br(),
@@ -686,9 +671,7 @@ shinyUI(
                             checkboxGroupInput("af_colors", "Select columns to display:",
                                                choices = af_cols,
                                                selected = c("Score")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
+                            )
                           )
                         ),
                         br(),
@@ -740,9 +723,7 @@ shinyUI(
                             checkboxGroupInput("ni_colors", "Select columns to color:",
                                                choices = ni_cols,
                                                selected = c("Rank")
-                            ),
-                            em("**Selecting a column that is not in the table will cause an error.",
-                               style = "color:red")
+                            )
                           )
                         ),
                         br(),
