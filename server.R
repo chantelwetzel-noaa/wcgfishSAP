@@ -833,7 +833,9 @@ shinyServer(function(input, output, session) {
       select("Species", input$fm_columns) %>%
       gt() %>%
       tab_header(
-        title = "Fishing Mortality"
+        title = "Fishing Mortality",
+        subtitle = "Measured by average OFLs and average catch
+        between 2018-2022 (source: GEMM)"
       )
       
     for(i in input$fm_colors) {
