@@ -51,6 +51,7 @@ assess_freq_data$Score <- assess_freq_data[, 3] + af_adj
 ## load in species management groups, format cryptic species names
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
 species_groups <- format_species_names(x = species_groups)
+colnames(species_groups)[2] <- "Management Group"
 
 
 # replace species column
@@ -125,7 +126,7 @@ joined_ni_df <- joined_ni_df %>%
 joined_af_df <- left_join(assess_freq_data, species_groups, by = c("Species" = "speciesName"))
 joined_af_df <- joined_af_df %>%
   rename_with(~gsub("_", " ", colnames(joined_af_df))) %>%
-  select(Species, Rank, Score, `Recruit Variation`:managementGroup) %>%
+  select(Species, Rank, Score, `Recruit Variation`:`Management Group`) %>%
   arrange(Rank)
 
 
@@ -393,7 +394,7 @@ shinyServer(function(input, output, session) {
     req(joined_com_df)
     
     # filter data down to species selected
-    joined_com_df <- joined_com_df[joined_com_df$managementGroup %in% input$com_species_selector,]
+    joined_com_df <- joined_com_df[joined_com_df$`Management Group` %in% input$com_species_selector,]
   
     # create commercial revenue gt table output, display in ascending order by rank
     com_table <- joined_com_df %>%
@@ -444,12 +445,12 @@ shinyServer(function(input, output, session) {
                                                         "\nRank: ", Rank,
                                                         "\nFactor Score: ",
                                                         round(`Factor Score`, digits = 2),
-                                                        "\nManagement Group: ", managementGroup))
+                                                        "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                    color = "gray") +
       geom_hline(yintercept = 65, color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       scale_y_reverse() +
       labs(
         title = "Fish Species Ranking by Commercial Importance",
@@ -468,7 +469,7 @@ shinyServer(function(input, output, session) {
     req(joined_rec_df)
     
     # filter data down to species selected
-    joined_rec_df <- joined_rec_df[joined_rec_df$managementGroup %in% input$rec_species_selector,]
+    joined_rec_df <- joined_rec_df[joined_rec_df$`Management Group` %in% input$rec_species_selector,]
     
     # create recreational gt table output, display in ascending order by rank
     rec_table <- joined_rec_df %>%
@@ -519,12 +520,12 @@ shinyServer(function(input, output, session) {
                                                         "\nRank: ", Rank,
                                                         "\nFactor Score: ",
                                                         round(`Factor Score`, digits = 2),
-                                                        "\nManagement Group: ", managementGroup))
+                                                        "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                    color = "gray") +
       geom_hline(yintercept = 65, color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       scale_y_reverse() +
       labs(
         title = "Fish Species Ranking by Recreational Importance",
@@ -543,7 +544,7 @@ shinyServer(function(input, output, session) {
     req(joined_tribal_df)
     
     # filter data down to species selected
-    joined_tribal_df <- joined_tribal_df[joined_tribal_df$managementGroup %in% input$tribal_species_selector,]
+    joined_tribal_df <- joined_tribal_df[joined_tribal_df$`Management Group` %in% input$tribal_species_selector,]
     
     # create tribal revenue gt table output, display in ascending order by rank
     tribal_table <- joined_tribal_df %>%
@@ -594,12 +595,12 @@ shinyServer(function(input, output, session) {
                                                               "\nRank: ", Rank,
                                                               "\nFactor Score: ",
                                                               round(`Factor Score`, digits = 2),
-                                                              "\nManagement Group: ", managementGroup))
+                                                              "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                    color = "gray") +
       geom_hline(yintercept = 65, color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       scale_y_reverse() +
       labs(
         title = "Fish Species Ranking by Tribal Importance",
@@ -619,7 +620,7 @@ shinyServer(function(input, output, session) {
     req(joined_cd_df)
     
     # filter data down to species selected
-    joined_cd_df <- joined_cd_df[joined_cd_df$managementGroup %in% input$cd_species_selector,]
+    joined_cd_df <- joined_cd_df[joined_cd_df$`Management Group` %in% input$cd_species_selector,]
     
     # create recreational gt table output, display in ascending order by rank
     cd_table <- joined_cd_df %>%
@@ -661,12 +662,12 @@ shinyServer(function(input, output, session) {
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
                                                       round(`Factor Score`, digits = 2),
-                                                      "\nManagement Group: ", managementGroup))
+                                                      "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                    color = "gray") +
       geom_hline(yintercept = 65, color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       scale_y_reverse() +
       labs(
         title = "Fish Species Ranking by Constituent Demand",
@@ -684,7 +685,7 @@ shinyServer(function(input, output, session) {
   output$reb_gt_table <- render_gt({
     req(joined_reb_df)
     
-    joined_reb_df <- joined_reb_df[joined_reb_df$managementGroup %in% input$reb_species_selector,]
+    joined_reb_df <- joined_reb_df[joined_reb_df$`Management Group` %in% input$reb_species_selector,]
 
     reb_table <- joined_reb_df %>%
       select("Species", input$reb_columns) %>%
@@ -722,11 +723,11 @@ shinyServer(function(input, output, session) {
                                           text = paste0("Species: ", Species,
                                                         "\nFactor Score: ",
                                                         round(`Factor Score`, digits = 2),
-                                                        "\nManagement Group: ", managementGroup))
+                                                        "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = 0, yend = `Factor Score`),
                    color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       ylim(NA, 10) +
       labs(
         title = "Fish Species Ranking by Rebuilding",
@@ -744,7 +745,7 @@ shinyServer(function(input, output, session) {
   output$ss_gt_table <- render_gt({
     req(joined_ss_df)
     
-    joined_ss_df <- joined_ss_df[joined_ss_df$managementGroup %in% input$ss_species_selector,]
+    joined_ss_df <- joined_ss_df[joined_ss_df$`Management Group` %in% input$ss_species_selector,]
 
     ss_table <- joined_ss_df %>%
       select("Species", input$ss_columns) %>%
@@ -801,12 +802,12 @@ shinyServer(function(input, output, session) {
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
                                                       round(Score, digits = 2),
-                                                      "\nManagement Group: ", managementGroup))
+                                                      "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                    color = "gray") +
       geom_hline(yintercept = 65, color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       scale_y_reverse() +
       labs(
         title = "Fish Species Ranking by Stock Status",
@@ -827,7 +828,7 @@ shinyServer(function(input, output, session) {
     
     fm_cols <- colnames(joined_fm_df)[colnames(joined_fm_df) != "Species"]
       
-    joined_fm_df <- joined_fm_df[joined_fm_df$managementGroup %in% input$fm_species_selector,]
+    joined_fm_df <- joined_fm_df[joined_fm_df$`Management Group` %in% input$fm_species_selector,]
       
     fm_table <- joined_fm_df %>%
       select("Species", input$fm_columns) %>%
@@ -863,12 +864,12 @@ shinyServer(function(input, output, session) {
     }
       
     if("Average OFL" %in% input$fm_columns &
-       "managementGroup" %in% input$fm_columns) {
+       "`Management Group`" %in% input$fm_columns) {
       fm_table <- fm_table %>%
         tab_style(style = cell_text(style = "italic"),
                   locations = cells_body(
                     columns = `Average OFL`,
-                    rows = managementGroup != "species specific"
+                    rows = `Management Group` != "species specific"
                   )
         ) %>%
         tab_footnote(footnote = "Cells with italic text indicate OFL contributions.",
@@ -895,12 +896,12 @@ shinyServer(function(input, output, session) {
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
                                                       round(`Factor Score`, digits = 2),
-                                                      "\nManagement Group: ", managementGroup))
+                                                      "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                    color = "gray") +
       geom_hline(yintercept = 65, color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       scale_y_reverse() +
       labs(
         title = "Fish Species Ranking by Fishing Mortality",
@@ -918,7 +919,7 @@ shinyServer(function(input, output, session) {
   output$eco_gt_table <- render_gt({
     req(joined_eco_df)
     
-    joined_eco_df <- joined_eco_df[joined_eco_df$managementGroup %in% input$eco_species_selector,]
+    joined_eco_df <- joined_eco_df[joined_eco_df$`Management Group` %in% input$eco_species_selector,]
     
     eco_table <- joined_eco_df %>%
       select("Species", input$eco_columns) %>%
@@ -966,12 +967,12 @@ shinyServer(function(input, output, session) {
                                                         "\nRank: ", Rank,
                                                         "\nFactor Score: ",
                                                         round(`Factor Score`, digits = 2),
-                                                        "\nManagement Group: ", managementGroup))
+                                                        "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                    color = "gray") +
       geom_hline(yintercept = 65, color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       scale_y_reverse() +
       labs(
         title = "Fish Species Ranking by Ecosystem",
@@ -989,7 +990,7 @@ shinyServer(function(input, output, session) {
   output$ni_gt_table <- render_gt({
     req(joined_ni_df)
     
-    joined_ni_df <- joined_ni_df[joined_ni_df$managementGroup %in% input$ni_species_selector,]
+    joined_ni_df <- joined_ni_df[joined_ni_df$`Management Group` %in% input$ni_species_selector,]
     
     ni_table <- joined_ni_df %>%
       select("Species", input$ni_columns) %>%
@@ -1032,12 +1033,12 @@ shinyServer(function(input, output, session) {
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
                                                       round(`Factor score`, digits = 2),
-                                                      "\nManagement Group: ", managementGroup))
+                                                      "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                    color = "gray") +
       geom_hline(yintercept = 65, color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       scale_y_reverse() +
       labs(
         title = "Fish Species Ranking by New Information",
@@ -1055,7 +1056,7 @@ shinyServer(function(input, output, session) {
   output$af_gt_table <- render_gt({
     req(joined_af_df)
     
-    joined_af_df <- joined_af_df[joined_af_df$managementGroup %in% input$af_species_selector,]
+    joined_af_df <- joined_af_df[joined_af_df$`Management Group` %in% input$af_species_selector,]
     
     af_table <- joined_af_df %>%
       select("Species", input$af_columns) %>%
@@ -1098,12 +1099,12 @@ shinyServer(function(input, output, session) {
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
                                                       round(Score, digits = 2),
-                                                      "\nManagement Group: ", managementGroup))
+                                                      "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
                    color = "gray") +
       geom_hline(yintercept = 65, color = "gray") +
-      geom_point(aes(color = managementGroup), size = 3) +
+      geom_point(aes(color = `Management Group`), size = 3) +
       scale_y_reverse() +
       labs(
         title = "Fish Species Ranking by Fishing Mortality",
