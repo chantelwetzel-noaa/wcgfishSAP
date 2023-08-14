@@ -22,6 +22,7 @@ ass_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
 
 # load in species management groups
 species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE)
+colnames(species_groups)[2] <- "Management Group"
 
 # join data + rename columns
 joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
@@ -63,7 +64,7 @@ joined_ni_df <- joined_ni_df %>%
 joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName"))
 joined_af_df <- joined_af_df %>%
   rename_with(~gsub("_", " ", colnames(joined_af_df))) %>%
-  select(Species, Rank, Score, `Recruit Variation`:managementGroup)
+  select(Species, Rank, Score, `Recruit Variation`:`Management Group`)
 
 # freezing species column when selecting
 com_cols <- colnames(joined_com_df)[colnames(joined_com_df) != "Species"]
@@ -234,7 +235,7 @@ shinyUI(
                                                             "Average Removals",
                                                             "Average OFL",
                                                             "Average OFL Attainment",
-                                                            "managementGroup")
+                                                            "Management Group")
                             )
                           ),
                           tabPanel(
@@ -250,8 +251,8 @@ shinyUI(
                         selectInput(
                           inputId = "fm_species_selector",
                           label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          choices = c(unique(as.character(species_groups$`Management Group`))),
+                          selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
@@ -302,8 +303,8 @@ shinyUI(
                         br(),
                         selectInput("com_species_selector",
                                     "Select a species management group:",
-                                    choices = c(unique(as.character(species_groups$managementGroup))),
-                                    selected = c(unique(as.character(species_groups$managementGroup))),
+                                    choices = c(unique(as.character(species_groups$`Management Group`))),
+                                    selected = c(unique(as.character(species_groups$`Management Group`))),
                                     multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
@@ -355,8 +356,8 @@ shinyUI(
                         selectInput(
                           inputId = "tribal_species_selector",
                           label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          choices = c(unique(as.character(species_groups$`Management Group`))),
+                          selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
@@ -408,8 +409,8 @@ shinyUI(
                         selectInput(
                           inputId = "rec_species_selector",
                           label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          choices = c(unique(as.character(species_groups$`Management Group`))),
+                          selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
@@ -465,8 +466,8 @@ shinyUI(
                         selectInput(
                           inputId = "cd_species_selector",
                           label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          choices = c(unique(as.character(species_groups$`Management Group`))),
+                          selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
@@ -518,8 +519,8 @@ shinyUI(
                         selectInput(
                           inputId = "ss_species_selector",
                           label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          choices = c(unique(as.character(species_groups$`Management Group`))),
+                          selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
@@ -571,8 +572,8 @@ shinyUI(
                         selectInput(
                           inputId = "reb_species_selector",
                           label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          choices = c(unique(as.character(species_groups$`Management Group`))),
+                          selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
@@ -624,8 +625,8 @@ shinyUI(
                         selectInput(
                           inputId = "eco_species_selector",
                           label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          choices = c(unique(as.character(species_groups$`Management Group`))),
+                          selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
@@ -678,8 +679,8 @@ shinyUI(
                         selectInput(
                           inputId = "af_species_selector",
                           label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          choices = c(unique(as.character(species_groups$`Management Group`))),
+                          selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
@@ -730,8 +731,8 @@ shinyUI(
                         selectInput(
                           inputId = "ni_species_selector",
                           label = "Select a species management group:",
-                          choices = c(unique(as.character(species_groups$managementGroup))),
-                          selected = c(unique(as.character(species_groups$managementGroup))),
+                          choices = c(unique(as.character(species_groups$`Management Group`))),
+                          selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
                         em("Place cursor in the box and press delete to narrow down your selection."),
