@@ -87,7 +87,7 @@ shinyUI(
       
       skin = "blue",
       
-      dashboardHeader(title = "Stock Assessment Prioritization Tool",
+      dashboardHeader(title = "U.S. West Coast Groundfish Stock Assessment Prioritization",
                       titleWidth = 300),
       
       dashboardSidebar(width = 300,
@@ -833,9 +833,8 @@ shinyUI(
                           tags$ul(
                             tags$li(
                               tags$a(href="https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1080/02755947.2011.591264",
-                                     target = "_blank", "An Approach to Defining Stock Complexes for U.S. West
-                                     Coast Groundfishes Using Vulnerabilities and Ecological Distributions"),
-                              "(Cope et al., 2011)"
+                                     target = "_blank", "Cope et al. 2011. An Approach to Defining Stock Complexes for U.S. West
+                                     Coast Groundfishes Using Vulnerabilities and Ecological Distributions. Fisheries Management. 31:589-604."),
                             )
                           )
                         )

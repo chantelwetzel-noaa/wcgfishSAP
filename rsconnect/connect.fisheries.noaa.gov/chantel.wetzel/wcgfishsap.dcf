@@ -5,7 +5,7 @@ account: chantel.wetzel
 server: connect.fisheries.noaa.gov
 hostUrl: https://connect.fisheries.noaa.gov/__api__
 appId: 214
-bundleId: 831
+bundleId: 887
 url: https://connect.fisheries.noaa.gov/content/547b3e4a-7514-465d-b058-be2dc1770d8b/
 version: 1
 asMultiple: FALSE
