@@ -211,10 +211,7 @@ shinyUI(
                         solidHeader = TRUE, collapsible = TRUE,
                         width = 12,
                         uiOutput("overall_gt_table") %>% withSpinner(),
-                        div(style = "display:inline-block",
-                            downloadButton("overall_csv", "Download CSV")),
-                        # div(style = "display:inline-block",
-                        #     downloadButton("overall_xls", "Download Excel spreadsheet"))
+                        downloadButton("overall_csv", "Download CSV"),
                     )
                   )
           ),
@@ -262,6 +259,7 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("fm_gt_table") %>% withSpinner(),
+                        downloadButton("fm_csv", "Download CSV"),
                         p("See descriptions of each column",
                         tags$a(href="javascript:window.open('Fishing Mortality Definitions.html',
                         '_blank', 'width = 600, height = 400')", "here."))
@@ -313,10 +311,45 @@ shinyUI(
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
-                        gt_output("com_gt_table") %>% withSpinner(),
-                        p("See descriptions of each column",
-                          tags$a(href="javascript:window.open('Commercial Importance Definitions.html',
-                          '_blank', 'width = 600, height = 400')", "here."))
+                        tabsetPanel(
+                          tabPanel(
+                            "Factor Table",
+                            gt_output("com_gt_table") %>% withSpinner()
+                          ),
+                          tabPanel(
+                            "Column Descriptions",
+                            br(),
+                            p(strong("Rank:"),
+                              "Denotes the rank of a fish species based on this factor."),
+                            p(strong("Factor Score:"),
+                              "Denotes the scaled initial factor score for each species.
+                              Calculated based on the initial factor score standardized
+                              to the maximum initial factor score and scaled to range between
+                              10, the maximum score, and 0, the minimum score."),
+                            p(strong("Interim Value:"),
+                              "Unscaled factor score based on the coastwide revenue by species
+                              exponentiated by a value of 0.18 to account for highly variable
+                              coastwide revenues by species."),
+                            p(strong("Revenue:"),
+                              "The summed inflation adjusted ex-vessel revenue across states
+                              by species. Source: PacFIN."),
+                            p(strong("CA Revenue:"),
+                              "Total inflation adjusted ex-vessel revenue associated by within California.
+                              Source: PacFIN."),
+                            p(strong("OR Revenue:"),
+                              "Total inflation adjusted ex-vessel revenue associated by species within Oregon.
+                              Source: PacFIN."),
+                            p(strong("WA Revenue:"),
+                              "Total inflation adjusted ex-vessel revenue associated by species within
+                              Washington. Source: PacFIN."),
+                            p(strong("Management Group:"),
+                              "Management group associated with a species within the fishery management plan.")
+                          )
+                        ),
+                        downloadButton("com_csv", "Download CSV")
+                        # p("See descriptions of each column",
+                        #   tags$a(href="javascript:window.open('Commercial Importance Definitions.html',
+                        #   '_blank', 'width = 600, height = 400')", "here."))
                     )
                   ),
                   fluidRow(
@@ -367,6 +400,7 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("tribal_gt_table") %>% withSpinner(),
+                        downloadButton("tribal_csv", "Download CSV"),
                         p("See descriptions of each column",
                           tags$a(href="javascript:window.open('Tribal Importance Definitions.html',
                           '_blank', 'width = 600, height = 400')", "here."))
@@ -420,6 +454,7 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("rec_gt_table") %>% withSpinner(),
+                        downloadButton("rec_csv", "Download CSV"),
                         p("See descriptions of each column",
                           tags$a(href="javascript:window.open('Recreational Importance Definitions.html',
                           '_blank', 'width = 600, height = 400')", "here."))
@@ -477,6 +512,7 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("cd_gt_table") %>% withSpinner(),
+                        downloadButton("cd_csv", "Download CSV"),
                         p("See descriptions of each column",
                           tags$a(href="javascript:window.open('Constituent Demand Definitions.html',
                           '_blank', 'width = 600, height = 400')", "here."))
@@ -530,6 +566,7 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("ss_gt_table") %>% withSpinner(),
+                        downloadButton("ss_csv", "Download CSV"),
                         p("See descriptions of each column",
                           tags$a(href="javascript:window.open('Stock Status Definitions.html',
                           '_blank', 'width = 600, height = 400')", "here."))
@@ -583,6 +620,7 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("reb_gt_table") %>% withSpinner(),
+                        downloadButton("reb_csv", "Download CSV"),
                         p("See descriptions of each column",
                           tags$a(href="javascript:window.open('Rebuilding Definitions.html',
                           '_blank', 'width = 600, height = 400')", "here."))
@@ -636,6 +674,7 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("eco_gt_table") %>% withSpinner(),
+                        downloadButton("eco_csv", "Download CSV"),
                         p("See descriptions of each column",
                           tags$a(href="javascript:window.open('Ecosystem Definitions.html',
                           '_blank', 'width = 600, height = 400')", "here."))
@@ -690,6 +729,7 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("af_gt_table") %>% withSpinner(),
+                        downloadButton("af_csv", "Download CSV"),
                         p("See descriptions of each column",
                           tags$a(href="javascript:window.open('Assessment Frequency Definitions.html',
                           '_blank', 'width = 600, height = 400')", "here."))
@@ -742,6 +782,7 @@ shinyUI(
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("ni_gt_table") %>% withSpinner(),
+                        downloadButton("ni_csv", "Download CSV"),
                         p("See descriptions of each column",
                           tags$a(href="javascript:window.open('New Information Definitions.html',
                           '_blank', 'width = 600, height = 400')", "here."))
@@ -754,21 +795,6 @@ shinyUI(
                         width = 12)
                   )
           ),
-          
-          # upload file page
-          # tabItem(tabName = "test",
-          #         sidebarLayout(
-          #           sidebarPanel(
-          #             fileInput("upload", "Upload file here:", accept = ".csv"),
-          #             tags$hr(),
-          #             checkboxInput("rename", "Rename columns?", value = TRUE)
-          #           ),
-          #           mainPanel(
-          #             gt_output("table") %>% withSpinner()
-          #           )
-          #         ),
-          #         plotlyOutput("test_species_ranking")
-          # )
           
           # resources page
           tabItem(tabName = "resources",

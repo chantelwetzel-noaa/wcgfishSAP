@@ -325,15 +325,6 @@ shinyServer(function(input, output, session) {
     }
   )
   
-  # output$overall_xls <- downloadHandler(
-  #   filename = function() {
-  #     paste("overall_table_", Sys.Date(), ".xls", sep = "")
-  #   },
-  #   content = function(file) {
-  #     save(overall_data(), file = file)
-  #   }
-  # )
-  
   # overall ranking plot
   output$overall_ranking <- renderPlotly({
     req(overall_data())
@@ -390,15 +381,21 @@ shinyServer(function(input, output, session) {
   
 
   # commercial revenue table
+  # create reactive dataframe
+  reactive_com_df <- reactive({
+    # filter data down to selected species + columns
+    joined_com_df <- joined_com_df[joined_com_df$`Management Group` %in% input$com_species_selector,]
+    joined_com_df <- joined_com_df %>%
+      select("Species", input$com_columns)
+    
+    joined_com_df
+  })
+  
   output$com_gt_table <- render_gt({
     req(joined_com_df)
-    
-    # filter data down to species selected
-    joined_com_df <- joined_com_df[joined_com_df$`Management Group` %in% input$com_species_selector,]
   
     # create commercial revenue gt table output, display in ascending order by rank
-    com_table <- joined_com_df %>%
-      select("Species", input$com_columns) %>%
+    com_table <- reactive_com_df() %>%
       gt() %>%
       tab_header(
         title = "Commercial Importance",
@@ -436,6 +433,16 @@ shinyServer(function(input, output, session) {
                       use_page_size_select = TRUE)
   })
   
+  # download com ranking table
+  output$com_csv <- downloadHandler(
+    filename = function() {
+      paste("com_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_com_df(), file)
+    }
+  )
+  
   # commercial importance species ranking plot
   output$com_ranking <- renderPlotly({
     req(joined_com_df)
@@ -465,15 +472,21 @@ shinyServer(function(input, output, session) {
   
   
   # recreational importance table
+  # create reactive dataframe
+  reactive_rec_df <- reactive({
+    # filter data down to selected species + columns
+    joined_rec_df <- joined_rec_df[joined_rec_df$`Management Group` %in% input$rec_species_selector,]
+    joined_rec_df <- joined_rec_df %>%
+      select("Species", input$rec_columns)
+      
+    joined_rec_df
+  })
+  
   output$rec_gt_table <- render_gt({
     req(joined_rec_df)
     
-    # filter data down to species selected
-    joined_rec_df <- joined_rec_df[joined_rec_df$`Management Group` %in% input$rec_species_selector,]
-    
     # create recreational gt table output, display in ascending order by rank
-    rec_table <- joined_rec_df %>%
-      select("Species", input$rec_columns) %>%
+    rec_table <- reactive_rec_df() %>%
       gt() %>%
       tab_header(
         title = "Recreational Importance",
@@ -511,6 +524,16 @@ shinyServer(function(input, output, session) {
                       use_page_size_select = TRUE)
   })
   
+  # download rec ranking table
+  output$rec_csv <- downloadHandler(
+    filename = function() {
+      paste("rec_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_rec_df(), file)
+    }
+  )
+  
   # recreational importance species ranking plot
   output$rec_species_ranking <- renderPlotly({
     req(joined_rec_df)
@@ -540,15 +563,21 @@ shinyServer(function(input, output, session) {
   
   
   # tribal revenue table
+  # create reactive dataframe
+  reactive_tribal_df <- reactive({
+    # filter data down to selected species + columns
+    joined_tribal_df <- joined_tribal_df[joined_tribal_df$`Management Group` %in% input$tribal_species_selector,]
+    joined_tribal_df <- joined_tribal_df %>%
+      select("Species", input$tribal_columns)
+    
+    joined_tribal_df
+  })
+  
   output$tribal_gt_table <- render_gt({
     req(joined_tribal_df)
     
-    # filter data down to species selected
-    joined_tribal_df <- joined_tribal_df[joined_tribal_df$`Management Group` %in% input$tribal_species_selector,]
-    
     # create tribal revenue gt table output, display in ascending order by rank
-    tribal_table <- joined_tribal_df %>%
-      select("Species", input$tribal_columns) %>%
+    tribal_table <- reactive_tribal_df() %>%
       gt() %>%
       tab_header(
         title = "Tribal Importance",
@@ -586,6 +615,16 @@ shinyServer(function(input, output, session) {
                       use_page_size_select = TRUE)
   })
   
+  # download tribal ranking table
+  output$tribal_csv <- downloadHandler(
+    filename = function() {
+      paste("tribal_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_tribal_df(), file)
+    }
+  )
+  
   # tribal importance species ranking plot
   output$tribal_species_ranking <- renderPlotly({
     req(joined_tribal_df)
@@ -615,16 +654,22 @@ shinyServer(function(input, output, session) {
   
   
   # constituent demand table
+  # create reactive dataframe
+  reactive_cd_df <- reactive({
+    # filter data down to selected species + columns
+    joined_cd_df <- joined_cd_df[joined_cd_df$`Management Group` %in% input$cd_species_selector,]
+    joined_cd_df <- joined_cd_df %>%
+      select("Species", input$cd_columns)
+    
+    joined_cd_df
+  })
+  
   ## negative scores adjusted
   output$cd_gt_table <- render_gt({
     req(joined_cd_df)
     
-    # filter data down to species selected
-    joined_cd_df <- joined_cd_df[joined_cd_df$`Management Group` %in% input$cd_species_selector,]
-    
     # create recreational gt table output, display in ascending order by rank
-    cd_table <- joined_cd_df %>%
-      select("Species", input$cd_columns) %>%
+    cd_table <- reactive_cd_df() %>%
       gt() %>%
       tab_header(
         title = "Constituent Demand"
@@ -652,6 +697,16 @@ shinyServer(function(input, output, session) {
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
   })
+  
+  # download cd ranking table
+  output$cd_csv <- downloadHandler(
+    filename = function() {
+      paste("cd_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_cd_df(), file)
+    }
+  )
   
   # constituent demand species ranking plot
   output$cd_species_ranking <- renderPlotly({
@@ -682,13 +737,19 @@ shinyServer(function(input, output, session) {
   
   
   # rebuilding table
+  # create reactive dataframe
+  reactive_reb_df <- reactive({
+    joined_reb_df <- joined_reb_df[joined_reb_df$`Management Group` %in% input$reb_species_selector,]
+    joined_reb_df <- joined_reb_df %>%
+      select("Species", input$reb_columns)
+    
+    joined_reb_df
+  })
+  
   output$reb_gt_table <- render_gt({
     req(joined_reb_df)
-    
-    joined_reb_df <- joined_reb_df[joined_reb_df$`Management Group` %in% input$reb_species_selector,]
 
-    reb_table <- joined_reb_df %>%
-      select("Species", input$reb_columns) %>%
+    reb_table <- reactive_reb_df() %>%
       gt() %>%
       tab_header(
         title = "Rebuilding"
@@ -714,6 +775,16 @@ shinyServer(function(input, output, session) {
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
   })
+  
+  # download reb ranking table
+  output$reb_csv <- downloadHandler(
+    filename = function() {
+      paste("reb_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_reb_df(), file)
+    }
+  )
   
   # rebuilding species ranking plot - uses rebuilding score
   output$reb_species_ranking <- renderPlotly({
@@ -742,13 +813,19 @@ shinyServer(function(input, output, session) {
   
   
   # stock status table
+  # create reactive dataframe
+  reactive_ss_df <- reactive({
+    joined_ss_df <- joined_ss_df[joined_ss_df$`Management Group` %in% input$ss_species_selector,]
+    joined_ss_df <- joined_ss_df %>%
+      select("Species", input$ss_columns)
+    
+    joined_ss_df  
+  })
+  
   output$ss_gt_table <- render_gt({
     req(joined_ss_df)
     
-    joined_ss_df <- joined_ss_df[joined_ss_df$`Management Group` %in% input$ss_species_selector,]
-
-    ss_table <- joined_ss_df %>%
-      select("Species", input$ss_columns) %>%
+    ss_table <- reactive_ss_df() %>%
       gt() %>%
       tab_header(
         title = "Stock Status",
@@ -793,6 +870,16 @@ shinyServer(function(input, output, session) {
                       use_page_size_select = TRUE)
   })
   
+  # download ss ranking table
+  output$ss_csv <- downloadHandler(
+    filename = function() {
+      paste("ss_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_ss_df(), file)
+    }
+  )
+  
   # stock status species ranking plot
   output$ss_species_ranking <- renderPlotly({
     req(joined_ss_df)
@@ -822,16 +909,21 @@ shinyServer(function(input, output, session) {
   
   
   # fishing mortality table
+  # create reactive dataframe
+  reactive_fm_df <- reactive({
+    # filter data down to selected species + columns
+    joined_fm_df <- joined_fm_df[joined_fm_df$`Management Group` %in% input$fm_species_selector,]
+    joined_fm_df <- joined_fm_df %>%
+      select("Species", input$fm_columns)
+    
+    joined_fm_df
+  })
+  
   ## footnotes disappear if less than 2
   output$fm_gt_table <- render_gt({
     req(joined_fm_df)
-    
-    fm_cols <- colnames(joined_fm_df)[colnames(joined_fm_df) != "Species"]
       
-    joined_fm_df <- joined_fm_df[joined_fm_df$`Management Group` %in% input$fm_species_selector,]
-      
-    fm_table <- joined_fm_df %>%
-      select("Species", input$fm_columns) %>%
+    fm_table <- reactive_fm_df() %>%
       gt() %>%
       tab_header(
         title = "Fishing Mortality"
@@ -887,6 +979,16 @@ shinyServer(function(input, output, session) {
                       use_page_size_select = TRUE)
   })
   
+  # download fm ranking table
+  output$fm_csv <- downloadHandler(
+    filename = function() {
+      paste("fm_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_fm_df(), file)
+    }
+  )
+  
   # fishing mortality species ranking plot
   output$fm_species_ranking <- renderPlotly({
     req(joined_fm_df)
@@ -916,13 +1018,29 @@ shinyServer(function(input, output, session) {
   
   
   # ecosystem table - factor score has 3 decimals
+  # create reactive dataframe
+  reactive_eco_df <- reactive({
+    joined_eco_df <- joined_eco_df[joined_eco_df$`Management Group` %in% input$eco_species_selector,]
+    joined_eco_df <- joined_eco_df %>%
+      select("Species", input$eco_columns)
+    
+    joined_eco_df
+  })
+  
+  # download eco ranking table
+  output$eco_csv <- downloadHandler(
+    filename = function() {
+      paste("eco_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_eco_df(), file)
+    }
+  )
+  
   output$eco_gt_table <- render_gt({
     req(joined_eco_df)
-    
-    joined_eco_df <- joined_eco_df[joined_eco_df$`Management Group` %in% input$eco_species_selector,]
-    
-    eco_table <- joined_eco_df %>%
-      select("Species", input$eco_columns) %>%
+  
+    eco_table <- reactive_eco_df() %>%
       gt() %>%
       tab_header(
         title = "Ecosystem"
@@ -987,13 +1105,19 @@ shinyServer(function(input, output, session) {
   
   
   # new information table
+  # create reactive dataframe
+  reactive_ni_df <- reactive({
+    joined_ni_df <- joined_ni_df[joined_ni_df$`Management Group` %in% input$ni_species_selector,]
+    joined_ni_df <- joined_ni_df %>%
+      select("Species", input$ni_columns)
+    
+    joined_ni_df
+  })
+  
   output$ni_gt_table <- render_gt({
     req(joined_ni_df)
-    
-    joined_ni_df <- joined_ni_df[joined_ni_df$`Management Group` %in% input$ni_species_selector,]
-    
-    ni_table <- joined_ni_df %>%
-      select("Species", input$ni_columns) %>%
+  
+    ni_table <- reactive_ni_df() %>%
       gt() %>%
       tab_header(
         title = "New Information"
@@ -1024,6 +1148,16 @@ shinyServer(function(input, output, session) {
                       use_page_size_select = TRUE)
   })
   
+  # download ni ranking table
+  output$ni_csv <- downloadHandler(
+    filename = function() {
+      paste("ni_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_ni_df(), file)
+    }
+  )
+  
   # new information species ranking plot
   output$ni_species_ranking <- renderPlotly({
     req(joined_ni_df)
@@ -1053,13 +1187,19 @@ shinyServer(function(input, output, session) {
   
   
   # assessment frequency table
+  # create reactive dataframe
+  reactive_af_df <- reactive({
+    joined_af_df <- joined_af_df[joined_af_df$`Management Group` %in% input$af_species_selector,]
+    joined_af_df <- joined_af_df %>%
+      select("Species", input$af_columns)
+      
+    joined_af_df
+  })
+  
   output$af_gt_table <- render_gt({
     req(joined_af_df)
-    
-    joined_af_df <- joined_af_df[joined_af_df$`Management Group` %in% input$af_species_selector,]
-    
-    af_table <- joined_af_df %>%
-      select("Species", input$af_columns) %>%
+  
+    af_table <- reactive_af_df() %>%
       gt() %>%
       tab_header(
         title = "Assessment Frequency"
@@ -1089,6 +1229,16 @@ shinyServer(function(input, output, session) {
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
   })
+  
+  # download af ranking table
+  output$af_csv <- downloadHandler(
+    filename = function() {
+      paste("af_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_af_df(), file)
+    }
+  )
   
   # assessment frequency species ranking plot
   output$af_species_ranking <- renderPlotly({
