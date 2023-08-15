@@ -1,14 +1,25 @@
+# PACKAGES:
+## shiny
 library(shiny)
 library(shinyBS)
+
+## data manipulation
 library(plyr)
 library(dplyr)
+library(stringr)
+library(tidyr)
+
+## tables + data visualizations
 library(ggplot2)
 library(gt)
 library(gtExtras)
 library(plotly)
-library(stringr)
-library(tidyr)
 library(viridis)
+
+## downloads
+library(readr)
+library(openxlsx)
+
 
 # load in data
 ## SPELLING INCONSISTENCIES:
@@ -325,6 +336,24 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  output$overall_xlsx <- downloadHandler(
+    filename = function() {
+      paste("overall_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(overall_data(), file = file)
+    }
+  )
+  
+  output$overall_rds <- downloadHandler(
+    filename = function() {
+      paste("overall_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(overall_data(), file = file)
+    }
+  )
+
   # overall ranking plot
   output$overall_ranking <- renderPlotly({
     req(overall_data())
@@ -443,6 +472,24 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  output$com_xlsx <- downloadHandler(
+    filename = function() {
+      paste("com_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_com_df(), file = file)
+    }
+  )
+  
+  output$com_rds <- downloadHandler(
+    filename = function() {
+      paste("com_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_com_df(), file = file)
+    }
+  )
+  
   # commercial importance species ranking plot
   output$com_ranking <- renderPlotly({
     req(joined_com_df)
@@ -531,6 +578,24 @@ shinyServer(function(input, output, session) {
     },
     content = function(file) {
       write.csv(reactive_rec_df(), file)
+    }
+  )
+  
+  output$rec_xlsx <- downloadHandler(
+    filename = function() {
+      paste("rec_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_rec_df(), file = file)
+    }
+  )
+  
+  output$rec_rds <- downloadHandler(
+    filename = function() {
+      paste("rec_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(reactive_rec_df(), file = file)
     }
   )
   
@@ -625,6 +690,24 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  output$tribal_xlsx <- downloadHandler(
+    filename = function() {
+      paste("tribal_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_tribal_df(), file = file)
+    }
+  )
+  
+  output$tribal_rds <- downloadHandler(
+    filename = function() {
+      paste("tribal_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(reactive_tribal_df(), file = file)
+    }
+  )
+  
   # tribal importance species ranking plot
   output$tribal_species_ranking <- renderPlotly({
     req(joined_tribal_df)
@@ -708,6 +791,24 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  output$cd_xlsx <- downloadHandler(
+    filename = function() {
+      paste("cd_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_cd_df(), file = file)
+    }
+  )
+  
+  output$cd_rds <- downloadHandler(
+    filename = function() {
+      paste("cd_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(reactive_cd_df(), file = file)
+    }
+  )
+  
   # constituent demand species ranking plot
   output$cd_species_ranking <- renderPlotly({
     req(joined_cd_df)
@@ -783,6 +884,24 @@ shinyServer(function(input, output, session) {
     },
     content = function(file) {
       write.csv(reactive_reb_df(), file)
+    }
+  )
+  
+  output$reb_xlsx <- downloadHandler(
+    filename = function() {
+      paste("reb_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_reb_df(), file = file)
+    }
+  )
+  
+  output$reb_rds <- downloadHandler(
+    filename = function() {
+      paste("reb_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(reactive_reb_df(), file = file)
     }
   )
   
@@ -877,6 +996,24 @@ shinyServer(function(input, output, session) {
     },
     content = function(file) {
       write.csv(reactive_ss_df(), file)
+    }
+  )
+  
+  output$ss_xlsx <- downloadHandler(
+    filename = function() {
+      paste("ss_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_ss_df(), file = file)
+    }
+  )
+  
+  output$ss_rds <- downloadHandler(
+    filename = function() {
+      paste("ss_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(reactive_ss_df(), file = file)
     }
   )
   
@@ -991,6 +1128,24 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  output$fm_xlsx <- downloadHandler(
+    filename = function() {
+      paste("fm_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_fm_df(), file = file)
+    }
+  )
+  
+  output$fm_rds <- downloadHandler(
+    filename = function() {
+      paste("fm_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(reactive_fm_df(), file = file)
+    }
+  )
+  
   # fishing mortality species ranking plot
   output$fm_species_ranking <- renderPlotly({
     req(joined_fm_df)
@@ -1028,16 +1183,6 @@ shinyServer(function(input, output, session) {
     
     joined_eco_df
   })
-  
-  # download eco ranking table
-  output$eco_csv <- downloadHandler(
-    filename = function() {
-      paste("eco_ranking_", Sys.Date(), ".csv", sep = "")
-    },
-    content = function(file) {
-      write.csv(reactive_eco_df(), file)
-    }
-  )
   
   output$eco_gt_table <- render_gt({
     req(joined_eco_df)
@@ -1077,6 +1222,34 @@ shinyServer(function(input, output, session) {
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
   })
+  
+  # download eco ranking table
+  output$eco_csv <- downloadHandler(
+    filename = function() {
+      paste("eco_ranking_", Sys.Date(), ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(reactive_eco_df(), file)
+    }
+  )
+  
+  output$eco_xlsx <- downloadHandler(
+    filename = function() {
+      paste("eco_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_eco_df(), file = file)
+    }
+  )
+  
+  output$eco_rds <- downloadHandler(
+    filename = function() {
+      paste("eco_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(reactive_eco_df(), file = file)
+    }
+  )
   
   # ecosystem species ranking plot
   output$eco_species_ranking <- renderPlotly({
@@ -1160,6 +1333,24 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  output$ni_xlsx <- downloadHandler(
+    filename = function() {
+      paste("ni_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_ni_df(), file = file)
+    }
+  )
+  
+  output$ni_rds <- downloadHandler(
+    filename = function() {
+      paste("ni_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(reactive_ni_df(), file = file)
+    }
+  )
+  
   # new information species ranking plot
   output$ni_species_ranking <- renderPlotly({
     req(joined_ni_df)
@@ -1239,6 +1430,24 @@ shinyServer(function(input, output, session) {
     },
     content = function(file) {
       write.csv(reactive_af_df(), file)
+    }
+  )
+  
+  output$af_xlsx <- downloadHandler(
+    filename = function() {
+      paste("af_ranking_", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      write.xlsx(reactive_af_df(), file = file)
+    }
+  )
+  
+  output$af_rds <- downloadHandler(
+    filename = function() {
+      paste("af_ranking_", Sys.Date(), ".rds", sep = "")
+    },
+    content = function(file) {
+      write_rds(reactive_af_df(), file = file)
     }
   )
   
