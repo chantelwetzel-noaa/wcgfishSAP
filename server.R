@@ -1213,7 +1213,6 @@ shinyServer(function(input, output, session) {
     
     eco_table %>%
       fmt_number(columns = ends_with("Score"), decimals = 2) %>%
-      fmt_percent(columns = contains("Quantile"), decimals = 1) %>%
       data_color(columns = Rank, method = "numeric", palette = "viridis",
                  reverse = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
