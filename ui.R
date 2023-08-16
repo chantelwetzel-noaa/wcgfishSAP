@@ -76,7 +76,6 @@ ss_cols <- colnames(joined_ss_df)[colnames(joined_ss_df) != "Species"]
 fm_cols <- colnames(joined_fm_df)[colnames(joined_fm_df) != "Species"]
 eco_cols <- colnames(joined_eco_df)[colnames(joined_eco_df) != "Species"]
 ni_cols <- colnames(joined_ni_df)[colnames(joined_ni_df) != "Species"]
-ni_cols <- ni_cols[ni_cols != "Notes"]
 af_cols <- colnames(joined_af_df)[colnames(joined_af_df) != "Species"]
 
 # Define UI for application that produces tables + description of variables
