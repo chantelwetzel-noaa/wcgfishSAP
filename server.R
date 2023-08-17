@@ -273,7 +273,7 @@ shinyServer(function(input, output, session) {
       select(species_groups.speciesName, rank, total,
              com_rev_data.Factor_Score:assess_freq_data.Score)
     
-    colnames(results) <- c("Species", "Rank", "Total",
+    colnames(results) <- c("Species", "Rank", "Weighted Total Score",
                            "Commercial Importance", "Recreational Importance",
                            "Tribal Importance", "Constituent Demand", "Rebuilding",
                            "Stock Status", "Fishing Mortality", "Ecosystem",
@@ -295,7 +295,7 @@ shinyServer(function(input, output, session) {
           title = "Overall Factor Summary"
         ) %>%
         cols_label(
-          Total = "Wt.'d Total Score",
+          # Total = "Wt.'d Total Score",
           `Commercial Importance` = "Comm. Importance Factor Score",
           `Recreational Importance` = "Rec. Importance Factor Score",
           `Tribal Importance` = "Tribal Importance Factor Score",
@@ -312,7 +312,7 @@ shinyServer(function(input, output, session) {
                   locations = cells_body(columns = c("Species", "Rank"))
         ) %>%
         tab_style(style = list(cell_text(weight = "bold")),
-                  locations = cells_body(columns = Total)) %>%
+                  locations = cells_body(columns = `Weighted Total Score`)) %>%
         opt_interactive(use_search = TRUE,
                         use_highlight = TRUE,
                         use_page_size_select = TRUE)
@@ -389,11 +389,11 @@ shinyServer(function(input, output, session) {
                                                             "\nWt'd. Factor Score: ",
                                                             paste0(round(score, digits = 2),
                                                                    " (",
-                                                                  round((score / Total) * 100,
+                                                                  round((score / `Weighted Total Score`) * 100,
                                                                         digits = 1),
                                                                   "%)"),
                                                             "\nTotal Wt'd. Factor Score: ",
-                                                            round(Total, digits = 2)))
+                                                            round(`Weighted Total Score`, digits = 2)))
         ) +
         geom_col() +
         coord_flip() +
@@ -408,7 +408,7 @@ shinyServer(function(input, output, session) {
       final_fig <- ggplotly(overall_plot, tooltip = "text")
       final_fig <- final_fig %>%
         layout(
-          xaxis = list(range = c(0, max(for_plot$Total) + 0.5),
+          xaxis = list(range = c(0, max(for_plot$`Weighted Total Score`) + 0.5),
                        tickmode = "linear",
                        dtick = 1)
         )

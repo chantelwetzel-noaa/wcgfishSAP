@@ -185,21 +185,19 @@ shinyUI(
                                actionButton("reset", " Reset weights",
                                             icon = icon("arrow-rotate-right"))
                         ),
-                        column(1, numericInput("comm_weight", "Comm. Factor Weight:",
+                        column(1, numericInput("comm_weight", "Comm. Importance Factor Weight:",
                                                value = 0.21, min = 0, max = 1, step = 0.01,
                                                width = "100%")
                         ),
-                        column(1, style = "margin-top: 20px;",
-                               numericInput("rec_weight", "Rec. Factor Weight:",
-                                            value = 0.09, min = 0, max = 1, step = 0.01,
-                                            width = "100%")
+                        column(1, numericInput("rec_weight", "Rec. Importance Factor Weight:",
+                                               value = 0.09, min = 0, max = 1, step = 0.01,
+                                               width = "100%")
                         ),
-                        column(1, style = "margin-top: 20px;",
-                               numericInput("tribal_weight", "Tribal Factor Weight:",
-                                            value = 0.05, min = 0, max = 1, step = 0.01,
-                                            width = "100%")
+                        column(1, numericInput("tribal_weight", "Tribal Importance Factor Weight:",
+                                               value = 0.05, min = 0, max = 1, step = 0.01,
+                                               width = "100%")
                         ),
-                        column(1, numericInput("cd_weight", "Const. Dem. Factor Weight:",
+                        column(1, numericInput("cd_weight", "Const. Demand Factor Weight:",
                                                value = 0.11, min = 0, max = 1, step = 0.01,
                                                width = "100%")
                         ),
@@ -211,20 +209,19 @@ shinyUI(
                                                value = 0.08, min = 0, max = 1, step = 0.01,
                                                width = "100%")
                         ),
-                        column(1, numericInput("fm_weight", "Fishing Mort. Factor Weight:",
+                        column(1, numericInput("fm_weight", "Fishing Mortality Factor Weight:",
                                                value = 0.08, min = 0, max = 1, step = 0.01,
                                                width = "100%")
                         ),
-                        column(1, style = "margin-top: 20px;",
-                               numericInput("eco_weight", "Eco. Factor Weight:",
-                                            value = 0.05, min = 0, max = 1, step = 0.01,
-                                            width = "100%")
-                        ),
-                        column(1, numericInput("ni_weight", "New Info Factor Weight:",
+                        column(1, numericInput("eco_weight", "Ecosystem Factor Weight:",
                                                value = 0.05, min = 0, max = 1, step = 0.01,
                                                width = "100%")
                         ),
-                        column(1, numericInput("af_weight", "Assess. Freq. Factor Weight:",
+                        column(1, numericInput("ni_weight", "New Information Factor Weight:",
+                                               value = 0.05, min = 0, max = 1, step = 0.01,
+                                               width = "100%")
+                        ),
+                        column(1, numericInput("af_weight", "Assmt. Frequency Factor Weight:",
                                                value = 0.18, min = 0, max = 1, step = 0.01,
                                                width = "100%")
                         )
