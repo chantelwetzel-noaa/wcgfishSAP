@@ -84,17 +84,26 @@ shinyUI(
    
    # format scrolling text sections
    tags$head(
+     # format scrolling text sections
      tags$style(
-       HTML(".scrolling-text {
-                height: 250px;
-                overflow-y: scroll;
-                border: 1px solid #ccc;
-                padding: 10px;
-            }")
+       HTML("
+       .scrolling-text {
+          height: 250px;
+          overflow-y: scroll;
+          border: 1px solid #ccc;
+          padding: 10px;
+       }")
+     ),
+     # format resources tab bulleted list font size
+     tags$style(
+       HTML("
+     .custom-bulleted-list {
+        font-size: 16px;
+     }")
      )
    ),
    
-   # to format mathematical expressions
+   # format mathematical expressions
    withMathJax(),
    
    # load page layout
@@ -194,7 +203,7 @@ shinyUI(
                                                value = 0.11, min = 0, max = 1, step = 0.01,
                                                width = "100%")
                         ),
-                        column(1, numericInput("reb_weight", "Rebuild Factor Weight:",
+                        column(1, numericInput("reb_weight", "Rebuilding Factor Weight:",
                                                value = 0.10, min = 0, max = 1, step = 0.01,
                                                width = "100%")
                         ),
@@ -1357,6 +1366,7 @@ shinyUI(
                           "Background Information",
                           br(),
                           tags$ul(
+                            class = "custom-bulleted-list",
                             tags$li(
                               tags$a(href="https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf",
                                      target = "_blank", "Prioritizing Fish Stock Assessments")
@@ -1365,8 +1375,9 @@ shinyUI(
                         ),
                         tabPanel(
                           "PFMC Decisions",
-                          br(),
+                          h3("2022"),
                           tags$ul(
+                            class = "custom-bulleted-list",
                             tags$li(
                               tags$a(href="https://www.pcouncil.org/september-2022-decision-summary-document/",
                                      target = "_blank", "September 2022 Decision Summary Document")
@@ -1381,6 +1392,7 @@ shinyUI(
                           "References",
                           br(),
                           tags$ul(
+                            class = "custom-bulleted-list",
                             tags$li(
                               tags$a(href="https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1080/02755947.2011.591264",
                                      target = "_blank", "Cope et al. 2011. An Approach to Defining Stock Complexes for U.S. West

@@ -274,9 +274,10 @@ shinyServer(function(input, output, session) {
              com_rev_data.Factor_Score:assess_freq_data.Score)
     
     colnames(results) <- c("Species", "Rank", "Total",
-                           "Comm.", "Rec.", "Tribal", "Const. Dem.",
-                           "Rebuild", "Stock Status", "Fishing Mort.",
-                           "Ecosystem", "New Info", "Assess. Freq.")
+                           "Commercial Importance", "Recreational Importance",
+                           "Tribal Importance", "Constituent Demand", "Rebuilding",
+                           "Stock Status", "Fishing Mortality", "Ecosystem",
+                           "New Information", "Assessment Frequency")
     
     results
   })
@@ -295,16 +296,16 @@ shinyServer(function(input, output, session) {
         ) %>%
         cols_label(
           Total = "Wt.'d Total Score",
-          `Comm.` = "Comm. Factor Score",
-          `Rec.` = "Rec. Factor Score",
-          `Tribal` = "Tribal Factor Score",
-          `Const. Dem.` = "Const. Dem. Factor Score",
-          Rebuild = "Rebuild Factor Score",
+          `Commercial Importance` = "Comm. Importance Factor Score",
+          `Recreational Importance` = "Rec. Importance Factor Score",
+          `Tribal Importance` = "Tribal Importance Factor Score",
+          `Constituent Demand` = "Const. Demand Factor Score",
+          Rebuilding = "Rebuilding Factor Score",
           `Stock Status` = "Stock Status Factor Score",
-          `Fishing Mort.` = "Fishing Mort. Factor Score",
-          Ecosystem = "Eco. Factor Score",
-          `New Info` = "New Info Factor Score",
-          `Assess. Freq.` = "Assess. Freq. Factor Score"
+          `Fishing Mortality` = "Fishing Mortality Factor Score",
+          Ecosystem = "Ecosystem Factor Score",
+          `New Information` = "New Information Factor Score",
+          `Assessment Frequency` = "Assmt. Frequency Factor Score"
         ) %>%
         fmt_number(columns = -c("Rank"), decimals = 2) %>%
         tab_style(style = list(cell_text(weight = "bold")),
@@ -362,7 +363,7 @@ shinyServer(function(input, output, session) {
       # reshape dataframe
       for_plot <- overall_data() %>%
         pivot_longer(
-          cols = `Comm.`:`Assess. Freq.`,
+          cols = `Commercial Importance`:`Assessment Frequency`,
           names_to = "factor",
           values_to = "score"
         )
@@ -404,7 +405,15 @@ shinyServer(function(input, output, session) {
         theme_light() +
         scale_fill_viridis(discrete = TRUE)
       
-      ggplotly(overall_plot, tooltip = "text", dynamicTicks = TRUE)
+      final_fig <- ggplotly(overall_plot, tooltip = "text")
+      final_fig <- final_fig %>%
+        layout(
+          xaxis = list(range = c(0, max(for_plot$Total) + 0.5),
+                       tickmode = "linear",
+                       dtick = 1)
+        )
+      
+      final_fig
     }
   })
   
