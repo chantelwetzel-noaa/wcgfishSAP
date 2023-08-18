@@ -5,6 +5,7 @@ library(shinyWidgets)
 library(shinycssloaders)
 library(dplyr)
 library(gt)
+library(knitr)
 library(plotly)
 source("format_species_names.R")
 
@@ -78,6 +79,7 @@ eco_cols <- colnames(joined_eco_df)[colnames(joined_eco_df) != "Species"]
 ni_cols <- colnames(joined_ni_df)[colnames(joined_ni_df) != "Species"]
 af_cols <- colnames(joined_af_df)[colnames(joined_af_df) != "Species"]
 
+
 # Define UI for application that produces tables + description of variables
 shinyUI(
  fluidPage(
@@ -97,9 +99,19 @@ shinyUI(
      # format resources tab bulleted list font size
      tags$style(
        HTML("
-     .custom-bulleted-list {
-        font-size: 16px;
+       .custom-bulleted-list {
+          font-size: 16px;
      }")
+     ),
+     # control image dimensions (calendar page)
+     tags$style(
+       HTML("
+       .shiny-image-output img {
+          max-width: 1000px;
+          max-height: 778px;
+          display: block;
+          margin: 0 auto;
+       }")
      )
    ),
    
@@ -117,6 +129,8 @@ shinyUI(
       dashboardSidebar(width = 300,
                        sidebarMenu(
                          menuItem("Home", tabName = "home", icon = icon("home")),
+                         menuItem("Methodology", tabName = "methodology",
+                                  icon = icon("list-check")),
                          menuItem("2024 Overall Ranking",
                                   tabName = "overall_ranking", icon = icon("ranking-star")),
                          menuItem("Factors", tabName = "factors", icon = icon("table"),
@@ -140,7 +154,8 @@ shinyUI(
                                   menuSubItem("New Information", tabName = "ni_page",
                                               icon = icon("info"))
                          ),
-                         # menuItem("Upload file", tabName = "test", icon = icon("upload")),
+                         menuItem("Stock Assessment Calendar", tabName = "calendar",
+                                  icon = icon("calendar")),
                          menuItem("Resources", tabName = "resources", icon = icon("book")),
                          menuItem("Contact", tabName = "contact", icon = icon("envelope"))
                        )
@@ -152,7 +167,13 @@ shinyUI(
           
           # home page (landing)
           tabItem(tabName = "home",
-                  h1("Welcome!")),
+                  h1("Welcome!")
+          ),
+          
+          # methodology page
+          tabItem(tabName = "methodology"
+                  # uiOutput("factors_rmd")
+          ),
           
           # overall ranking page
           tabItem(tabName = "overall_ranking",
@@ -1307,10 +1328,10 @@ shinyUI(
                                   previous assessment can be adequately addressed. Values range
                                   from 1 to 0."
                                 ),
-                                # p(strong("Notes:"),
-                                #   "Description of the new information that could be incorporated
-                                #   in a new assessment."
-                                # ),
+                                p(strong("Notes:"),
+                                  "Description of the new information that could be incorporated
+                                  in a new assessment."
+                                ),
                                 p(strong("Management Group:"),
                                   "Management group associated with a species within the fishery
                                   management plan."
@@ -1349,6 +1370,24 @@ shinyUI(
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("ni_species_ranking") %>% withSpinner(),
                         width = 12)
+                  )
+          ),
+          
+          # stock assessment calendar page
+          tabItem(tabName = "calendar",
+                  h1("2023 Stock Assessment Calendar"),
+                  h4("Below is an annotated 2023 assessment planning calendar that
+                     identifies potential weeks in which STAR panels can be scheduled.
+                     Based on the expected availability of 2022 data and the time
+                     needed for model development and documentation, it is unlikely
+                     that any full assessments could be reviewed before May. As of
+                     January 2022, the June and September Pacific Fishery Management Council
+                     meeting date have not been announced. Once meeting dates for June
+                     and September 2023 are available these weeks will be shaded and
+                     potential STAR panel weeks will be finalized."),
+                  br(),
+                  fluidRow(
+                    imageOutput("sa_calendar")
                   )
           ),
           

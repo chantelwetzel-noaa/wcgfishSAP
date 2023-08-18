@@ -17,6 +17,7 @@ library(plotly)
 library(viridis)
 
 ## downloads
+library(rmarkdown)
 library(readr)
 library(openxlsx)
 
@@ -143,6 +144,14 @@ joined_af_df <- joined_af_df %>%
 
 # define server logic to display user inputs
 shinyServer(function(input, output, session) {
+  
+  # display markdown file (methodology tab)
+  # output$factors_rmd <- renderUI({
+  #   withMathJax(
+  #     # HTML(markdown::markdownToHTML(knit("documents/21factors.Rmd", quiet = TRUE)))
+  #     render("documents/21factors.Rmd", output_format = "html_document")
+  #   )
+  # })
   
   # overall ranking table
   results <- data.frame(species_groups$speciesName,
@@ -380,10 +389,10 @@ shinyServer(function(input, output, session) {
       
       # create plot
       # order of factors when coloring plot
-      order <- c("Commercial Importance", "Recreational Importance",
-                 "Tribal Importance", "Constituent Demand", "Rebuilding",
-                 "Stock Status", "Fishing Mortality", "Ecosystem",
-                 "New Information", "Assessment Frequency")
+      # order <- c("Commercial Importance", "Recreational Importance",
+      #            "Tribal Importance", "Constituent Demand", "Rebuilding",
+      #            "Stock Status", "Fishing Mortality", "Ecosystem",
+      #            "New Information", "Assessment Frequency")
       
       overall_plot <- ggplot(top_species, aes(x = reorder(rank_species, score, sum),
                                               y = score,
@@ -399,7 +408,7 @@ shinyServer(function(input, output, session) {
                                                             "\nTotal Wt'd. Factor Score: ",
                                                             round(`Weighted Total Score`, digits = 2)))
         ) +
-        geom_col() +
+        geom_col(color = "white") +
         coord_flip() +
         labs(
           title = "Overall Fish Species Ranking",
@@ -407,7 +416,7 @@ shinyServer(function(input, output, session) {
           fill = "Factors"
         ) +
         theme_light() +
-        scale_fill_viridis_d(direction = -1, limits = order)
+        scale_fill_viridis_d()
       
       final_fig <- ggplotly(overall_plot, tooltip = "text")
       final_fig <- final_fig %>%
@@ -1489,5 +1498,14 @@ shinyServer(function(input, output, session) {
     
     ggplotly(af_plot, tooltip = "text")
   })
+  
+  
+  # stock assessment calendar
+  output$sa_calendar <- renderImage({
+    list(
+      src = file.path("documents/figs/calendar.png"),
+      contentType = "image/png"
+    )
+  }, deleteFile = FALSE)
   
 })
