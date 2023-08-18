@@ -295,7 +295,6 @@ shinyServer(function(input, output, session) {
           title = "Overall Factor Summary"
         ) %>%
         cols_label(
-          # Total = "Wt.'d Total Score",
           `Commercial Importance` = "Comm. Importance Factor Score",
           `Recreational Importance` = "Rec. Importance Factor Score",
           `Tribal Importance` = "Tribal Importance Factor Score",
@@ -320,8 +319,7 @@ shinyServer(function(input, output, session) {
       # color cells of columns
       overall_table <- overall_table %>%
         data_color(columns = 4:13, method = "numeric",
-                   palette = c("Greys"), reverse = TRUE
-        )
+                   palette = "Greys", reverse = TRUE)
       
       overall_table
     }
@@ -381,6 +379,12 @@ shinyServer(function(input, output, session) {
       }
       
       # create plot
+      # order of factors when coloring plot
+      order <- c("Commercial Importance", "Recreational Importance",
+                 "Tribal Importance", "Constituent Demand", "Rebuilding",
+                 "Stock Status", "Fishing Mortality", "Ecosystem",
+                 "New Information", "Assessment Frequency")
+      
       overall_plot <- ggplot(top_species, aes(x = reorder(rank_species, score, sum),
                                               y = score,
                                               fill = factor,
@@ -403,7 +407,7 @@ shinyServer(function(input, output, session) {
           fill = "Factors"
         ) +
         theme_light() +
-        scale_fill_viridis(discrete = TRUE)
+        scale_fill_viridis_d(direction = -1, limits = order)
       
       final_fig <- ggplotly(overall_plot, tooltip = "text")
       final_fig <- final_fig %>%
@@ -1098,13 +1102,13 @@ shinyServer(function(input, output, session) {
                     rows = `Average OFL Attainment` > 1.00
                   )
         ) %>%
-        tab_footnote(footnote = "Cells highlighted red indicate
+        tab_footnote(footnote = "Cells with red text indicate
                      high OFL attainment percentages.",
                      locations = cells_column_labels(columns = `Average OFL Attainment`))
     }
       
     if("Average OFL" %in% input$fm_columns &
-       "`Management Group`" %in% input$fm_columns) {
+       "Management Group" %in% input$fm_columns) {
       fm_table <- fm_table %>%
         tab_style(style = cell_text(style = "italic"),
                   locations = cells_body(
