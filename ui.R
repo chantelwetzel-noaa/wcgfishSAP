@@ -607,21 +607,18 @@ shinyUI(
                                   variable coastwide pseudo revenues by species."
                                 ),
                                 p(strong("Pseudo Revenue Coastwide:"),
-                                  "The summed pseudo revenue across states based on the retained
-                                  recreational catch and the pre-specified relative importance weight
-                                  for each species by (retained catch by state and species multiplied
-                                  by the relative importance weight by state and species)."
+                                  "The sum of the state-specific pseudo revenues for each species."
                                 ),
                                 p(strong("Pseudo Revenue CA:"),
-                                  "The retained recreational catch multiplied by the state-specific
+                                  "The state-specific retained recreational catch multiplied by the state-specific
                                   relative importance for California."
                                 ),
                                 p(strong("Pseudo Revenue OR:"),
-                                  "The retained recreational catch multiplied by the state-specific
+                                  "The state-specific retained recreational catch multiplied by the state-specific
                                   relative importance for Oregon."
                                 ),
                                 p(strong("Pseudo Revenue WA:"),
-                                  "The retained recreational catch multiplied by the state-specific
+                                  "The state-specific retained recreational catch multiplied by the state-specific
                                   relative importance for Washington."
                                 ),
                                 p(strong("Species Importance CA:"),
