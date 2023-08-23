@@ -1,0 +1,48 @@
+---
+output: html_document
+---
+
+## Recreational Importance
+
+Recreational landings lack a measure of value that is equivalent to commercial ex-vessel revenue. In the absence of an equivalent metric, these rankings continue to rely on the approach implemented in 2016, in which a "pseudo" value for the recreational landings of each species is calculated by multiplying the -2 landed catch amounts in each state by a set of state-specific relative weights, which serve the same function as prices. The factor score by species is calculated as:
+
+\begin{equation}
+\text{pseudo}_{s} = \sum_{a=1}^{A} \text{catch}_{s,a}*\text{importance}_{s,a}  
+\end{equation}
+
+where catch is the recreational catch by stock $s$ and state $a$ and importance by stock $s$ and area $a$ is a qualitative measure to represent the importance of that stock to the recreational fishery by area. The overall factor for recreational importance is then calculated as:
+
+\begin{equation}
+r_s = \frac{10}{\text{max}(\text{pseudo value}_s^{0.18})}\text{pseudo value}_s^{0.18} 
+\end{equation}
+
+The recreational importance by species and state are shown in Table 3. These weights were initially developed in cooperation with the state recreational representatives to the Groundfish Management Team in 2016, and were reviewed by members of the Groundfish Advisory Panel in in that year and 2018. The pseudo values are transformed into Factor Scores using the same exponential transformation that is applied to commercial revenues. Continued comments and input from the recreational fishing community or state agencies regarding relative value of species among recreational fishery participants of each state will allow these weights to reflect the current priority of the recreational sector.
+
+  
+```{r, results = 'asis', echo = FALSE}
+library(gt)
+
+tab <- read.csv("recr_importance.csv", header = TRUE) 
+colnames(tab) <- c("Species", "California", "Oregon", "Washington")
+tab[is.na(tab)] = 0
+
+rec_importance <- tab %>%
+  gt() %>%
+  tab_header(
+    title = "Table 3: Recreational importance of species by state based on the relative species desirability."
+  ) %>%
+  cols_align(
+    align = "left",
+    columns = "Species"
+  ) %>%
+  cols_align(
+    align = "right",
+    columns = California:Washington
+  ) %>%
+  data_color(
+    columns = California:Washington, method = "numeric",
+    palette = "viridis"
+  )
+
+rec_importance
+```

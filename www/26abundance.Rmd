@@ -1,0 +1,83 @@
+---
+output: html_document
+mathjax: "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"
+---
+
+## Stock Status Relative to Management Targets
+
+Holding other Factors constant, scheduling an assessment in the upcoming cycle will be a higher priority for a stock whose spawning biomass represents a lower percentage of that in an unfished condition, as estimated in the most recent assessment. Correspondingly, the highest scores for this Factor would be assigned to stocks that are below their Minimum Stock Size Thresholds (MSSTs, i.e., are overfished). Such cases are differentiated in the scoring by whether the spawning biomass trend is decreasing, stable, or increasing. As the ratio of current stock biomass to the unfished level increases, this Factor Score decreases. Where available, the percentage of unfished biomass estimated in the terminal year of the most recent assessment for each species is used as the basis for scoring. Scoring criteria for this factor by species are described in (Table 4).
+
+However, not all groundfish species have not been assessed in a manner that provides an estimate of relative abundance. For those stocks, the Productivity Susceptibility Analysis (PSA) score, a measure of a species potential vulnerability to fishing pressures, has been used to assign a Factor Score (Table 5).
+
+Rather than basing scores for these species solely on PSA scores, it may be useful in the future to also categorize them according to the average attainment of their OFL contributions (to assemblage OFLs) over the past 10 years. The scoring criteria show the stocks ordered by PSA score (with assessment-based fraction of unfished levels) and also by the fraction of unfished level, within each of the three PSA categories used in the analysis.
+ 
+
+```{r, results = 'asis', echo = FALSE}
+library(gt)
+
+abund = data.frame(matrix(NA, 10, 2))
+colnames(abund) <- c("Score", "Stock Status")
+
+abund[1,]  = c(1, "Stock abundance is well above the target (\\(SB > 2*SB_{\\text{PROXY}}\\))." )
+abund[2,]  = c(2, "Stock abundance is above the target (\\(2*SB_{\\text{PROXY}}\\) \\(\\ge SB > 1.5*SB_{\\text{PROXY}}\\)).")
+abund[3,]  = c(3, "Stock abundance is above the target (\\(1.5*SB_{\\text{PROXY}} \\ge SB > 1.1*SB_{\\text{PROXY}}\\)) or abundance is unknown and vulnerability is low (1.8 \\(>\\) PSA).")
+abund[4,]  = c(4, "Stock abundance is near the target (\\(1.1*SB_{\\text{PROXY}} \\ge SB > 0.9*SB_{\\text{PROXY}}\\), or is unknown and vulnerability is intermediate (2 \\(>\\) PSA \\(\\ge\\) 1.8).")
+abund[5,]  = c(5, "Stock abundance is below the target (\\(0.9*SB_{\\text{PROXY}} \\ge SB > \\text{MSST}\\)) and is not declining.")
+abund[6,]  = c(6, "Stock abundance is unknown and the vulnerability is high (\\(PSA > 2\\)).")
+abund[7,]  = c(7, "Stock abundance is below the target (\\(0.9*SB_{\\text{PROXY}} \\ge SB > \\text{MSST}\\)) and is declining or recent trend unknown.")
+abund[8,]  = c(8, "Stock is overfished (\\(SB \\le \\text{MSST}\\)) and increasing.")
+abund[9,]  = c(9, "Stock is overfished (\\(SB \\le \\text{MSST}\\)) and stable.")
+abund[10,] = c(10, "Stock is overfished (\\(SB \\le \\text{MSST}\\)) and decreasing.")
+
+abund_tbl <- abund %>%
+  gt() %>%
+  tab_header(
+    title = "Table 4: Scores applied based the estimated fraction of unfished relative to management targets from the most recent assessment or the PSA score for un-assessed stocks."
+  ) %>%
+  cols_align(
+    align = "left",
+    columns = everything()
+  )
+
+abund_tbl
+
+# table_format(abund, 
+#              caption = c('Scores applied based the estimated fraction of unfished relative to management targets from the most recent assessment or the PSA score for un-assessed stocks.'),
+#              label = 'abund',
+#              align = 'l',
+#              escape = FALSE,
+#              col_names = col_names,
+#              digits = 0,             
+#              custom_width = TRUE,
+#              col_to_adjust = 1:2,
+#              width = c("1cm","13cm"))  
+```
+
+
+```{r, results = 'asis', echo = FALSE}
+library(gt)
+
+psa <- read.csv("psa.csv", header = TRUE) 
+psa <- psa[-c(2)]
+colnames(psa) <- c("Species", "PSA Score")
+
+psa_tbl <- psa %>%
+  gt() %>%
+  tab_header(
+    title = "Table 5: The estimated stock status and Productivity Susceptibility Analysis (PSA) scores by species.  Higher PSA values indicate higher vulnerability. Stocks that have area specific assessments a single stock status value is calculated by aggregating spawning biomass or output by area."
+  ) %>%
+  cols_align(
+    align = "left",
+    columns = "Species"
+  ) %>%
+  cols_align(
+    align = "right",
+    columns = "PSA Score"
+  ) %>%
+  data_color(
+    columns = "PSA Score", method = "numeric", palette = "viridis"
+  )
+
+psa_tbl
+  
+```

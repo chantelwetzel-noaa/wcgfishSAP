@@ -107,8 +107,8 @@ shinyUI(
      tags$style(
        HTML("
        .shiny-image-output img {
-          max-width: 1000px;
-          max-height: 778px;
+          max-width: 800px;
+          max-height: 622px;
           display: block;
           margin: 0 auto;
        }")
@@ -171,8 +171,59 @@ shinyUI(
           ),
           
           # methodology page
-          tabItem(tabName = "methodology"
-                  # uiOutput("factors_rmd")
+          tabItem(tabName = "methodology",
+                  fluidRow(
+                    tags$iframe(seamless = "seamless", src = "11introduction.html",
+                                width = "100%", height = 600,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless", src = "21factors.html",
+                                width = "100%", height = 800,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "22commercial_importance.html",
+                                width = "100%", height = 300,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "23tribal_importance.html",
+                                width = "100%", height = 800,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "24recreational_importance.html",
+                                width = "100%", height = 800,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "25constituent_demand.html",
+                                width = "100%", height = 700,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "26abundance.html",
+                                width = "100%", height = 800,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "27rebuild.html",
+                                width = "100%", height = 500,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "28fishing_mort.html",
+                                width = "100%", height = 700,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "29ecosystem.html",
+                                width = "100%", height = 800,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "30new_data.html",
+                                width = "100%", height = 500,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "31assessment_freq.html",
+                                width = "100%", height = 800,
+                                style = "border:none;"),
+                    tags$iframe(seamless = "seamless",
+                                src = "32future_spex.html",
+                                width = "100%", height = 600,
+                                style = "border:none;")
+                  )
           ),
           
           # overall ranking page

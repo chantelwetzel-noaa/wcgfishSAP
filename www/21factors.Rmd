@@ -1,0 +1,52 @@
+---
+output: html_document
+---
+
+# Description of Factors
+
+## Factor Summary
+
+The total scoring combines the scores by species from each Factor using pre-defined weights for each Factor. The total scoring by species is calculated as:
+
+```{r, results = 'asis', echo = FALSE}
+cat("$$F_{s} = w_c \\cdot c_{s} + w_r \\cdot r_{s} + w_t \\cdot t_{s} + w_d \\cdot d_{s} + w_o \\cdot o_{s} + w_b \\cdot b_s + w_h \\cdot h_s + w_e \\cdot e_s + w_n \\cdot n_s + w_a \\cdot a_s$$")
+```
+
+where $w$ is the weight applied to each Factor, $c$ is the commercial importance by species $s$, $r$ is the recreational importance by species $s$, $t$ is the tribal importance by species $s$, $d$ is he constituent demand or choke factor by species $s$, $o$ is rebuilding by species $s$, $b$ is relative stock status by species $s$, $h$ is harvest by species $s$, $e$ is ecosystem importance by species $s$, $n$ is new information available by species $s$, and $a$ is the assessment frequency by species $s$. The weights for each Factor are shown in Table 1.
+
+```{r, results = 'asis', echo = FALSE}
+library(gt)
+
+weight <- data.frame(matrix(NA, 10, 4))
+colnames(weight) <- c("Factor", "Notation", "Weight Notation", "Weight")
+
+weight[1,] = c("Commercial Importance", "$c$","$w_c$", 0.21)
+weight[2,] = c("Recreational Importance", "$r$", "$w_r$", 0.09)
+weight[3,] = c("Tribal Importance", "$t$","$w_t$", 0.05)
+weight[4,] = c("Constituent Demand", "$d$","$w_d$", 0.11)
+weight[5,] = c("Rebuilding", "$o$", "$w_o$", 0.10)
+weight[6,] = c("Relative Stock Status", "$b$", "$w_b$", 0.08)
+weight[7,] = c("Fishing Mortality", "$h$", "$w_h$", 0.08)
+weight[8,] = c("Ecosystem Importance", "$e$", "$w_e$", 0.05)
+weight[9,] = c("New Information Available", "$n$", "$w_n$", 0.05)
+weight[10,] = c("Assessment Frequency", "$a$", "$w_a$", 0.18)
+
+table_factors <- weight %>%
+  gt(id = "weights") %>%
+  tab_header(
+    title = "Table 1: Weights used for each factor in the calculation of total factor score by species."
+  ) %>%
+  cols_align(
+    align = "left",
+    columns = "Factor"
+  ) %>%
+  cols_align(
+    align = "right",
+    columns = "Notation":"Weight"
+  ) %>%
+  fmt_markdown(columns = c("Notation", "Weight Notation")) %>%
+  fmt_number(columns = "Weight", decimals = 2)
+
+table_factors
+
+```

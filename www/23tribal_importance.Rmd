@@ -1,0 +1,42 @@
+---
+output: html_document
+---
+
+## Tribal Importance
+
+West Coast groundfish species are highly important to northwest coastal Tribes. The Subsistence category identified in the NMFS guidance document (Methot 2015) was expanded to include the value of Tribal fishing for both commercial sale and subsistence and ceremonial uses. The Tribal Importance Factor is calculated as:
+  
+\begin{equation}
+t_{s} = \frac{\alpha}{\text{max}(\text{revenue}_{s}^{0.18})} \text{revenue}_{s}^{0.18} + \beta_s    
+\end{equation}
+  
+where $\text{revenue}_s$ is the revenue based on ex-vessel prices by species $s$, $\alpha$ is the initial factor score set equal to 7.0 and $\beta_s$ is the subsistence score by species $s$ (Table 2).
+  
+Commercial revenue from landings by Tribal vessels were obtained from PacFIN. The calculation of the Tribal Importance scores is broken into two parts.  The first component uses revenues and were transformed using the same process described above for commercial and recreational values, except that the maximum for this part of the total score is set to 7.0. The second component of the score (ranging from 0 to 3.0), represents the relative value of groundfish species to Tribal subsistence harvesters (Table 2).  These species scores were refined through consultation with Tribal representatives.  Continued comments/input from the Tribal community regarding subsistence scores will ensure that the scoring reflect the current prioritization of the Tribal sector. 
+  
+```{r, results = 'asis', echo = FALSE}
+library(gt)
+
+sub_score_data <- read.csv("subsistence_score.csv", header = TRUE) 
+
+sub_score <- sub_score_data %>%
+  gt() %>%
+  tab_header(
+    title = "Table 2: Subsistence score by species."
+  ) %>%
+  cols_align(
+    align = "left",
+    columns = "Species"
+  ) %>%
+  cols_align(
+    align = "center",
+    columns = "Score"
+  ) %>%
+  data_color(
+    columns = "Score", method = "numeric", palette = "viridis",
+    reverse = TRUE
+  )
+
+sub_score
+```
+

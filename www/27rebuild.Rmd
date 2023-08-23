@@ -1,0 +1,32 @@
+---
+output: html_document
+---
+
+## Rebuilding Status
+
+This Factor provides another means of emphasizing the importance of rebuilding stocks, whose harvest amounts are commonly highly restricted. The highest possible score would be assigned to species that are being managed under rebuilding plans, whose spawning biomass is continuing to decline. The next highest score acknowledges the importance of completing the rebuilding process (stocks projected to rebuild by the next cycle) and permitting the relaxation of constraints that rebuilding has presented. Species with longer anticipated rebuilding times receive lower scores than those with shorter ones. Table 6 shows how the scores are assigned for this factor according to rebuilding status of the species.
+
+```{r, results = 'asis', echo = FALSE}
+library(gt)
+
+score <- data.frame(matrix(NA, 5, 2))
+colnames(score) <- c("Score", "Rebuilding Status")
+
+score[1,] = c(0, "Not in rebuilding")
+score[2,] = c(4, "Projected to rebuild in over 20 years")
+score[3,] = c(6, "Projected to rebuild within 20 years")
+score[4,] = c(9, "Projected to rebuild within 4 years")
+score[5,] = c(10, "In rebuilding with declining biomass trajectory")
+
+reb_score_tbl <- score %>%
+  gt() %>%
+  tab_header(
+    title = "Table 6: Scores applied based on rebuilding status."
+  ) %>%
+  cols_align(
+    align = "left"
+  )
+
+reb_score_tbl
+
+```

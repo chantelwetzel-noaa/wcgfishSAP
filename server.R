@@ -145,14 +145,6 @@ joined_af_df <- joined_af_df %>%
 # define server logic to display user inputs
 shinyServer(function(input, output, session) {
   
-  # display markdown file (methodology tab)
-  # output$factors_rmd <- renderUI({
-  #   withMathJax(
-  #     # HTML(markdown::markdownToHTML(knit("documents/21factors.Rmd", quiet = TRUE)))
-  #     render("documents/21factors.Rmd", output_format = "html_document")
-  #   )
-  # })
-  
   # overall ranking table
   results <- data.frame(species_groups$speciesName,
                         com_rev_data$Factor_Score,
@@ -1504,7 +1496,7 @@ shinyServer(function(input, output, session) {
   # stock assessment calendar
   output$sa_calendar <- renderImage({
     list(
-      src = file.path("documents/figs/calendar.png"),
+      src = file.path("figs/calendar.png"),
       contentType = "image/png"
     )
   }, deleteFile = FALSE)
