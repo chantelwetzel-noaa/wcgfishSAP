@@ -301,7 +301,8 @@ shinyServer(function(input, output, session) {
       overall_table <- overall_data() %>%
         gt() %>%
         tab_header(
-          title = "Overall Factor Summary"
+          title = "Overall Factor Summary",
+          subtitle = "The weighted score using the specified weights (shown above) for each factor and the sum of all weighted factors (Total Weighted Score) by species to determine overall rank."
         ) %>%
         cols_label(
           `Commercial Importance` = "Comm. Importance Factor Score",
