@@ -112,6 +112,14 @@ shinyUI(
           display: block;
           margin: 0 auto;
        }")
+     ),
+     # right-align HTML files + add margin (methodology page)
+     tags$style(
+       HTML("
+       .align-right {
+          text-align: right;
+          margin-right: 15px;
+       }")
      )
    ),
    
@@ -172,20 +180,109 @@ shinyUI(
           
           # methodology page
           tabItem(tabName = "methodology",
+                  h1("Methodology"),
                   fluidRow(
-                    htmlOutput("intro"),
-                    htmlOutput("factors"),
-                    htmlOutput("comm_importance"),
-                    htmlOutput("tribal_importance"),
-                    htmlOutput("rec_importance"),
-                    htmlOutput("const_demand"),
-                    htmlOutput("abundance"),
-                    htmlOutput("rebuild"),
-                    htmlOutput("fishing_mort"),
-                    htmlOutput("ecosystem"),
-                    htmlOutput("new_data"),
-                    htmlOutput("assessment_freq"),
-                    htmlOutput("future_spex")
+                    box(
+                      title = "Table of Contents", status = "primary",
+                      solidHeader = TRUE, width = 3,
+                      tags$ol(
+                        tags$li(
+                          tags$a(
+                            href = "#intro_toc", "Introduction"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#factors_toc", "Description of Factors"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#comm_imp_toc", "Commercial Importance"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#tribal_imp_toc", "Tribal Importance"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#rec_imp_toc", "Recreational Importance"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#const_dem_toc", "Constituent Demand"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#abundance_toc",
+                            "Stock Status Relative to Management Targets"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#rebuilding_toc", "Rebuilding Status"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#fishing_mort_toc",
+                            "Fishing Mortality, Relative to Overfishing Limits"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#ecosystem_toc", "Ecosystem Importance"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#new_data_toc",
+                            "Relevant New Types of Information Available"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#assessment_freq_toc", "Assessment Frequency"
+                          )
+                        ),
+                        tags$li(
+                          tags$a(
+                            href = "#future_spex_toc",
+                            "Future Limiting Harvest Specifications"
+                          )
+                        )
+                      )
+                    ),
+                    htmlOutput("intro", align = "right",
+                               class = "align-right"),
+                    htmlOutput("factors", align = "right",
+                               class = "align-right"),
+                    htmlOutput("comm_importance", align = "right",
+                               class = "align-right"),
+                    htmlOutput("tribal_importance", align = "right",
+                               class = "align-right"),
+                    htmlOutput("rec_importance", align = "right",
+                               class = "align-right"),
+                    htmlOutput("const_demand", align = "right",
+                               class = "align-right"),
+                    htmlOutput("abundance", align = "right",
+                               class = "align-right"),
+                    htmlOutput("rebuild", align = "right",
+                               class = "align-right"),
+                    htmlOutput("fishing_mort", align = "right",
+                               class = "align-right"),
+                    htmlOutput("ecosystem", align = "right",
+                               class = "align-right"),
+                    htmlOutput("new_data", align = "right",
+                               class = "align-right"),
+                    htmlOutput("assessment_freq", align = "right",
+                               class = "align-right"),
+                    htmlOutput("future_spex", align = "right",
+                               class = "align-right")
                   )
           ),
           

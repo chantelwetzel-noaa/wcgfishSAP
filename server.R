@@ -147,93 +147,106 @@ shinyServer(function(input, output, session) {
   
   # render HTML files for methodology page
   output$intro <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "intro_toc",
+                seamless = "seamless",
                 src = "11introduction.html",
-                width = "100%", height = 600,
+                width = "74%", height = 600,
                 style = "border:none;")
   })
   
   output$factors <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "factors_toc",
+                seamless = "seamless",
                 src = "21factors.html",
-                width = "100%", height = 800,
+                width = "74%", height = 800,
                 style = "border:none;")
   })
   
   output$comm_importance <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "comm_imp_toc",
+                seamless = "seamless",
                 src = "22commercial_importance.html",
-                width = "100%", height = 300,
+                width = "74%", height = 300,
                 style = "border:none;")
   })
   
   output$tribal_importance <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "tribal_imp_toc",
+                seamless = "seamless",
                 src = "23tribal_importance.html",
-                width = "100%", height = 800,
+                width = "74%", height = 800,
                 style = "border:none;")
   })
   
   output$rec_importance <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "rec_imp_toc",
+                seamless = "seamless",
                 src = "24recreational_importance.html",
-                width = "100%", height = 800,
+                width = "74%", height = 800,
                 style = "border:none;")
   })
   
   output$const_demand <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "const_dem_toc",
+                seamless = "seamless",
                 src = "25constituent_demand.html",
-                width = "100%", height = 700,
+                width = "74%", height = 700,
                 style = "border:none;")
   })
   
   output$abundance <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "abundance_toc",
+                seamless = "seamless",
                 src = "26abundance.html",
-                width = "100%", height = 800,
+                width = "74%", height = 800,
                 style = "border:none;")
   })
   
   output$rebuild <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "rebuilding_toc",
+                seamless = "seamless",
                 src = "27rebuild.html",
-                width = "100%", height = 500,
+                width = "74%", height = 500,
                 style = "border:none;")
   })
   
   output$fishing_mort <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "fishing_mort_toc",
+                seamless = "seamless",
                 src = "28fishing_mort.html",
-                width = "100%", height = 700,
+                width = "74%", height = 700,
                 style = "border:none;")
   })
   
   output$ecosystem <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "ecosystem_toc",
+                seamless = "seamless",
                 src = "29ecosystem.html",
-                width = "100%", height = 800,
+                width = "74%", height = 800,
                 style = "border:none;")
   })
   
   output$new_data <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "new_data_toc",
+                seamless = "seamless",
                 src = "30new_data.html",
-                width = "100%", height = 500,
+                width = "74%", height = 500,
                 style = "border:none;")
   })
   
   output$assessment_freq <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "assessment_freq_toc",
+                seamless = "seamless",
                 src = "31assessment_freq.html",
-                width = "100%", height = 800,
+                width = "74%", height = 800,
                 style = "border:none;")
   })
   
   output$future_spex <- renderUI({
-    tags$iframe(seamless = "seamless",
+    tags$iframe(id = "future_spex_toc",
+                seamless = "seamless",
                 src = "32future_spex.html",
-                width = "100%", height = 600,
+                width = "74%", height = 600,
                 style = "border:none;")
   })
   
