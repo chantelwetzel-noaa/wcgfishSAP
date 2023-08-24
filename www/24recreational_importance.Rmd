@@ -22,7 +22,7 @@ The recreational importance by species and state are shown in Table 3. These wei
 ```{r, results = 'asis', echo = FALSE}
 library(gt)
 
-tab <- read.csv("recr_importance.csv", header = TRUE) 
+tab <- read.csv("tables/recr_importance.csv", header = TRUE) 
 colnames(tab) <- c("Species", "California", "Oregon", "Washington")
 tab[is.na(tab)] = 0
 

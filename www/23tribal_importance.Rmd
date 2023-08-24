@@ -17,7 +17,7 @@ Commercial revenue from landings by Tribal vessels were obtained from PacFIN. Th
 ```{r, results = 'asis', echo = FALSE}
 library(gt)
 
-sub_score_data <- read.csv("subsistence_score.csv", header = TRUE) 
+sub_score_data <- read.csv("tables/subsistence_score.csv", header = TRUE) 
 
 sub_score <- sub_score_data %>%
   gt() %>%

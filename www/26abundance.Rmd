@@ -53,11 +53,12 @@ abund_tbl
 #              width = c("1cm","13cm"))  
 ```
 
+<br>
 
 ```{r, results = 'asis', echo = FALSE}
 library(gt)
 
-psa <- read.csv("psa.csv", header = TRUE) 
+psa <- read.csv("tables/psa.csv", header = TRUE) 
 psa <- psa[-c(2)]
 colnames(psa) <- c("Species", "PSA Score")
 
