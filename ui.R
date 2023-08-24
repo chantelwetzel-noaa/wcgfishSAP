@@ -1541,6 +1541,17 @@ shinyUI(
                               tags$a(href="https://afspubs.onlinelibrary.wiley.com/doi/abs/10.1080/02755947.2011.591264",
                                      target = "_blank", "Cope et al. 2011. An Approach to Defining Stock Complexes for U.S. West
                                      Coast Groundfishes Using Vulnerabilities and Ecological Distributions. Fisheries Management. 31:589-604."),
+                            ),
+                            tags$li(
+                              tags$a(href="https://www.sciencedirect.com/science/article/pii/S0304380016301909",
+                              target = "_blank", "Koehn et al. 2016. Developing a high taxonomic resolution food web model to
+                              assess the functional role of forage fish in the California Current ecosystem. Ecological
+                              Modelling 335: 87–100."),
+                            ),
+                            tags$li(
+                              tags$a(href="https://www.science.org/doi/10.1126/science.1209395",
+                                     target = "_blank", "Smith et al. 2011. Impacts of Fishing Low–Trophic Level Species on Marine Ecosystems.
+                                     Science 333(6046): 1147–1150.")
                             )
                           )
                         )
