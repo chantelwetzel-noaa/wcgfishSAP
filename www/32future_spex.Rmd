@@ -2,7 +2,7 @@
 output: html_document
 ---
 
-## Future Limiting Harvest Specifications{#future-spex-sec}
+## Future Limiting Harvest Specifications
 
 The assessment prioritization for the first time in 2020 explored the potential for future catch to be constrained relative to future OFLs and ABCs.  The Council adopted a time-varying $\sigma$ resulting in increased uncertainty and greater reduction between the OFL and the ABC as the time from last assessment increases.  A similar analysis was also conducted this year.  
 
@@ -33,13 +33,4 @@ mort_tbl <- mort %>%
 
 mort_tbl
 
-# table_format(mort, 
-#              caption = c('Modifier values based the future specification Factor score. Factor score values are based on the percent attainment between recent average catches and future ACL values.  '),
-#              label = 'future-spex',
-#              align = 'l',
-#              escape = FALSE,
-#              col_names = col_names,             
-#              custom_width = TRUE,
-#              col_to_adjust = 1:2,
-#              width = c("1cm","2cm"))
 ```

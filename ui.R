@@ -107,8 +107,8 @@ shinyUI(
      tags$style(
        HTML("
        .shiny-image-output img {
-          max-width: 800px;
-          max-height: 622px;
+          max-width: 600px;
+          max-height: 467px;
           display: block;
           margin: 0 auto;
        }")
@@ -1484,19 +1484,22 @@ shinyUI(
           # stock assessment calendar page
           tabItem(tabName = "calendar",
                   h1("2023 Stock Assessment Calendar"),
-                  h4("Below is an annotated 2023 assessment planning calendar that
-                     identifies potential weeks in which STAR panels can be scheduled.
-                     Based on the expected availability of 2022 data and the time
-                     needed for model development and documentation, it is unlikely
-                     that any full assessments could be reviewed before May. As of
-                     January 2022, the June and September Pacific Fishery Management Council
-                     meeting date have not been announced. Once meeting dates for June
-                     and September 2023 are available these weeks will be shaded and
-                     potential STAR panel weeks will be finalized."),
-                  br(),
                   fluidRow(
-                    imageOutput("sa_calendar")
-                  )
+                    box(
+                      width = 12, height = "700px",
+                      h4("Below is an annotated 2023 assessment planning calendar that
+                      identifies potential weeks in which STAR panels can be scheduled.
+                      Based on the expected availability of 2022 data and the time
+                      needed for model development and documentation, it is unlikely
+                      that any full assessments could be reviewed before May. As of
+                      January 2022, the June and September Pacific Fishery Management Council
+                      meeting date have not been announced. Once meeting dates for June
+                      and September 2023 are available these weeks will be shaded and
+                      potential STAR panel weeks will be finalized."),
+                      br(),
+                      imageOutput("sa_calendar")
+                    )
+                  ),
           ),
           
           # resources page

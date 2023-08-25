@@ -6,7 +6,7 @@ output: html_document
 
 The original focus of this Factor was to quantify the extent to which a stock is "overdue" for an assessment (e.g., has it been more than the target number of years since the last assessment was conducted?). Gradually, other considerations which reflect the urgency of conducting a new assessment during the upcoming cycle have been included in the calculation of the final score for this Factor. 
 
-The first step in this process involves the calculation of a target assessment frequency for all stocks that have had a benchmark assessment.  As described in the NMFS Technical Memo [@methot_prioritizing_2015], the mean age of harvested fish serves as the starting point, which is then modified by a regional multiplier. In the case of U.S. west coast groundfish, there is more than a 10-fold difference among species in the mean age of fishery catch, so part of the initial adjustment serves to compress the range of the distribution to a range that is more useful for calculating target frequency. The mean age of the catch is transformed as:
+The first step in this process involves the calculation of a target assessment frequency for all stocks that have had a benchmark assessment.  As described in the NMFS Technical Memo [(Methot 2015)](https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf), the mean age of harvested fish serves as the starting point, which is then modified by a regional multiplier. In the case of U.S. west coast groundfish, there is more than a 10-fold difference among species in the mean age of fishery catch, so part of the initial adjustment serves to compress the range of the distribution to a range that is more useful for calculating target frequency. The mean age of the catch is transformed as:
 
 \begin{equation}
 T_s = (\bar{A}_s*20)^{0.38}
@@ -96,18 +96,5 @@ adj_tbl <- adj %>%
   opt_css(css = ".gt_stub { padding-left: 50px !important; }")
 
 adj_tbl
-
-# t <- table_format(adj, 
-#              caption = c('List of scoring adjustments made depending upon assessment age, the level of recommended next assessment, and the target assessment frequency.'),
-#              label = 'penalty',
-#              align = 'l',
-#              escape = FALSE,
-#              col_names = col_names,             
-#              custom_width = TRUE,
-#              col_to_adjust = 1:2,
-#              width = c("10cm","1cm"))
-# 
-# t %>%
-#     kableExtra::add_indent(c(2, 3, 5, 6, 8, 9)) 
 
 ```                    
