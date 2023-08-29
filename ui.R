@@ -120,6 +120,19 @@ shinyUI(
           text-align: right;
           margin-right: 15px;
        }")
+     ),
+     # align numericInputs on overall ranking page
+     tags$style(
+       HTML(
+         ".numeric-input-container { 
+            display: flex;
+            align-items: flex-end;
+            margin-right: 15px;
+          }
+          .numeric-input-container .shiny-input-container:not(:last-child) {
+            margin-right: 10px;
+          }"
+       )
      )
    ),
    
@@ -136,6 +149,13 @@ shinyUI(
       
       dashboardSidebar(width = 300,
                        sidebarMenu(
+                         # br(),
+                         # div(
+                         #   style = "display: flex; justify-content: center; margin-bottom: 20px",
+                         #   img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "125px",
+                         #       style = "margin-right: 20px;"),
+                         #   img(src = "logos/pfmc-classic-logo-invert.png", height = "125px")
+                         # ),
                          menuItem("Home", tabName = "home", icon = icon("home")),
                          menuItem("Methodology", tabName = "methodology",
                                   icon = icon("list-check")),
@@ -166,13 +186,14 @@ shinyUI(
                                   icon = icon("calendar")),
                          menuItem("Resources", tabName = "resources", icon = icon("book")),
                          menuItem("Contact", tabName = "contact", icon = icon("envelope"))
-                       ),
-                       div(
-                         style = "position: absolute; bottom: 10px; left: 0; right: 0; text-align: center;",
-                         tags$img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "80px",
-                                  style = "margin-right: 10px;"),
-                         tags$img(src = "logos/pfmc-classic-logo-invert.png", height = "80px")
                        )
+                       # div(
+                       #   style = "position: absolute; bottom: 10px; left: 0; right: 0;
+                       #     text-align: center;",
+                       #   img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "80px",
+                       #       style = "margin-right: 20px;"),
+                       #   img(src = "logos/pfmc-classic-logo-invert.png", height = "80px")
+                       # )
       ),
       
       dashboardBody(
@@ -323,45 +344,48 @@ shinyUI(
                                actionButton("reset", " Reset weights",
                                             icon = icon("arrow-rotate-right"))
                         ),
-                        column(1, numericInput("comm_weight", "Comm. Importance Factor Weight:",
-                                               value = 0.21, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
-                        ),
-                        column(1, numericInput("rec_weight", "Rec. Importance Factor Weight:",
-                                               value = 0.09, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
-                        ),
-                        column(1, numericInput("tribal_weight", "Tribal Importance Factor Weight:",
-                                               value = 0.05, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
-                        ),
-                        column(1, numericInput("cd_weight", "Const. Demand Factor Weight:",
-                                               value = 0.11, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
-                        ),
-                        column(1, numericInput("reb_weight", "Rebuilding Factor Weight:",
-                                               value = 0.10, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
-                        ),
-                        column(1, numericInput("ss_weight", "Stock Status Factor Weight:",
-                                               value = 0.08, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
-                        ),
-                        column(1, numericInput("fm_weight", "Fishing Mortality Factor Weight:",
-                                               value = 0.08, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
-                        ),
-                        column(1, numericInput("eco_weight", "Ecosystem Factor Weight:",
-                                               value = 0.05, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
-                        ),
-                        column(1, numericInput("ni_weight", "New Information Factor Weight:",
-                                               value = 0.05, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
-                        ),
-                        column(1, numericInput("af_weight", "Assmt. Frequency Factor Weight:",
-                                               value = 0.18, min = 0, max = 1, step = 0.01,
-                                               width = "100%")
+                        div(
+                          class = "numeric-input-container",
+                          numericInput("comm_weight", "Comm. Importance Factor Weight:",
+                                       value = 0.21, min = 0, max = 1, step = 0.01,
+                                       width = "100%"
+                          ),
+                          numericInput("rec_weight", "Rec. Importance Factor Weight:",
+                                                 value = 0.09, min = 0, max = 1, step = 0.01,
+                                                 width = "100%"
+                          ),
+                          numericInput("tribal_weight", "Tribal Importance Factor Weight:",
+                                                 value = 0.05, min = 0, max = 1, step = 0.01,
+                                                 width = "100%"
+                          ),
+                          numericInput("cd_weight", "Const. Demand Factor Weight:",
+                                                 value = 0.11, min = 0, max = 1, step = 0.01,
+                                                 width = "100%"
+                          ),
+                          numericInput("reb_weight", "Rebuilding Factor Weight:",
+                                                 value = 0.10, min = 0, max = 1, step = 0.01,
+                                                 width = "100%"
+                          ),
+                          numericInput("ss_weight", "Stock Status Factor Weight:",
+                                                 value = 0.08, min = 0, max = 1, step = 0.01,
+                                                 width = "100%"
+                          ),
+                          numericInput("fm_weight", "Fishing Mortality Factor Weight:",
+                                                 value = 0.08, min = 0, max = 1, step = 0.01,
+                                                 width = "100%"
+                          ),
+                          numericInput("eco_weight", "Ecosystem Factor Weight:",
+                                                 value = 0.05, min = 0, max = 1, step = 0.01,
+                                                 width = "100%"
+                          ),
+                          numericInput("ni_weight", "New Information Factor Weight:",
+                                                 value = 0.05, min = 0, max = 1, step = 0.01,
+                                                 width = "100%"
+                          ),
+                          numericInput("af_weight", "Assmt. Frequency Factor Weight:",
+                                                 value = 0.18, min = 0, max = 1, step = 0.01,
+                                                 width = "100%"
+                          )
                         )
                     )
                   ),

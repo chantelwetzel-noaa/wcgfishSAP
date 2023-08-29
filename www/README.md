@@ -29,7 +29,7 @@ This is an inline equation: $y = mx + b$, and this is an equation on a new line:
 
 This is an inline equation: $y = mx + b$, and this is an equation on a new line: $$y = mx + b$$
 
-4. **gt Tables**: Use an R code block to include tables. Ensure that the `gt` library is installed in the code block before rendering and saving the file. For more information about `gt` and its functions, click [here](https://gt.rstudio.com/).
+4. **gt Tables**: Use an R code block to include tables. Ensure that the `gt` library is installed in the code block before rendering and saving the file. For more information about `gt` and its functions, click [here](https://gt.rstudio.com/). If coloring the cells of the table, use the `viridis` palette.
 
 Before running the Shiny app, knit the edited Rmd file to HTML. Changes made should then be visible on the app.
 
