@@ -1,6 +1,5 @@
 ---
 output: html_document
-mathjax: "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"
 ---
 
 ## Stock Status Relative to Management Targets
@@ -41,16 +40,6 @@ abund_tbl <- abund %>%
 
 abund_tbl
 
-# table_format(abund, 
-#              caption = c('Scores applied based the estimated fraction of unfished relative to management targets from the most recent assessment or the PSA score for un-assessed stocks.'),
-#              label = 'abund',
-#              align = 'l',
-#              escape = FALSE,
-#              col_names = col_names,
-#              digits = 0,             
-#              custom_width = TRUE,
-#              col_to_adjust = 1:2,
-#              width = c("1cm","13cm"))  
 ```
 
 <br>

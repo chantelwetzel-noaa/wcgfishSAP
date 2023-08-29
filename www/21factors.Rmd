@@ -8,13 +8,12 @@ output: html_document
 
 The total scoring combines the scores by species from each Factor using pre-defined weights for each Factor. The total scoring by species is calculated as:
 
-```{r, results = 'asis', echo = FALSE}
-cat("\\begin{align*}\n")
-cat("F_{s} = w_c \\cdot c_{s} + w_r \\cdot r_{s} + w_t \\cdot t_{s} + w_d \\cdot d_{s} + w_o \\cdot o_{s} + w_b \\cdot b_s &")
-cat("\\\\")
-cat("+ w_h \\cdot h_s + w_e \\cdot e_s + w_n \\cdot n_s + w_a \\cdot a_s &")
-cat("\\end{align*}")
-```
+$$
+\begin{align}
+\text{F}_s = w_c*c_s + w_r*r_s + w_t*t_s + w_d*d_s + w_o*o_s + w_b*b_s \\
++ w_h*h_s + w_e*e_s + w_n*n_s + w_a*a_s
+\end{align}
+$$
 
 where $w$ is the weight applied to each Factor, $c$ is the commercial importance by species $s$, $r$ is the recreational importance by species $s$, $t$ is the tribal importance by species $s$, $d$ is he constituent demand or choke factor by species $s$, $o$ is rebuilding by species $s$, $b$ is relative stock status by species $s$, $h$ is harvest by species $s$, $e$ is ecosystem importance by species $s$, $n$ is new information available by species $s$, and $a$ is the assessment frequency by species $s$. The weights for each Factor are shown in Table 1.
 

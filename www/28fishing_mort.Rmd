@@ -1,6 +1,5 @@
 ---
 output: html_document
-mathjax: "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"
 ---
 
 ## Fishing Mortality, Relative to Overfishing Limits

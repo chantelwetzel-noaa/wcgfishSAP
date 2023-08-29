@@ -8,9 +8,11 @@ The original focus of this Factor was to quantify the extent to which a stock is
 
 The first step in this process involves the calculation of a target assessment frequency for all stocks that have had a benchmark assessment.  As described in the NMFS Technical Memo [(Methot 2015)](https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf){target="_blank"}, the mean age of harvested fish serves as the starting point, which is then modified by a regional multiplier. In the case of U.S. west coast groundfish, there is more than a 10-fold difference among species in the mean age of fishery catch, so part of the initial adjustment serves to compress the range of the distribution to a range that is more useful for calculating target frequency. The mean age of the catch is transformed as:
 
+$$
 \begin{equation}
 T_s = (\bar{A}_s*20)^{0.38}
 \end{equation}
+$$
 
 where $\bar{A}$ is the mean age in the catch for stock $s$.
 
@@ -18,9 +20,9 @@ The transformed mean-age value ($T_s$) is then modified, based on each stock's r
 
 $$
 F_s =
-\begin{cases} 
+\begin{cases}
 T_s + r_s + f_s + e_s & \text{if $<$ 10}\\ 
-10 & \text{if $T_s + r_s + f_s + e_s >$ 10} 
+10 & \text{if $T_s + r_s + f_s + e_s >$ 10}
 \end{cases}
 $$
 
