@@ -166,6 +166,12 @@ shinyUI(
                                   icon = icon("calendar")),
                          menuItem("Resources", tabName = "resources", icon = icon("book")),
                          menuItem("Contact", tabName = "contact", icon = icon("envelope"))
+                       ),
+                       div(
+                         style = "position: absolute; bottom: 10px; left: 0; right: 0; text-align: center;",
+                         tags$img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "80px",
+                                  style = "margin-right: 10px;"),
+                         tags$img(src = "logos/pfmc-classic-logo-invert.png", height = "80px")
                        )
       ),
       
