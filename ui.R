@@ -84,7 +84,7 @@ af_cols <- colnames(joined_af_df)[colnames(joined_af_df) != "Species"]
 shinyUI(
  fluidPage(
    
-   # format scrolling text sections
+   # CSS to format features
    tags$head(
      # format scrolling text sections
      tags$style(
@@ -149,13 +149,6 @@ shinyUI(
       
       dashboardSidebar(width = 300,
                        sidebarMenu(
-                         # br(),
-                         # div(
-                         #   style = "display: flex; justify-content: center; margin-bottom: 20px",
-                         #   img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "125px",
-                         #       style = "margin-right: 20px;"),
-                         #   img(src = "logos/pfmc-classic-logo-invert.png", height = "125px")
-                         # ),
                          menuItem("Home", tabName = "home", icon = icon("home")),
                          menuItem("Methodology", tabName = "methodology",
                                   icon = icon("list-check")),
@@ -186,14 +179,12 @@ shinyUI(
                                   icon = icon("calendar")),
                          menuItem("Resources", tabName = "resources", icon = icon("book")),
                          menuItem("Contact", tabName = "contact", icon = icon("envelope"))
+                       ),
+                       div(
+                         style = "position: absolute; bottom: 10px; left: 0; right: 0;
+                         text-align: center;",
+                         img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "80px")
                        )
-                       # div(
-                       #   style = "position: absolute; bottom: 10px; left: 0; right: 0;
-                       #     text-align: center;",
-                       #   img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "80px",
-                       #       style = "margin-right: 20px;"),
-                       #   img(src = "logos/pfmc-classic-logo-invert.png", height = "80px")
-                       # )
       ),
       
       dashboardBody(
