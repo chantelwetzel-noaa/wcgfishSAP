@@ -86,33 +86,6 @@ shinyUI(
    
    # CSS to format features
    tags$head(
-     # format scrolling text sections
-     tags$style(
-       HTML("
-       .scrolling-text {
-          height: 250px;
-          overflow-y: scroll;
-          border: 1px solid #ccc;
-          padding: 10px;
-       }")
-     ),
-     # format resources tab bulleted list font size
-     tags$style(
-       HTML("
-       .custom-bulleted-list {
-          font-size: 16px;
-     }")
-     ),
-     # control image dimensions (calendar page)
-     tags$style(
-       HTML("
-       .shiny-image-output img {
-          max-width: 600px;
-          max-height: 467px;
-          display: block;
-          margin: 0 auto;
-       }")
-     ),
      # right-align HTML files + add margin (methodology page)
      tags$style(
        HTML("
@@ -133,6 +106,33 @@ shinyUI(
             margin-right: 10px;
           }"
        )
+     ),
+     # format scrolling text sections (factor pages)
+     tags$style(
+       HTML("
+       .scrolling-text {
+          height: 250px;
+          overflow-y: scroll;
+          border: 1px solid #ccc;
+          padding: 10px;
+       }")
+     ),
+     # control image dimensions (calendar page)
+     tags$style(
+       HTML("
+       .shiny-image-output img {
+          max-width: 600px;
+          max-height: 467px;
+          display: block;
+          margin: 0 auto;
+       }")
+     ),
+     # format bulleted list font size  (resources page)
+     tags$style(
+       HTML("
+       .custom-bulleted-list {
+          font-size: 16px;
+     }")
      )
    ),
    
@@ -178,12 +178,12 @@ shinyUI(
                          menuItem("Stock Assessment Calendar", tabName = "calendar",
                                   icon = icon("calendar")),
                          menuItem("Resources", tabName = "resources", icon = icon("book")),
-                         menuItem("Contact", tabName = "contact", icon = icon("envelope"))
-                       ),
-                       div(
-                         style = "position: absolute; bottom: 10px; left: 0; right: 0;
-                         text-align: center;",
-                         img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "80px")
+                         menuItem("Contact", tabName = "contact", icon = icon("envelope")),
+                         div(
+                           style = "position: absolute; left: 0; right: 0; margin-top: 10px;
+                           text-align: center;",
+                           img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "150px")
+                         )
                        )
       ),
       
@@ -194,10 +194,29 @@ shinyUI(
           # home page (landing)
           tabItem(tabName = "home",
                   h1("Stock Assessment Prioritization for U.S. West Coast Groundfish"),
-                  h2("Groudfish stocks off the U.S. West Coast are managed by the Pacific Fishery Management Council (PFMC).  The PFMC groundfih Fishery Management Plan contains a large diversity of 100+ species and stocks.
-                     The number of species off the West Coast far exceeds the capacity and resources to conduct scientific assessments each management cycle to determine population status to inform harvest 
-                     limits. Stock assessment prioritization is aimed to be an objective and transparent tool to considere a wide range of fishery, economic, and population indicators 
-                     in order to identify species with the greatest need for new assessments. Stock assessment prioritization allows us to work with regional partners to decide which stocks are assessed each year.")
+                  h4("Groundfish stocks off the U.S. West Coast are managed by the Pacific
+                     Fishery Management Council (PFMC).  The PFMC groundfish Fishery Management Plan
+                     contains a large diversity of 100+ species and stocks. The number of species off
+                     the West Coast far exceeds the capacity and resources to conduct scientific assessments 
+                     each management cycle to determine population status to inform harvest limits.
+                     Stock assessment prioritization is aimed to be an objective and transparent tool to
+                     consider a wide range of fishery, economic, and population indicators in order to
+                     identify species with the greatest need for new assessments. Stock assessment
+                     prioritization allows us to work with regional partners to decide which stocks
+                     are assessed each year."),
+                  br(),
+                  fluidRow(
+                    column(
+                      width = 6,
+                      align = "right",
+                      img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "80px")
+                    ),
+                    column(
+                      width = 6,
+                      align = "left",
+                      img(src = "logos/pfmc_black.png", height = "80px")
+                    )
+                  )
           ),
           
           # methodology page
@@ -479,7 +498,8 @@ shinyUI(
                           selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
                         br()
                     ),
@@ -577,7 +597,8 @@ shinyUI(
                                     selected = c(unique(as.character(species_groups$`Management Group`))),
                                     multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
                         br()
                     ),
@@ -674,7 +695,8 @@ shinyUI(
                           selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
                         br()
                     ),
@@ -796,7 +818,8 @@ shinyUI(
                           selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
                         br()
                     ),
@@ -911,7 +934,8 @@ shinyUI(
                           selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
                         br()
                     ),
@@ -1012,9 +1036,13 @@ shinyUI(
                           selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
-                        br()
+                        br(),
+                        p("More information on current and historical groundfish stock status
+                          can be found", a(href = "https://connect.fisheries.noaa.gov/species_quadplots/",
+                                           target = "_blank", "here."))
                     ),
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
@@ -1099,7 +1127,8 @@ shinyUI(
                           selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
                         br()
                     ),
@@ -1206,7 +1235,8 @@ shinyUI(
                           selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
                         br()
                     ),
@@ -1366,7 +1396,8 @@ shinyUI(
                           selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
                         br()
                     ),
@@ -1480,7 +1511,8 @@ shinyUI(
                           selected = c(unique(as.character(species_groups$`Management Group`))),
                           multiple = TRUE
                         ),
-                        em("Place cursor in the box and press delete to narrow down your selection."),
+                        em("To edit your selection, place cursor in the box. Press delete to
+                           narrow down your selection."),
                         br(),
                         br()
                     ),
