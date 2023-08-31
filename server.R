@@ -89,57 +89,42 @@ new_info_data <- new_info_data[order(new_info_data$Species),]
 new_info_data$Species <- species_groups$speciesName
 
 
-# join tables + species mgmt. groups, rename columns
-joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
-joined_com_df <- joined_com_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_com_df))) %>%
-  arrange(Rank)
+edit_table <- function(df) {
+  # join table + species mgmt. groups
+  joined_df <- left_join(df, species_groups, by = c("Species" = "speciesName"))
+  
+  # rename columns + arrange in ascending rank
+  joined_df <- joined_df %>%
+    rename_with(~gsub("_", " ", colnames(joined_df))) %>%
+    arrange(Rank)
+  
+  return(joined_df)
+}
 
-joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName"))
-joined_rec_df <- joined_rec_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_rec_df))) %>%
-  arrange(Rank)
+joined_com_df <- edit_table(com_rev_data)
 
-joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
-joined_tribal_df <- joined_tribal_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_tribal_df))) %>%
-  arrange(Rank)
+joined_rec_df <- edit_table(rec_data)
 
-joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "speciesName"))
-joined_cd_df <- joined_cd_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_cd_df))) %>%
-  arrange(Rank)
+joined_tribal_df <- edit_table(tribal_data)
+
+joined_cd_df <- edit_table(const_dem_data)
 
 joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
 joined_reb_df <- joined_reb_df %>%
   rename_with(~gsub("_", " ", colnames(joined_reb_df))) %>%
   arrange(desc(`Factor Score`))
 
-joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName"))
-joined_ss_df <- joined_ss_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_ss_df))) %>%
-  arrange(Rank)
+joined_ss_df <- edit_table(stock_stat_data)
 
-joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "speciesName"))
-joined_fm_df <- joined_fm_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_fm_df))) %>%
-  arrange(Rank)
+joined_fm_df <- edit_table(fish_mort_data)
 
-joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
-joined_eco_df <- joined_eco_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_eco_df))) %>%
-  arrange(Rank)
+joined_eco_df <- edit_table(eco_data)
 
-joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName"))
-joined_ni_df <- joined_ni_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_ni_df))) %>%
-  arrange(Rank)
+joined_ni_df <- edit_table(new_info_data)
 
-joined_af_df <- left_join(assess_freq_data, species_groups, by = c("Species" = "speciesName"))
+joined_af_df <- edit_table(assess_freq_data)
 joined_af_df <- joined_af_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_af_df))) %>%
-  select(Species, Rank, Score, `Recruit Variation`:`Management Group`) %>%
-  arrange(Rank)
+  select(Species, Rank, Score, `Recruit Variation`:`Management Group`)
 
 
 # define server logic to display user inputs
