@@ -8,6 +8,7 @@ library(gt)
 library(knitr)
 library(plotly)
 source("format_species_names.R")
+source("format_table.R")
 
 # load in data (10 factors)
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
@@ -26,45 +27,28 @@ species_groups <- read.csv("tables/species_management_groups.csv", header = TRUE
 colnames(species_groups)[2] <- "Management Group"
 
 # join data + rename columns
-joined_com_df <- left_join(com_rev_data, species_groups, by = c("Species" = "speciesName"))
-joined_com_df <- joined_com_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_com_df)))
+joined_com_df <- format_table(com_rev_data, species_groups)
   
-joined_rec_df <- left_join(rec_data, species_groups, by = c("Species" = "speciesName"))
-joined_rec_df <- joined_rec_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_rec_df)))
+joined_rec_df <- format_table(rec_data, species_groups)
 
-joined_tribal_df <- left_join(tribal_data, species_groups, by = c("Species" = "speciesName"))
-joined_tribal_df <- joined_tribal_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_tribal_df)))
+joined_tribal_df <- format_table(tribal_data, species_groups)
 
-joined_cd_df <- left_join(const_dem_data, species_groups, by = c("Species" = "speciesName"))
-joined_cd_df <- joined_cd_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_cd_df)))
+joined_cd_df <- format_table(const_dem_data, species_groups)
 
 joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
 joined_reb_df <- joined_reb_df %>%
   rename_with(~gsub("_", " ", colnames(joined_reb_df)))
 
-joined_ss_df <- left_join(stock_stat_data, species_groups, by = c("Species" = "speciesName"))
-joined_ss_df <- joined_ss_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_ss_df)))
+joined_ss_df <- format_table(stock_stat_data, species_groups)
 
-joined_fm_df <- left_join(fish_mort_data, species_groups, by = c("Species" = "speciesName"))
-joined_fm_df <- joined_fm_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_fm_df)))
+joined_fm_df <- format_table(fish_mort_data, species_groups)
 
-joined_eco_df <- left_join(eco_data, species_groups, by = c("Species" = "speciesName"))
-joined_eco_df <- joined_eco_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_eco_df)))
+joined_eco_df <- format_table(eco_data, species_groups)
 
-joined_ni_df <- left_join(new_info_data, species_groups, by = c("Species" = "speciesName"))
-joined_ni_df <- joined_ni_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_ni_df)))
+joined_ni_df <- format_table(new_info_data, species_groups)
 
-joined_af_df <- left_join(ass_freq_data, species_groups, by = c("Species" = "speciesName"))
+joined_af_df <- format_table(ass_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_af_df))) %>%
   select(Species, Rank, Score, `Recruit Variation`:`Management Group`)
 
 # freezing species column when selecting

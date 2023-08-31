@@ -89,42 +89,45 @@ new_info_data <- new_info_data[order(new_info_data$Species),]
 new_info_data$Species <- species_groups$speciesName
 
 
-# join tables
-edit_table <- function(df) {
-  # join table + species mgmt. groups
-  joined_df <- left_join(df, species_groups, by = c("Species" = "speciesName"))
-  
-  # rename columns + arrange in ascending rank
-  joined_df <- joined_df %>%
-    rename_with(~gsub("_", " ", colnames(joined_df))) %>%
-    arrange(Rank)
-  
-  return(joined_df)
-}
+joined_com_df <- format_table(com_rev_data, species_groups)
+joined_com_df <- joined_com_df %>%
+  arrange(Rank)
 
-joined_com_df <- edit_table(com_rev_data)
+joined_rec_df <- format_table(rec_data, species_groups)
+joined_rec_df <- joined_rec_df %>%
+  arrange(Rank)
 
-joined_rec_df <- edit_table(rec_data)
+joined_tribal_df <- format_table(tribal_data, species_groups)
+joined_tribal_df <- joined_tribal_df %>%
+  arrange(Rank)
 
-joined_tribal_df <- edit_table(tribal_data)
+joined_cd_df <- format_table(const_dem_data, species_groups)
+joined_cd_df <- joined_cd_df %>%
+  arrange(Rank)
 
-joined_cd_df <- edit_table(const_dem_data)
-
-joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
+joined_reb_df <- format_table(rebuilding_data, species_groups)
 joined_reb_df <- joined_reb_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_reb_df))) %>%
   arrange(desc(`Factor Score`))
 
-joined_ss_df <- edit_table(stock_stat_data)
+joined_ss_df <- format_table(stock_stat_data, species_groups)
+joined_ss_df <- joined_ss_df %>%
+  arrange(Rank)
 
-joined_fm_df <- edit_table(fish_mort_data)
+joined_fm_df <- format_table(fish_mort_data, species_groups)
+joined_fm_df <- joined_fm_df %>%
+  arrange(Rank)
 
-joined_eco_df <- edit_table(eco_data)
+joined_eco_df <- format_table(eco_data, species_groups)
+joined_eco_df <- joined_eco_df %>%
+  arrange(Rank)
 
-joined_ni_df <- edit_table(new_info_data)
+joined_ni_df <- format_table(new_info_data, species_groups)
+joined_ni_df <- joined_ni_df %>%
+  arrange(Rank)
 
-joined_af_df <- edit_table(assess_freq_data)
+joined_af_df <- format_table(assess_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
+  arrange(Rank) %>%
   select(Species, Rank, Score, `Recruit Variation`:`Management Group`)
 
 
