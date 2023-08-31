@@ -179,27 +179,21 @@ shinyUI(
           tabItem(tabName = "home",
                   h1("Stock Assessment Prioritization for U.S. West Coast Groundfish"),
                   h4("Groundfish stocks off the U.S. West Coast are managed by the Pacific
-                     Fishery Management Council (PFMC).  The PFMC groundfish Fishery Management Plan
-                     contains a large diversity of 100+ species and stocks. The number of species off
-                     the West Coast far exceeds the capacity and resources to conduct scientific assessments 
-                     each management cycle to determine population status to inform harvest limits.
-                     Stock assessment prioritization is aimed to be an objective and transparent tool to
-                     consider a wide range of fishery, economic, and population indicators in order to
-                     identify species with the greatest need for new assessments. Stock assessment
-                     prioritization allows us to work with regional partners to decide which stocks
-                     are assessed each year."),
-                  br(),
-                  fluidRow(
-                    column(
-                      width = 6,
-                      align = "right",
-                      img(src = "logos/noaa-logo-rgb-blue-2022.png", height = "80px")
-                    ),
-                    column(
-                      width = 6,
-                      align = "left",
-                      img(src = "logos/pfmc_black.png", height = "80px")
-                    )
+                  Fishery Management Council (PFMC).  The PFMC groundfish Fishery Management Plan
+                  contains a large diversity of 100+ species and stocks. The number of species off
+                  the West Coast far exceeds the capacity and resources to conduct scientific assessments 
+                  each management cycle to determine population status to inform harvest limits.
+                  Stock assessment prioritization is aimed to be an objective and transparent tool to
+                  consider a wide range of fishery, economic, and population indicators in order to
+                  identify species with the greatest need for new assessments. Stock assessment
+                  prioritization allows us to work with regional partners to decide which stocks
+                  are assessed each year."),
+                  tags$footer(
+                    style = "text-align: center;",
+                    HTML(paste0("<img src='logos/noaa-logo-rgb-blue-2022.png' alt='Image 1',
+                                height='80' style='margin-right: 15px;'>")),
+                    HTML(paste0("<img src='logos/pfmc_black.png' alt='Image 2',
+                                height='80'>"))
                   )
           ),
           
