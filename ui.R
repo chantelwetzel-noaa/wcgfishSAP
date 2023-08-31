@@ -193,7 +193,11 @@ shinyUI(
           
           # home page (landing)
           tabItem(tabName = "home",
-                  h1("Welcome!")
+                  h1("Stock Assessment Prioritization for U.S. West Coast Groundfish"),
+                  h2("Groudfish stocks off the U.S. West Coast are managed by the Pacific Fishery Management Council (PFMC).  The PFMC groundfih Fishery Management Plan contains a large diversity of 100+ species and stocks.
+                     The number of species off the West Coast far exceeds the capacity and resources to conduct scientific assessments each management cycle to determine population status to inform harvest 
+                     limits. Stock assessment prioritization is aimed to be an objective and transparent tool to considere a wide range of fishery, economic, and population indicators 
+                     in order to identify species with the greatest need for new assessments. Stock assessment prioritization allows us to work with regional partners to decide which stocks are assessed each year.")
           ),
           
           # methodology page
