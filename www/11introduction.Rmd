@@ -4,8 +4,6 @@ output: html_document
 
 # Introduction
 
-TEST
-
 This document provides a detailed description of the analysis that is intended to provide the Pacific Fishery Management Council (Council) and advisory bodies guidance on species-specific assessment prioritization by synthesizing information from commercial fisheries, recreational fisheries, stock status, and other attributes defined as "Factors".  The methodology presented here follows the general framework advanced in the 2015 National Marine Fisheries Service (NMFS) Technical Memorandum, ["Prioritizing Fish Stock Assessments"](https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf){target="_blank"} (Methot 2015).  
 
 This process was envisioned as a way of synthesizing a broad range of relevant information in a manner that can, over time, provide improved guidance, primarily on which species should be considered for benchmark (i.e., full) assessments, or subsequent stock assessment updates. The ranking process provides a useful tool for focusing discussion on species where a new assessment may have the greatest impact, but it is not a replacement for the judgment of the Council and advisory bodies. An important consideration for selecting any species for assessment is whether the (potentially) available data (e.g., trend and length- and age-composition data) are adequate to conduct the desired level of assessment. This aspect of prioritization is not scored in the way other factors are, and so must be considered independently, at this time.  In that regard, the process is likely to help identify important data gaps and/or situations where a data-moderate approach should be undertaken with whatever data are available.

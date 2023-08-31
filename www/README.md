@@ -14,12 +14,12 @@ To update the Rmd files, follow these steps as needed:
 # Main Header
 ## Subheader
 
-2. **Add Links**: Insert links using square brackets for text and parentheses for URLs. For example:
+2. **Add Links**: Insert links using square brackets for text, parentheses for URLs, and curly brackets to open URLs in a new tab. For example:
 
 ```r
-[Google](https://www.google.com/)
+[Google](https://www.google.com/){target="_blank"}
 ```
-[Google](https://www.google.com)
+[Google](https://www.google.com){target="_blank"}
 
 3. **Math Equations**: Use LaTeX syntax to include mathematical equations. For inline equations, use single dollar signs, while for equations on a new line, use double dollar signs. For example:
 
@@ -31,7 +31,7 @@ This is an inline equation: $y = mx + b$, and this is an equation on a new line:
 
 4. **gt Tables**: Use an R code block to include tables. Ensure that the `gt` library is installed in the code block before rendering and saving the file. For more information about `gt` and its functions, click [here](https://gt.rstudio.com/). If coloring the cells of the table, use the `viridis` palette.
 
-Before running the Shiny app, knit the edited Rmd file to HTML. Changes made should then be visible on the app.
+Before running the Shiny app, knit the edited Rmd file to HTML, and restart RStudio. Changes made should then be visible on the app.
 
 To edit the appearance of the HTML files within the app, edit the `height` parameter where each file is rendered in `server.R`. All outputs are under the comment:
 
