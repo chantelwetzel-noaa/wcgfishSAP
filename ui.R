@@ -1,14 +1,22 @@
+# PACKAGES:
+## shiny
 library(shiny)
 library(shinyBS)
 library(shinydashboard)
 library(shinyWidgets)
 library(shinycssloaders)
+
+## data manipulation
 library(dplyr)
+
+## tables + visualizations
 library(gt)
-library(knitr)
 library(plotly)
+
+# FUNCTIONS:
 source("format_species_names.R")
 source("format_table.R")
+
 
 # load in data (10 factors)
 com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
@@ -35,9 +43,7 @@ joined_tribal_df <- format_table(tribal_data, species_groups)
 
 joined_cd_df <- format_table(const_dem_data, species_groups)
 
-joined_reb_df <- left_join(rebuilding_data, species_groups, by = c("Species" = "speciesName"))
-joined_reb_df <- joined_reb_df %>%
-  rename_with(~gsub("_", " ", colnames(joined_reb_df)))
+joined_reb_df <- format_table(rebuilding_data, species_groups)
 
 joined_ss_df <- format_table(stock_stat_data, species_groups)
 
@@ -101,22 +107,12 @@ shinyUI(
           padding: 10px;
        }")
      ),
-     # control image dimensions (calendar page)
-     tags$style(
-       HTML("
-       .shiny-image-output img {
-          max-width: 600px;
-          max-height: 467px;
-          display: block;
-          margin: 0 auto;
-       }")
-     ),
      # format bulleted list font size  (resources page)
      tags$style(
        HTML("
        .custom-bulleted-list {
           font-size: 16px;
-     }")
+       }")
      )
    ),
    
@@ -201,81 +197,36 @@ shinyUI(
           tabItem(tabName = "methodology",
                   h1("Methodology"),
                   fluidRow(
+                    # clickable table of contents
                     box(
                       title = "Table of Contents", status = "primary",
                       solidHeader = TRUE, width = 3,
                       tags$ol(
-                        tags$li(
-                          tags$a(
-                            href = "#intro_toc", "Introduction"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#factors_toc", "Description of Factors"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#comm_imp_toc", "Commercial Importance"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#tribal_imp_toc", "Tribal Importance"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#rec_imp_toc", "Recreational Importance"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#const_dem_toc", "Constituent Demand"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#abundance_toc",
-                            "Stock Status Relative to Management Targets"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#rebuilding_toc", "Rebuilding Status"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#fishing_mort_toc",
-                            "Fishing Mortality, Relative to Overfishing Limits"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#ecosystem_toc", "Ecosystem Importance"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#new_data_toc",
-                            "Relevant New Types of Information Available"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#assessment_freq_toc", "Assessment Frequency"
-                          )
-                        ),
-                        tags$li(
-                          tags$a(
-                            href = "#future_spex_toc",
-                            "Future Limiting Harvest Specifications"
-                          )
-                        )
+                        tags$li(tags$a(href = "#introduction", "Introduction")),
+                        tags$li(tags$a(href = "#factors", "Description of Factors")),
+                        tags$li(tags$a(href = "#commercial_importance",
+                                       "Commercial Importance")),
+                        tags$li(tags$a(href = "#tribal_importance",
+                                       "Tribal Importance")),
+                        tags$li(tags$a(href = "#recreational_importance",
+                                       "Recreational Importance")),
+                        tags$li(tags$a(href = "#constituent_demand",
+                                       "Constituent Demand")),
+                        tags$li(tags$a(href = "#stock_status",
+                                       "Stock Status Relative to Management Targets")),
+                        tags$li(tags$a(href = "#rebuilding", "Rebuilding Status")),
+                        tags$li(tags$a(href = "#fishing_mortality",
+                                       "Fishing Mortality, Relative to Overfishing Limits")),
+                        tags$li(tags$a(href = "#ecosystem", "Ecosystem Importance")),
+                        tags$li(tags$a(href = "#new_information",
+                                       "Relevant New Types of Information Available")),
+                        tags$li(tags$a(href = "#assessment_frequency",
+                                       "Assessment Frequency")),
+                        tags$li(tags$a(href = "#future_spex",
+                                       "Future Limiting Harvest Specifications"))
                       )
                     ),
+                    # HTML outputs of knitted Rmd files
                     htmlOutput("intro", align = "right",
                                class = "align-right"),
                     htmlOutput("factors", align = "right",
@@ -309,6 +260,7 @@ shinyUI(
           tabItem(tabName = "overall_ranking",
                   h1("2024 Stock Assessment Prioritization Ranking"),
                   fluidRow(
+                    # overall ranking plot
                     box(title = "Overall Ranking", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         width = 12,
@@ -323,6 +275,7 @@ shinyUI(
                     ),
                   ),
                   fluidRow(
+                    # weights panel
                     box(title = "Weights", status = "warning",
                         solidHeader = TRUE, width = 12,
                         column(2, textOutput("weights_sum"), htmlOutput("warning"),
@@ -382,6 +335,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # overall ranking table
                     box(title = "Factor Summary", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         width = 12,
@@ -403,6 +357,7 @@ shinyUI(
           tabItem(tabName = "fm_page",
                   h1("Fishing Mortality"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -481,6 +436,7 @@ shinyUI(
                         br(),
                         br()
                     ),
+                    # fishing mortality table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("fm_gt_table") %>% withSpinner(),
@@ -496,6 +452,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # fishing mortality plot
                     box(title = "Fishing Mortality Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("fm_species_ranking") %>% withSpinner(),
@@ -507,6 +464,7 @@ shinyUI(
           tabItem(tabName = "com_page",
                   h1("Commercial Importance"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -580,6 +538,7 @@ shinyUI(
                         br(),
                         br()
                     ),
+                    # commercial importance table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("com_gt_table") %>% withSpinner(),
@@ -595,6 +554,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # commercial importance plot
                     box(title = "Commercial Importance Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("com_ranking") %>% withSpinner(),
@@ -606,6 +566,7 @@ shinyUI(
           tabItem(tabName = "tribal_page",
                   h1("Tribal Importance"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -678,6 +639,7 @@ shinyUI(
                         br(),
                         br()
                     ),
+                    # tribal importance table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("tribal_gt_table") %>% withSpinner(),
@@ -693,6 +655,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # tribal importance plot
                     box(title = "Tribal Importance Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("tribal_species_ranking") %>% withSpinner(),
@@ -704,6 +667,7 @@ shinyUI(
           tabItem(tabName = "rec_page",
                   h1("Recreational Importance"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -801,6 +765,7 @@ shinyUI(
                         br(),
                         br()
                     ),
+                    # recreational importance table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("rec_gt_table") %>% withSpinner(),
@@ -816,6 +781,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # recreational importance plot
                     box(title = "Recreational Importance Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE, 
                         plotlyOutput("rec_species_ranking") %>% withSpinner(),
@@ -827,6 +793,7 @@ shinyUI(
           tabItem(tabName = "cd_page",
                   h1("Constituent Demand"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -917,6 +884,7 @@ shinyUI(
                         br(),
                         br()
                     ),
+                    # constituent demand table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("cd_gt_table") %>% withSpinner(),
@@ -932,6 +900,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # constituent demand plot
                     box(title = "Constituent Demand Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("cd_species_ranking") %>% withSpinner(),
@@ -943,6 +912,7 @@ shinyUI(
           tabItem(tabName = "ss_page",
                   h1("Stock Status"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -1022,6 +992,7 @@ shinyUI(
                           can be found", a(href = "https://connect.fisheries.noaa.gov/species_quadplots/",
                                            target = "_blank", "here."))
                     ),
+                    # constituent demand table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("ss_gt_table") %>% withSpinner(),
@@ -1037,6 +1008,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # constituent demand plot
                     box(title = "Stock Status Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("ss_species_ranking") %>% withSpinner(),
@@ -1048,6 +1020,7 @@ shinyUI(
           tabItem(tabName = "rebuilding_page",
                   h1("Rebuilding"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -1110,6 +1083,7 @@ shinyUI(
                         br(),
                         br()
                     ),
+                    # rebuilding table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("reb_gt_table") %>% withSpinner(),
@@ -1125,6 +1099,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # rebuilding plot
                     box(title = "Rebuilding Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("reb_species_ranking") %>% withSpinner(),
@@ -1136,6 +1111,7 @@ shinyUI(
           tabItem(tabName = "eco_page",
                   h1("Ecosystem"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -1218,6 +1194,7 @@ shinyUI(
                         br(),
                         br()
                     ),
+                    # ecosystem table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("eco_gt_table") %>% withSpinner(),
@@ -1233,6 +1210,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # ecosystem plot
                     box(title = "Ecosystem Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("eco_species_ranking") %>% withSpinner(),
@@ -1244,6 +1222,7 @@ shinyUI(
           tabItem(tabName = "af_page",
                   h1("Assessment Frequency"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -1379,6 +1358,7 @@ shinyUI(
                         br(),
                         br()
                     ),
+                    # assessment frequency table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("af_gt_table") %>% withSpinner(),
@@ -1395,6 +1375,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # assessment frequency plot
                     box(title = "Assessment Frequency Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("af_species_ranking") %>% withSpinner(),
@@ -1406,6 +1387,7 @@ shinyUI(
           tabItem(tabName = "ni_page",
                   h1("New Information"),
                   fluidRow(
+                    # controls panel
                     box(title = "Controls", status = "warning",
                         solidHeader = TRUE, width = 3,
                         tabsetPanel(
@@ -1494,6 +1476,7 @@ shinyUI(
                         br(),
                         br()
                     ),
+                    # new information table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("ni_gt_table") %>% withSpinner(),
@@ -1509,6 +1492,7 @@ shinyUI(
                     )
                   ),
                   fluidRow(
+                    # new information plot
                     box(title = "New Information Ranking Plot", status = "primary",
                         solidHeader = TRUE, collapsible = TRUE,
                         plotlyOutput("ni_species_ranking") %>% withSpinner(),
@@ -1521,7 +1505,7 @@ shinyUI(
                   h1("2023 Stock Assessment Calendar"),
                   fluidRow(
                     box(
-                      width = 12, height = "700px",
+                      width = 12,
                       h4("Below is an annotated 2023 assessment planning calendar that
                       identifies potential weeks in which STAR panels can be scheduled.
                       Based on the expected availability of 2022 data and the time
@@ -1532,7 +1516,11 @@ shinyUI(
                       and September 2023 are available these weeks will be shaded and
                       potential STAR panel weeks will be finalized."),
                       br(),
-                      imageOutput("sa_calendar")
+                      div(
+                        img(src = "figs/calendar.png", height = "467px", width = "600px",
+                            style = "display: block; margin-left: auto; margin-right: auto;")
+                      ),
+                      br()
                     )
                   ),
           ),

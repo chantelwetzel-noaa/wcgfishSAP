@@ -89,6 +89,7 @@ new_info_data <- new_info_data[order(new_info_data$Species),]
 new_info_data$Species <- species_groups$speciesName
 
 
+# join tables + edit column names
 joined_com_df <- format_table(com_rev_data, species_groups)
 joined_com_df <- joined_com_df %>%
   arrange(Rank)
@@ -136,7 +137,7 @@ shinyServer(function(input, output, session) {
   
   # render HTML files for methodology page
   output$intro <- renderUI({
-    tags$iframe(id = "intro_toc",
+    tags$iframe(id = "introduction",
                 seamless = "seamless",
                 src = "11introduction.html",
                 width = "74%", height = 600,
@@ -144,7 +145,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$factors <- renderUI({
-    tags$iframe(id = "factors_toc",
+    tags$iframe(id = "factors",
                 seamless = "seamless",
                 src = "21factors.html",
                 width = "74%", height = 800,
@@ -152,7 +153,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$comm_importance <- renderUI({
-    tags$iframe(id = "comm_imp_toc",
+    tags$iframe(id = "commercial_importance",
                 seamless = "seamless",
                 src = "22commercial_importance.html",
                 width = "74%", height = 300,
@@ -160,7 +161,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$tribal_importance <- renderUI({
-    tags$iframe(id = "tribal_imp_toc",
+    tags$iframe(id = "tribal_importance",
                 seamless = "seamless",
                 src = "23tribal_importance.html",
                 width = "74%", height = 800,
@@ -168,7 +169,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$rec_importance <- renderUI({
-    tags$iframe(id = "rec_imp_toc",
+    tags$iframe(id = "recreational_importance",
                 seamless = "seamless",
                 src = "24recreational_importance.html",
                 width = "74%", height = 800,
@@ -176,7 +177,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$const_demand <- renderUI({
-    tags$iframe(id = "const_dem_toc",
+    tags$iframe(id = "constituent_demand",
                 seamless = "seamless",
                 src = "25constituent_demand.html",
                 width = "74%", height = 700,
@@ -184,7 +185,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$abundance <- renderUI({
-    tags$iframe(id = "abundance_toc",
+    tags$iframe(id = "stock_status",
                 seamless = "seamless",
                 src = "26abundance.html",
                 width = "74%", height = 800,
@@ -192,7 +193,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$rebuild <- renderUI({
-    tags$iframe(id = "rebuilding_toc",
+    tags$iframe(id = "rebuilding",
                 seamless = "seamless",
                 src = "27rebuild.html",
                 width = "74%", height = 500,
@@ -200,7 +201,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$fishing_mort <- renderUI({
-    tags$iframe(id = "fishing_mort_toc",
+    tags$iframe(id = "fishing_mortality",
                 seamless = "seamless",
                 src = "28fishing_mort.html",
                 width = "74%", height = 700,
@@ -208,7 +209,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$ecosystem <- renderUI({
-    tags$iframe(id = "ecosystem_toc",
+    tags$iframe(id = "ecosystem",
                 seamless = "seamless",
                 src = "29ecosystem.html",
                 width = "74%", height = 800,
@@ -216,7 +217,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$new_data <- renderUI({
-    tags$iframe(id = "new_data_toc",
+    tags$iframe(id = "new_information",
                 seamless = "seamless",
                 src = "30new_data.html",
                 width = "74%", height = 500,
@@ -224,7 +225,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$assessment_freq <- renderUI({
-    tags$iframe(id = "assessment_freq_toc",
+    tags$iframe(id = "assessment_frequency",
                 seamless = "seamless",
                 src = "31assessment_freq.html",
                 width = "74%", height = 800,
@@ -232,7 +233,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$future_spex <- renderUI({
-    tags$iframe(id = "future_spex_toc",
+    tags$iframe(id = "future_spex",
                 seamless = "seamless",
                 src = "32future_spex.html",
                 width = "74%", height = 600,
@@ -240,7 +241,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # overall ranking table
+  # create overall ranking table
   results <- data.frame(species_groups$speciesName,
                         com_rev_data$Factor_Score,
                         rec_data$Factor_Score,
@@ -273,7 +274,7 @@ shinyServer(function(input, output, session) {
     paste("Sum of weights:", sum_weights())
   })
   
-  # warning if sum is > 1.00
+  # print warning if sum is > 1.00
   output$warning <- renderText({
     if(sum_weights() != 1.00) {
       paste("<span style=\"color:red\">WARNING: Ensure all weights add up to 1.</span>")
@@ -294,7 +295,10 @@ shinyServer(function(input, output, session) {
     updateNumericInput(session, "af_weight", value = 0.18)
   }, ignoreInit = TRUE)
   
-  # function to rescale weights
+  
+  #' this function rescales all non-zero weights
+  #' @param factor_weights numeric vector that holds the 10 factor weights
+  #' @returns numeric vector that holds the rescaled 10 factor weights
   rescale_weights <- function(factor_weights) {
     # count non-zero weights
     count <- length(factor_weights[factor_weights > 0])
@@ -325,6 +329,7 @@ shinyServer(function(input, output, session) {
                                     fm_weight(), eco_weight(),
                                     ni_weight(), af_weight()))
     
+    # update factor weights
     factor_weights(rescale_weights(factor_weights()))
     updateNumericInput(session, "comm_weight", value = round(factor_weights()[1], 4))
     updateNumericInput(session, "rec_weight", value = round(factor_weights()[2], 4))
@@ -339,7 +344,7 @@ shinyServer(function(input, output, session) {
   }, ignoreInit = TRUE)
   
   
-  # create reactive dataframe (used for table + plot)
+  # create reactive dataframe (used for overall table + plot)
   overall_data <- reactive({
     # multiply factor scores with weights
     results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * comm_weight()
@@ -365,15 +370,18 @@ shinyServer(function(input, output, session) {
                           decreasing = TRUE)
     results$rank[order_totals] <- 1:nrow(results)
     
+    # order columns in table
     results <- results %>%
       select(species_groups.speciesName, rank, total,
              com_rev_data.Factor_Score:assess_freq_data.Score)
     
+    # rename columns in table
     colnames(results) <- c("Species", "Rank", "Weighted Total Score",
                            "Commercial Importance", "Recreational Importance",
                            "Tribal Importance", "Constituent Demand", "Rebuilding",
                            "Stock Status", "Fishing Mortality", "Ecosystem",
                            "New Information", "Assessment Frequency")
+    
     results
   })
   
@@ -422,6 +430,7 @@ shinyServer(function(input, output, session) {
   })
   
   # download overall ranking table
+  ## as csv
   output$overall_csv <- downloadHandler(
     filename = function() {
       paste("overall_ranking_", Sys.Date(), ".csv", sep = "")
@@ -431,6 +440,7 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  ## as excel spreadsheet
   output$overall_xlsx <- downloadHandler(
     filename = function() {
       paste("overall_ranking_", Sys.Date(), ".xlsx", sep = "")
@@ -440,6 +450,7 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  # as R object
   output$overall_rds <- downloadHandler(
     filename = function() {
       paste("overall_ranking_", Sys.Date(), ".rds", sep = "")
@@ -511,8 +522,7 @@ shinyServer(function(input, output, session) {
   })
   
 
-  # commercial revenue table
-  # create reactive dataframe
+  # create reactive dataframe (commercial importance)
   reactive_com_df <- reactive({
     # filter data down to selected species + columns
     joined_com_df <- joined_com_df[joined_com_df$`Management Group` %in% input$com_species_selector,]
@@ -522,10 +532,10 @@ shinyServer(function(input, output, session) {
     joined_com_df
   })
   
+  # commercial importance table
   output$com_gt_table <- render_gt({
     req(joined_com_df)
   
-    # create commercial revenue gt table output, display in ascending order by rank
     com_table <- reactive_com_df() %>%
       gt() %>%
       tab_header(
@@ -565,34 +575,40 @@ shinyServer(function(input, output, session) {
   })
   
   # download com ranking table
+  ## as csv
   output$com_csv <- downloadHandler(
     filename = function() {
-      paste("com_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("commercial_importance_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_com_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$com_xlsx <- downloadHandler(
     filename = function() {
-      paste("com_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("commercial_importance_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_com_df(), file = file)
     }
   )
   
+  ## as R object
   output$com_rds <- downloadHandler(
     filename = function() {
-      paste("com_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("commercial_importance_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write.csv(reactive_com_df(), file = file)
     }
   )
   
-  # create base species ranking plot
+  
+  #' function to create base species ranking plot
+  #' @param df a factor dataframe
+  #' @returns lollipop plot without labels
   create_base_plot <- function(df) {
     base_plot <- ggplot(df, aes(x = Species, y = Rank,
                                 text = paste0("Species: ", Species,
@@ -627,8 +643,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # recreational importance table
-  # create reactive dataframe
+  # create reactive dataframe (recreational importance)
   reactive_rec_df <- reactive({
     # filter data down to selected species + columns
     joined_rec_df <- joined_rec_df[joined_rec_df$`Management Group` %in% input$rec_species_selector,]
@@ -638,10 +653,10 @@ shinyServer(function(input, output, session) {
     joined_rec_df
   })
   
+  # recreational importance table
   output$rec_gt_table <- render_gt({
     req(joined_rec_df)
     
-    # create recreational gt table output, display in ascending order by rank
     rec_table <- reactive_rec_df() %>%
       gt() %>%
       tab_header(
@@ -681,27 +696,30 @@ shinyServer(function(input, output, session) {
   })
   
   # download rec ranking table
+  ## as csv
   output$rec_csv <- downloadHandler(
     filename = function() {
-      paste("rec_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("recreational_importance_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_rec_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$rec_xlsx <- downloadHandler(
     filename = function() {
-      paste("rec_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("recreational_importance_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_rec_df(), file = file)
     }
   )
   
+  ## as R object
   output$rec_rds <- downloadHandler(
     filename = function() {
-      paste("rec_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("recreational_importance_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write_rds(reactive_rec_df(), file = file)
@@ -721,8 +739,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # tribal revenue table
-  # create reactive dataframe
+  # create reactive dataframe (tribal importance)
   reactive_tribal_df <- reactive({
     # filter data down to selected species + columns
     joined_tribal_df <- joined_tribal_df[joined_tribal_df$`Management Group` %in% input$tribal_species_selector,]
@@ -732,10 +749,10 @@ shinyServer(function(input, output, session) {
     joined_tribal_df
   })
   
+  # tribal revenue table
   output$tribal_gt_table <- render_gt({
     req(joined_tribal_df)
     
-    # create tribal revenue gt table output, display in ascending order by rank
     tribal_table <- reactive_tribal_df() %>%
       gt() %>%
       tab_header(
@@ -775,27 +792,30 @@ shinyServer(function(input, output, session) {
   })
   
   # download tribal ranking table
+  ## as csv
   output$tribal_csv <- downloadHandler(
     filename = function() {
-      paste("tribal_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("tribal_importance_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_tribal_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$tribal_xlsx <- downloadHandler(
     filename = function() {
-      paste("tribal_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("tribal_importance_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_tribal_df(), file = file)
     }
   )
   
+  ## as R object
   output$tribal_rds <- downloadHandler(
     filename = function() {
-      paste("tribal_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("tribal_importance_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write_rds(reactive_tribal_df(), file = file)
@@ -815,8 +835,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # constituent demand table
-  # create reactive dataframe
+  # create reactive dataframe (constituent demand)
   reactive_cd_df <- reactive({
     # filter data down to selected species + columns
     joined_cd_df <- joined_cd_df[joined_cd_df$`Management Group` %in% input$cd_species_selector,]
@@ -826,6 +845,7 @@ shinyServer(function(input, output, session) {
     joined_cd_df
   })
   
+  # constituent demand table
   ## negative scores adjusted
   output$cd_gt_table <- render_gt({
     req(joined_cd_df)
@@ -861,27 +881,30 @@ shinyServer(function(input, output, session) {
   })
   
   # download cd ranking table
+  ## as csv
   output$cd_csv <- downloadHandler(
     filename = function() {
-      paste("cd_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("constituent_demand_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_cd_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$cd_xlsx <- downloadHandler(
     filename = function() {
-      paste("cd_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("constituent_demand_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_cd_df(), file = file)
     }
   )
   
+  ## as R object
   output$cd_rds <- downloadHandler(
     filename = function() {
-      paste("cd_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("constituent_demand_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write_rds(reactive_cd_df(), file = file)
@@ -901,8 +924,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # rebuilding table
-  # create reactive dataframe
+  # create reactive dataframe (rebuilding)
   reactive_reb_df <- reactive({
     joined_reb_df <- joined_reb_df[joined_reb_df$`Management Group` %in% input$reb_species_selector,]
     joined_reb_df <- joined_reb_df %>%
@@ -911,6 +933,7 @@ shinyServer(function(input, output, session) {
     joined_reb_df
   })
   
+  # rebuilding table
   output$reb_gt_table <- render_gt({
     req(joined_reb_df)
 
@@ -942,27 +965,30 @@ shinyServer(function(input, output, session) {
   })
   
   # download reb ranking table
+  ## as csv
   output$reb_csv <- downloadHandler(
     filename = function() {
-      paste("reb_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("rebuilding_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_reb_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$reb_xlsx <- downloadHandler(
     filename = function() {
-      paste("reb_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("rebuilding_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_reb_df(), file = file)
     }
   )
   
+  ## as R object
   output$reb_rds <- downloadHandler(
     filename = function() {
-      paste("reb_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("rebuilding_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write_rds(reactive_reb_df(), file = file)
@@ -995,8 +1021,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # stock status table
-  # create reactive dataframe
+  # create reactive dataframe (stock status)
   reactive_ss_df <- reactive({
     joined_ss_df <- joined_ss_df[joined_ss_df$`Management Group` %in% input$ss_species_selector,]
     joined_ss_df <- joined_ss_df %>%
@@ -1005,6 +1030,7 @@ shinyServer(function(input, output, session) {
     joined_ss_df  
   })
   
+  # stock status table
   output$ss_gt_table <- render_gt({
     req(joined_ss_df)
     
@@ -1054,27 +1080,30 @@ shinyServer(function(input, output, session) {
   })
   
   # download ss ranking table
+  ## as csv
   output$ss_csv <- downloadHandler(
     filename = function() {
-      paste("ss_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("stock_status_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_ss_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$ss_xlsx <- downloadHandler(
     filename = function() {
-      paste("ss_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("stock_status_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_ss_df(), file = file)
     }
   )
   
+  ## as R object
   output$ss_rds <- downloadHandler(
     filename = function() {
-      paste("ss_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("stock_status_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write_rds(reactive_ss_df(), file = file)
@@ -1109,8 +1138,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # fishing mortality table
-  # create reactive dataframe
+  # create reactive dataframe (fishing mortality)
   reactive_fm_df <- reactive({
     # filter data down to selected species + columns
     joined_fm_df <- joined_fm_df[joined_fm_df$`Management Group` %in% input$fm_species_selector,]
@@ -1120,6 +1148,7 @@ shinyServer(function(input, output, session) {
     joined_fm_df
   })
   
+  # fishing mortality table
   ## footnotes disappear if less than 2
   output$fm_gt_table <- render_gt({
     req(joined_fm_df)
@@ -1183,27 +1212,30 @@ shinyServer(function(input, output, session) {
   })
   
   # download fm ranking table
+  ## as csv
   output$fm_csv <- downloadHandler(
     filename = function() {
-      paste("fm_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("fishing_mortality_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_fm_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$fm_xlsx <- downloadHandler(
     filename = function() {
-      paste("fm_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("fishing_mortality_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_fm_df(), file = file)
     }
   )
   
+  ## as R object
   output$fm_rds <- downloadHandler(
     filename = function() {
-      paste("fm_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("fishing_mortality_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write_rds(reactive_fm_df(), file = file)
@@ -1223,8 +1255,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # ecosystem table - factor score has 3 decimals
-  # create reactive dataframe
+  # create reactive dataframe (ecosystem)
   reactive_eco_df <- reactive({
     joined_eco_df <- joined_eco_df[joined_eco_df$`Management Group` %in% input$eco_species_selector,]
     joined_eco_df <- joined_eco_df %>%
@@ -1233,6 +1264,7 @@ shinyServer(function(input, output, session) {
     joined_eco_df
   })
   
+  # ecosystem table
   output$eco_gt_table <- render_gt({
     req(joined_eco_df)
   
@@ -1272,27 +1304,30 @@ shinyServer(function(input, output, session) {
   })
   
   # download eco ranking table
+  ## as csv
   output$eco_csv <- downloadHandler(
     filename = function() {
-      paste("eco_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("ecosystem_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_eco_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$eco_xlsx <- downloadHandler(
     filename = function() {
-      paste("eco_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("ecosystem_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_eco_df(), file = file)
     }
   )
   
+  ## as R object
   output$eco_rds <- downloadHandler(
     filename = function() {
-      paste("eco_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("ecosystem_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write_rds(reactive_eco_df(), file = file)
@@ -1312,8 +1347,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # new information table
-  # create reactive dataframe
+  # create reactive dataframe (new information)
   reactive_ni_df <- reactive({
     joined_ni_df <- joined_ni_df[joined_ni_df$`Management Group` %in% input$ni_species_selector,]
     joined_ni_df <- joined_ni_df %>%
@@ -1322,6 +1356,7 @@ shinyServer(function(input, output, session) {
     joined_ni_df
   })
   
+  # new information table
   output$ni_gt_table <- render_gt({
     req(joined_ni_df)
   
@@ -1357,27 +1392,30 @@ shinyServer(function(input, output, session) {
   })
   
   # download ni ranking table
+  ## as csv
   output$ni_csv <- downloadHandler(
     filename = function() {
-      paste("ni_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("new_information_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_ni_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$ni_xlsx <- downloadHandler(
     filename = function() {
-      paste("ni_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("new_information_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_ni_df(), file = file)
     }
   )
   
+  ## as R object
   output$ni_rds <- downloadHandler(
     filename = function() {
-      paste("ni_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("new_information_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write_rds(reactive_ni_df(), file = file)
@@ -1412,8 +1450,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  # assessment frequency table
-  # create reactive dataframe
+  # create reactive dataframe (assessment frequency)
   reactive_af_df <- reactive({
     joined_af_df <- joined_af_df[joined_af_df$`Management Group` %in% input$af_species_selector,]
     joined_af_df <- joined_af_df %>%
@@ -1422,6 +1459,7 @@ shinyServer(function(input, output, session) {
     joined_af_df
   })
   
+  # assessment frequency table
   output$af_gt_table <- render_gt({
     req(joined_af_df)
   
@@ -1457,27 +1495,30 @@ shinyServer(function(input, output, session) {
   })
   
   # download af ranking table
+  ## as csv
   output$af_csv <- downloadHandler(
     filename = function() {
-      paste("af_ranking_", Sys.Date(), ".csv", sep = "")
+      paste("assessment_frequency_", Sys.Date(), ".csv", sep = "")
     },
     content = function(file) {
       write.csv(reactive_af_df(), file)
     }
   )
   
+  ## as excel spreadsheet
   output$af_xlsx <- downloadHandler(
     filename = function() {
-      paste("af_ranking_", Sys.Date(), ".xlsx", sep = "")
+      paste("assessment_frequency_", Sys.Date(), ".xlsx", sep = "")
     },
     content = function(file) {
       write.xlsx(reactive_af_df(), file = file)
     }
   )
   
+  ## as R object
   output$af_rds <- downloadHandler(
     filename = function() {
-      paste("af_ranking_", Sys.Date(), ".rds", sep = "")
+      paste("assessment_frequency_", Sys.Date(), ".rds", sep = "")
     },
     content = function(file) {
       write_rds(reactive_af_df(), file = file)
@@ -1510,14 +1551,5 @@ shinyServer(function(input, output, session) {
     
     ggplotly(af_plot, tooltip = "text")
   })
-  
-  
-  # stock assessment calendar
-  output$sa_calendar <- renderImage({
-    list(
-      src = file.path("figs/calendar.png"),
-      contentType = "image/png"
-    )
-  }, deleteFile = FALSE)
   
 })

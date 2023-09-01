@@ -33,8 +33,7 @@ sub_score <- sub_score_data %>%
     columns = "Score"
   ) %>%
   data_color(
-    columns = "Score", method = "numeric", palette = "viridis",
-    reverse = TRUE
+    columns = "Score", method = "numeric", palette = "viridis"
   )
 
 sub_score
