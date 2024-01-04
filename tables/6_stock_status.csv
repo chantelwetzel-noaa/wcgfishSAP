@@ -1,4 +1,4 @@
-Species,Rank,Score,Fraction_Unfished,Target,MSST,PSA,Trend
+Species,Rank,Factor_Score,Fraction_Unfished,Target,MSST,PSA,Trend
 arrowtooth flounder,59,1,0.87,0.25,0.125,1.21,0
 aurora rockfish,50,2,0.64,0.4,0.25,2.1,0
 bank rockfish,3,6,NA,0.4,0.25,2.02,0
