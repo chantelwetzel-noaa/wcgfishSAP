@@ -46,6 +46,7 @@ rebuilding_data <- read.csv("tables/10_rebuilding.csv", header = TRUE)
 rebuilding_data <- replace(rebuilding_data, rebuilding_data == "", NA)
 
 stock_stat_data <- read.csv("tables/6_stock_status.csv", header = TRUE)
+#stock_stat_data$Factor_Score <- stock_stat_data$Score
 
 fish_mort_data <- read.csv("tables/1_fishing_mortality.csv", header = TRUE)
 fish_mort_data$Average_OFL_Attainment <- fish_mort_data$Average_OFL_Attainment / 100
@@ -260,7 +261,7 @@ shinyServer(function(input, output, session) {
                         tribal_data$Factor_Score,
                         const_dem_data$Factor_Score,
                         rebuilding_data$Factor_Score,
-                        stock_stat_data$Score,
+                        stock_stat_data$Factor_Score,
                         fish_mort_data$Factor_Score,
                         eco_data$Factor_Score,
                         new_info_data$Factor_score,
@@ -364,7 +365,7 @@ shinyServer(function(input, output, session) {
     results$tribal_data.Factor_Score <- results$tribal_data.Factor_Score * tribal_weight()
     results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * cd_weight()
     results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * reb_weight()
-    results$stock_stat_data.Score <- results$stock_stat_data.Score * ss_weight()
+    results$stock_stat_data.Factor_Score <- results$stock_stat_data.Factor_Score * ss_weight()
     results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * fm_weight()
     results$eco_data.Factor_Score <- results$eco_data.Factor_Score * eco_weight()
     results$new_info_data.Factor_score <- results$new_info_data.Factor_score * ni_weight()
@@ -1130,7 +1131,7 @@ shinyServer(function(input, output, session) {
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
-                                                      round(Score, digits = 2),
+                                                      round(`Factor Score`, digits = 2),
                                                       "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),

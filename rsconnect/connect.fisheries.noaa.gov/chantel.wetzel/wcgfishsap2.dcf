@@ -1,0 +1,12 @@
+name: wcgfishsap2
+title: wcgfishSAP
+username: chantel.wetzel
+account: chantel.wetzel
+server: connect.fisheries.noaa.gov
+hostUrl: https://connect.fisheries.noaa.gov/__api__
+appId: 253
+bundleId: 1073
+url: https://connect.fisheries.noaa.gov/content/36241dff-ffe0-4f23-8dfa-c87edf1029fa/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
