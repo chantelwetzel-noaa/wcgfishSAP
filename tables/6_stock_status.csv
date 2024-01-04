@@ -1,0 +1,66 @@
+Species,Rank,Score,Fraction_Unfished,Target,MSST,PSA,Trend
+arrowtooth flounder,59,1,0.87,0.25,0.125,1.21,0
+aurora rockfish,50,2,0.64,0.4,0.25,2.1,0
+bank rockfish,3,6,NA,0.4,0.25,2.02,0
+big skate,50,2,0.791966061,0.4,0.25,1.99,0
+black rockfish,14,4,0.423952437,0.4,0.25,1.94,0
+blackgill rockfish,14,4,0.39,0.4,0.25,2.08,0
+blue and deacon rockfish,14,4,0.424731869,0.4,0.25,2.01,0
+bocaccio,31,3,0.49,0.4,0.25,1.93,0
+brown rockfish,14,4,0.43,0.4,0.25,1.99,0
+cabezon,31,3,0.528438127,0.4,0.25,1.48,0
+California scorpionfish,31,3,0.543241014,0.4,0.25,1.41,0
+canary rockfish,12,5,0.3507304,0.4,0.25,2.01,1
+chilipepper,50,2,0.69,0.4,0.25,1.35,0
+China rockfish,31,3,0.46,0.4,0.25,2.23,0
+copper rockfish,14,4,0.387359353,0.4,0.25,2.27,1
+cowcod,31,3,0.571400205,0.4,0.25,2.13,0
+curlfin sole,31,3,NA,0.25,0.125,1.23,0
+darkblotched rockfish,14,4,0.4,0.4,0.25,1.92,0
+Dover sole,59,1,0.789148842,0.25,0.125,1.54,0
+English sole,59,1,0.88,0.25,0.125,1.19,0
+flag rockfish,14,4,NA,0.4,0.25,1.97,0
+flathead sole,31,3,NA,0.25,0.125,1.03,0
+gopher and black and yellow rockfish,14,4,0.438168278,0.4,0.25,1.73,0
+grass rockfish,14,4,NA,0.4,0.25,1.89,0
+greenspotted rockfish,12,5,0.35,0.4,0.25,1.98,0
+greenstriped rockfish,59,1,0.81,0.4,0.25,1.88,0
+honeycomb rockfish,14,4,NA,0.4,0.25,1.97,0
+kelp greenling,59,1,0.81,0.4,0.25,1.56,0
+kelp rockfish,31,3,NA,0.4,0.25,1.59,0
+leopard shark,3,6,NA,0.4,0.25,2,0
+lingcod,31,3,0.491365352,0.4,0.25,1.55,0
+longnose skate,31,3,0.565009304,0.4,0.25,1.68,0
+longspine thornyhead,50,2,0.75,0.4,0.25,1.53,0
+olive rockfish,14,4,NA,0.4,0.25,1.87,0
+Pacific cod,31,3,NA,0.4,0.25,1.34,0
+Pacific ocean perch,50,2,0.766475497,0.4,0.25,1.69,0
+Pacific sanddab,31,3,NA,0.25,0.125,1.25,0
+Pacific spiny dogfish,14,4,0.417965668,0.4,0.25,2.13,0
+petrale sole,31,3,0.33551743,0.25,0.125,1.94,0
+quillback rockfish,1,7,0.256519475,0.4,0.25,2.22,-1
+redbanded rockfish,3,6,NA,0.4,0.25,2.02,0
+redstripe rockfish,3,6,NA,0.4,0.25,2.16,0
+rex sole,59,1,0.761236541,0.25,0.125,1.28,0
+rock sole,31,3,NA,0.25,0.125,1.42,0
+rosethorn rockfish,3,6,NA,0.4,0.25,2.09,0
+rosy rockfish,14,4,NA,0.4,0.25,1.89,0
+rougheye and black spotted rockfish,31,3,0.47,0.4,0.25,2.27,0
+sablefish,50,2,0.630013831,0.4,0.25,1.64,0
+sand sole,31,3,NA,0.25,0.125,1.23,0
+sharpchin rockfish,50,2,0.68,0.4,0.25,2.05,0
+shortraker rockfish,3,6,NA,0.4,0.25,2.25,0
+shortspine thornyhead,14,4,0.393620317,0.4,0.25,1.8,-1
+silvergray rockfish,3,6,NA,0.4,0.25,2.2,0
+speckled rockfish,3,6,NA,0.4,0.25,2.1,0
+splitnose rockfish,50,2,0.66,0.4,0.25,1.82,0
+squarespot rockfish,14,4,0.374634922,0.4,0.25,1.86,-1
+starry flounder,31,3,NA,0.4,0.25,1.02,0
+starry rockfish,3,6,NA,0.4,0.25,2.09,0
+stripetail rockfish,14,4,NA,0.4,0.25,1.8,0
+treefish,31,3,NA,0.4,0.25,1.73,0
+vermilion and sunset rockfish,31,3,0.456386721,0.4,0.25,2.05,0
+widow rockfish,59,1,0.919478379,0.4,0.25,2.05,0
+yelloweye rockfish,1,7,0.283681072,0.4,0.25,2,-1
+yellowmouth rockfish,14,4,NA,0.4,0.25,1.96,0
+yellowtail rockfish,50,2,0.75205548,0.4,0.25,1.88,0
