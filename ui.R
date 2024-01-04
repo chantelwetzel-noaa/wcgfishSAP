@@ -1242,7 +1242,7 @@ shinyUI(
                             br(),
                             checkboxGroupInput("af_columns", "Select columns to display:",
                                                choices = af_cols,
-                                               selected = c("Rank", "Factor Score",
+                                               selected = c("Rank", "Score",
                                                             "Last Assessment Year",
                                                             "Target Assessment Frequency")
                             )
@@ -1522,18 +1522,18 @@ shinyUI(
           
           # stock assessment calendar page
           tabItem(tabName = "calendar",
-                  h1("2023 Stock Assessment Calendar"),
+                  h1("2025 Stock Assessment Calendar"),
                   fluidRow(
                     box(
                       width = 12,
-                      h4("Below is an annotated 2023 assessment planning calendar that
+                      h4("Below is an annotated 2025 assessment planning calendar that
                       identifies potential weeks in which STAR panels can be scheduled.
-                      Based on the expected availability of 2022 data and the time
+                      Based on the expected availability of 2024 data and the time
                       needed for model development and documentation, it is unlikely
                       that any full assessments could be reviewed before May. As of
-                      January 2022, the June and September Pacific Fishery Management Council
+                      January 2024, the June and September Pacific Fishery Management Council
                       meeting date have not been announced. Once meeting dates for June
-                      and September 2023 are available these weeks will be shaded and
+                      and September 2025 are available these weeks will be shaded and
                       potential STAR panel weeks will be finalized."),
                       br(),
                       div(
