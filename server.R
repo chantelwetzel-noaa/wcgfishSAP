@@ -27,37 +27,40 @@ library(openxlsx)
 ## const_demand, assessment_frequency, ecosystem, new_information,
 ## rebuilding use sentence case for both species names
 
-com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
+com_rev_data <- read.csv("tables/2_commercial_revenue.csv", header = TRUE)
 
-rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
+rec_data <- read.csv("tables/4_recreational_importance.csv", header = TRUE)
 
-tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
+tribal_data <- read.csv("tables/3_tribal_revenue.csv", header = TRUE)
 
-const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
-  mutate_at(c("Commercial_Importance", "Recreational_Importance",
-              "Landings_Constricted"), ~replace_na(., 0))
+const_dem_data <- read.csv("tables/8_constituent_demand.csv", header = TRUE)
+#const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
+#  mutate_at(c("Commercial_Importance", "Recreational_Importance",
+#              "Landings_Constricted"), ~replace_na(., 0))
 # adjust negative scores
-cd_adj <- -min(const_dem_data[, 3])
-const_dem_data$Factor_Score <- const_dem_data[, 3] + cd_adj
+#cd_adj <- -min(const_dem_data[, 3])
+#const_dem_data$Factor_Score <- const_dem_data[, 3] + cd_adj
 
 ## table has no rank column
-rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
+rebuilding_data <- read.csv("tables/10_rebuilding.csv", header = TRUE)
 rebuilding_data <- replace(rebuilding_data, rebuilding_data == "", NA)
 
-stock_stat_data <- read.csv("tables/stock_status.csv", header = TRUE)
+stock_stat_data <- read.csv("tables/6_stock_status.csv", header = TRUE)
 
-fish_mort_data <- read.csv("tables/fishing_mortality.csv", header = TRUE)
+fish_mort_data <- read.csv("tables/1_fishing_mortality.csv", header = TRUE)
+fish_mort_data$Average_OFL_Attainment <- fish_mort_data$Average_OFL_Attainment / 100
+fish_mort_data$Average_ACL_Attainment <- fish_mort_data$Average_ACL_Attainment / 100
 
-eco_data <- read.csv("tables/ecosystem.csv", header = TRUE)
+eco_data <- read.csv("tables/5_ecosystem.csv", header = TRUE)
 
-new_info_data <- read.csv("tables/new_information.csv", header = TRUE)
+new_info_data <- read.csv("tables/9_new_information.csv", header = TRUE)
 new_info_data <- replace(new_info_data, new_info_data == "", NA)
 
 ## rank column at end of table
-assess_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
+assess_freq_data <- read.csv("tables/7_assessment_frequency.csv", header = TRUE)
 # adjust negative scores
-af_adj <- -min(assess_freq_data[, 3])
-assess_freq_data$Score <- assess_freq_data[, 3] + af_adj
+#af_adj <- -min(assess_freq_data[, 3])
+#assess_freq_data$Score <- assess_freq_data[, 3] + af_adj
 
 
 ## load in species management groups, format cryptic species names
@@ -66,16 +69,25 @@ species_groups <- format_species_names(x = species_groups)
 colnames(species_groups)[2] <- "Management Group"
 
 
-# replace species column
+# order species alphabetically, replace species column
+com_rev_data <- com_rev_data[order(com_rev_data$Species), ]
 com_rev_data$Species <- species_groups$speciesName
+
+tribal_data <- tribal_data[order(tribal_data$Species), ]
 tribal_data$Species <- species_groups$speciesName
+
+rebuilding_data <- rebuilding_data[order(rebuilding_data$Species), ]
 rebuilding_data$Species <- species_groups$speciesName
+
+stock_stat_data <- stock_stat_data[order(stock_stat_data$Species), ]
 stock_stat_data$Species <- species_groups$speciesName
+
+eco_data <- eco_data[order(eco_data$Species), ]
 eco_data$Species <- species_groups$speciesName
+
+assess_freq_data <- assess_freq_data[order(assess_freq_data$Species), ]
 assess_freq_data$Species <- species_groups$speciesName
 
-
-# order species alphabetically, replace species column
 rec_data <- rec_data[order(rec_data$Species),]
 rec_data$Species <- species_groups$speciesName
 
@@ -251,7 +263,7 @@ shinyServer(function(input, output, session) {
                         stock_stat_data$Score,
                         fish_mort_data$Factor_Score,
                         eco_data$Factor_Score,
-                        new_info_data$Factor_score,
+                        new_info_data$Factor_Score,
                         assess_freq_data$Score)
   
   # add factor weights
@@ -349,13 +361,13 @@ shinyServer(function(input, output, session) {
     # multiply factor scores with weights
     results$com_rev_data.Factor_Score <- results$com_rev_data.Factor_Score * comm_weight()
     results$rec_data.Factor_Score <- results$rec_data.Factor_Score * rec_weight()
-    results$tribal_data.Factor_Score <- results$rec_data.Factor_Score * tribal_weight()
+    results$tribal_data.Factor_Score <- results$tribal_data.Factor_Score * tribal_weight()
     results$const_dem_data.Factor_Score <- results$const_dem_data.Factor_Score * cd_weight()
     results$rebuilding_data.Factor_Score <- results$rebuilding_data.Factor_Score * reb_weight()
     results$stock_stat_data.Score <- results$stock_stat_data.Score * ss_weight()
     results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * fm_weight()
     results$eco_data.Factor_Score <- results$eco_data.Factor_Score * eco_weight()
-    results$new_info_data.Factor_score <- results$new_info_data.Factor_score * ni_weight()
+    results$new_info_data.Factor_Score <- results$new_info_data.Factor_Score * ni_weight()
     results$assess_freq_data.Score <- results$assess_freq_data.Score * af_weight()
     
     # create column with weighted sum
@@ -1430,7 +1442,7 @@ shinyServer(function(input, output, session) {
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
-                                                      round(`Factor score`, digits = 2),
+                                                      round(`Factor Score`, digits = 2),
                                                       "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
