@@ -55,7 +55,7 @@ joined_ni_df <- format_table(new_info_data, species_groups)
 
 joined_af_df <- format_table(ass_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
-  select(Species, Rank, `Factor Score`, `Recruit Variation`:`Management Group`)
+  select(Species, Rank, Factor Score, `Recruit Variation`:`Management Group`)
 
 # freezing species column when selecting
 com_cols <- colnames(joined_com_df)[colnames(joined_com_df) != "Species"]

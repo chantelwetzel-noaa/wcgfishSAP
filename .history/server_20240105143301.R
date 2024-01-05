@@ -57,7 +57,7 @@ new_info_data <- replace(new_info_data, new_info_data == "", NA)
 assess_freq_data <- read.csv("tables/assessment_frequency.csv", header = TRUE)
 # adjust negative scores
 af_adj <- -min(assess_freq_data[, 3])
-assess_freq_data$Factor_Score <- assess_freq_data[, 3] + af_adj
+assess_freq_data$Score <- assess_freq_data[, 3] + af_adj
 
 
 ## load in species management groups, format cryptic species names
@@ -129,7 +129,7 @@ joined_ni_df <- joined_ni_df %>%
 joined_af_df <- format_table(assess_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
   arrange(Rank) %>%
-  select(Species, Rank, `Factor Score`, `Recruit Variation`:`Management Group`)
+  select(Species, Rank, Score, `Recruit Variation`:`Management Group`)
 
 
 # define server logic to display user inputs
@@ -252,7 +252,7 @@ shinyServer(function(input, output, session) {
                         fish_mort_data$Factor_Score,
                         eco_data$Factor_Score,
                         new_info_data$Factor_score,
-                        assess_freq_data$Factor_Score)
+                        assess_freq_data$Score)
   
   # add factor weights
   comm_weight <- reactive(input$comm_weight)
@@ -356,7 +356,7 @@ shinyServer(function(input, output, session) {
     results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * fm_weight()
     results$eco_data.Factor_Score <- results$eco_data.Factor_Score * eco_weight()
     results$new_info_data.Factor_score <- results$new_info_data.Factor_score * ni_weight()
-    results$assess_freq_data.Factor_Score <- results$assess_freq_data.Factor_Score * af_weight()
+    results$assess_freq_data.Score <- results$assess_freq_data.Score * af_weight()
     
     # create column with weighted sum
     results$total <- rowSums(results[2:11])
@@ -373,7 +373,7 @@ shinyServer(function(input, output, session) {
     # order columns in table
     results <- results %>%
       select(species_groups.speciesName, rank, total,
-             com_rev_data.Factor_Score:assess_freq_data.Factor_Score)
+             com_rev_data.Factor_Score:assess_freq_data.Score)
     
     # rename columns in table
     colnames(results) <- c("Species", "Rank", "Weighted Total Score",
@@ -1533,7 +1533,7 @@ shinyServer(function(input, output, session) {
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
-                                                      round(`Factor Score`, digits = 2),
+                                                      round(Score, digits = 2),
                                                       "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),

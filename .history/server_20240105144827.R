@@ -21,7 +21,7 @@ library(rmarkdown)
 library(readr)
 library(openxlsx)
 
-
+browser()
 # load in data
 ## SPELLING INCONSISTENCIES:
 ## const_demand, assessment_frequency, ecosystem, new_information,
@@ -1533,7 +1533,7 @@ shinyServer(function(input, output, session) {
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
-                                                      round(`Factor Score`, digits = 2),
+                                                      round(`Factor score`, digits = 2),
                                                       "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),

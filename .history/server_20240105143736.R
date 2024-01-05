@@ -129,7 +129,7 @@ joined_ni_df <- joined_ni_df %>%
 joined_af_df <- format_table(assess_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
   arrange(Rank) %>%
-  select(Species, Rank, `Factor Score`, `Recruit Variation`:`Management Group`)
+  select(Species, Rank, Factor Score, `Recruit Variation`:`Management Group`)
 
 
 # define server logic to display user inputs
@@ -373,7 +373,7 @@ shinyServer(function(input, output, session) {
     # order columns in table
     results <- results %>%
       select(species_groups.speciesName, rank, total,
-             com_rev_data.Factor_Score:assess_freq_data.Factor_Score)
+             com_rev_data.Factor_Score:assess_freq_data.Score)
     
     # rename columns in table
     colnames(results) <- c("Species", "Rank", "Weighted Total Score",
@@ -1533,7 +1533,7 @@ shinyServer(function(input, output, session) {
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
-                                                      round(`Factor Score`, digits = 2),
+                                                      round(Score, digits = 2),
                                                       "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),

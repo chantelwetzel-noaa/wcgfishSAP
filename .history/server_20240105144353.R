@@ -129,7 +129,7 @@ joined_ni_df <- joined_ni_df %>%
 joined_af_df <- format_table(assess_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
   arrange(Rank) %>%
-  select(Species, Rank, `Factor Score`, `Recruit Variation`:`Management Group`)
+  select(Species, Rank, Factor Score, `Recruit Variation`:`Management Group`)
 
 
 # define server logic to display user inputs
@@ -459,7 +459,7 @@ shinyServer(function(input, output, session) {
       write_rds(overall_data(), file = file)
     }
   )
-
+browser()
   # overall ranking plot
   output$overall_ranking <- renderPlotly({
     req(overall_data())
@@ -1533,7 +1533,7 @@ shinyServer(function(input, output, session) {
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
-                                                      round(`Factor Score`, digits = 2),
+                                                      round(`Factor score`, digits = 2),
                                                       "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),

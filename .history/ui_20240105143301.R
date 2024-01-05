@@ -55,7 +55,7 @@ joined_ni_df <- format_table(new_info_data, species_groups)
 
 joined_af_df <- format_table(ass_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
-  select(Species, Rank, `Factor Score`, `Recruit Variation`:`Management Group`)
+  select(Species, Rank, Score, `Recruit Variation`:`Management Group`)
 
 # freezing species column when selecting
 com_cols <- colnames(joined_com_df)[colnames(joined_com_df) != "Species"]
@@ -1231,7 +1231,7 @@ shinyUI(
                             br(),
                             checkboxGroupInput("af_columns", "Select columns to display:",
                                                choices = af_cols,
-                                               selected = c("Factor Score",
+                                               selected = c("Score",
                                                             "Last Assessment Year",
                                                             "Target Assessment Frequency")
                             )
@@ -1241,7 +1241,7 @@ shinyUI(
                             br(),
                             checkboxGroupInput("af_colors", "Select columns to display:",
                                                choices = af_cols,
-                                               selected = c("Factor Score")
+                                               selected = c("Score")
                             )
                           ),
                           tabPanel(

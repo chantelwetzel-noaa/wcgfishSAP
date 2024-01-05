@@ -1,4 +1,4 @@
-Species,Rank,Score,Recruit_Variation,Mean_Age,Transfom_Mean_Age,Recruit_Adjustment,Fishery_Importance_Adjustment,Ecosystem_Importance_Adjustment,Target_Assessment_Frequency,Last_Assessment_Year,Years_Since_Assessment,Years_Past_Target_Assessment_Frequency,Beyond_Assessment_Adjustment,Greater_Than_10_Years,Less_Than_6_Years_Update,Greater_Than_Target_Assessment_Frequency
+Species,Rank,Factor_Score,Recruit_Variation,Mean_Age,Transfom_Mean_Age,Recruit_Adjustment,Fishery_Importance_Adjustment,Ecosystem_Importance_Adjustment,Target_Assessment_Frequency,Last_Assessment_Year,Years_Since_Assessment,Years_Past_Target_Assessment_Frequency,Beyond_Assessment_Adjustment,Greater_Than_10_Years,Less_Than_6_Years_Update,Greater_Than_Target_Assessment_Frequency
 Arrowtooth flounder,37,2,0.8,8.05,6.895945697,0,1,-1,6,2017,6,0,0,0,0,1
 Aurora rockfish,39,1,0.5,31.13,11.52920773,0,0,1,10,2013,10,0,0,0,0,1
 Bank rockfish,4,6,NA,NA,NA,0,1,0,NA,NA,NA,4,1,NA,0,NA
