@@ -5,8 +5,8 @@ account: chantel.wetzel
 server: connect.fisheries.noaa.gov
 hostUrl: https://connect.fisheries.noaa.gov/__api__
 appId: 214
-bundleId: 1075
-url: https://connect.fisheries.noaa.gov/wcgroundfish_SA_prioritization/
+bundleId: 1079
+url: https://connect.fisheries.noaa.gov/pfmc-stock-assessment-prioritization/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
