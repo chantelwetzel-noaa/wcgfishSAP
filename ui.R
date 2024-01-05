@@ -1537,7 +1537,7 @@ shinyUI(
                       potential STAR panel weeks will be finalized."),
                       br(),
                       div(
-                        img(src = "figs/calendar.png", height = "467px", width = "600px",
+                        img(src = "figs/calendar.png", height = "800px", width = "800px",
                             style = "display: block; margin-left: auto; margin-right: auto;")
                       ),
                       br()
