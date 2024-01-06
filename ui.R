@@ -1242,7 +1242,7 @@ shinyUI(
                             br(),
                             checkboxGroupInput("af_columns", "Select columns to display:",
                                                choices = af_cols,
-                                               selected = c("Rank", "Score",
+                                               selected = c("Rank", "Factor Score",
                                                             "Last Assessment Year",
                                                             "Target Assessment Frequency")
                             )

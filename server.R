@@ -264,7 +264,7 @@ shinyServer(function(input, output, session) {
                         stock_stat_data$Factor_Score,
                         fish_mort_data$Factor_Score,
                         eco_data$Factor_Score,
-                        new_info_data$Factor_score,
+                        new_info_data$Factor_Score,
                         assess_freq_data$Factor_Score)
   
   # add factor weights
@@ -368,7 +368,7 @@ shinyServer(function(input, output, session) {
     results$stock_stat_data.Factor_Score <- results$stock_stat_data.Factor_Score * ss_weight()
     results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * fm_weight()
     results$eco_data.Factor_Score <- results$eco_data.Factor_Score * eco_weight()
-    results$new_info_data.Factor_score <- results$new_info_data.Factor_score * ni_weight()
+    results$new_info_data.Factor_Score <- results$new_info_data.Factor_Score * ni_weight()
     results$assess_freq_data.Factor_Score <- results$assess_freq_data.Factor_Score * af_weight()
     
     # create column with weighted sum
@@ -1486,7 +1486,7 @@ shinyServer(function(input, output, session) {
       if(i %in% input$af_columns) {
         if(i == "Score") {
           af_table <- af_table %>%
-            data_color(columns = Score, method = "numeric", palette = "viridis")
+            data_color(columns = `Factor Score`, method = "numeric", palette = "viridis")
         } else if(i == "Last Assessment Year") {
           af_table <- af_table %>%
             data_color(columns = `Last Assessment Year`, method = "numeric", palette = "viridis",
