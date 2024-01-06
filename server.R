@@ -142,7 +142,7 @@ joined_ni_df <- joined_ni_df %>%
 joined_af_df <- format_table(assess_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
   arrange(Rank) %>%
-  select(Species, Rank, Score, `Recruit Variation`:`Management Group`)
+  select(Species, Rank, `Factor Score`, `Recruit Variation`:`Management Group`)
 
 
 # define server logic to display user inputs
@@ -265,7 +265,7 @@ shinyServer(function(input, output, session) {
                         fish_mort_data$Factor_Score,
                         eco_data$Factor_Score,
                         new_info_data$Factor_Score,
-                        assess_freq_data$Score)
+                        assess_freq_data$Factor_Score)
   
   # add factor weights
   comm_weight <- reactive(input$comm_weight)
@@ -369,7 +369,7 @@ shinyServer(function(input, output, session) {
     results$fish_mort_data.Factor_Score <- results$fish_mort_data.Factor_Score * fm_weight()
     results$eco_data.Factor_Score <- results$eco_data.Factor_Score * eco_weight()
     results$new_info_data.Factor_Score <- results$new_info_data.Factor_Score * ni_weight()
-    results$assess_freq_data.Score <- results$assess_freq_data.Score * af_weight()
+    results$assess_freq_data.Factor_Score <- results$assess_freq_data.Factor_Score * af_weight()
     
     # create column with weighted sum
     results$total <- rowSums(results[2:11])
@@ -386,7 +386,7 @@ shinyServer(function(input, output, session) {
     # order columns in table
     results <- results %>%
       select(species_groups.speciesName, rank, total,
-             com_rev_data.Factor_Score:assess_freq_data.Score)
+             com_rev_data.Factor_Score:assess_freq_data.Factor_Score)
     
     # rename columns in table
     colnames(results) <- c("Species", "Rank", "Weighted Total Score",
@@ -1486,7 +1486,7 @@ shinyServer(function(input, output, session) {
       if(i %in% input$af_columns) {
         if(i == "Score") {
           af_table <- af_table %>%
-            data_color(columns = Score, method = "numeric", palette = "viridis")
+            data_color(columns = `Factor Score`, method = "numeric", palette = "viridis")
         } else if(i == "Last Assessment Year") {
           af_table <- af_table %>%
             data_color(columns = `Last Assessment Year`, method = "numeric", palette = "viridis",
@@ -1546,7 +1546,7 @@ shinyServer(function(input, output, session) {
                                         text = paste0("Species: ", Species,
                                                       "\nRank: ", Rank,
                                                       "\nFactor Score: ",
-                                                      round(Score, digits = 2),
+                                                      round(`Factor Score`, digits = 2),
                                                       "\nManagement Group: ", `Management Group`))
       ) +
       geom_segment(aes(x = Species, xend = Species, y = Rank, yend = 65),
