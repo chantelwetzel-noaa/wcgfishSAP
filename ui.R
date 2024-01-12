@@ -61,7 +61,7 @@ joined_ni_df <- format_table(new_info_data, species_groups)
 
 joined_af_df <- format_table(ass_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
-  select(Species, Rank, `Factor Score`, `Recruit Variation`:`Management Group`)
+  select(Species, Rank, `Factor Score`, `Recruitment Variation`:`Management Group`)
 
 # freezing species column when selecting
 com_cols <- colnames(joined_com_df)[colnames(joined_com_df) != "Species"]
@@ -405,7 +405,7 @@ shinyUI(
                                   OFL-contribution for species managed within a complex.
                                   Values range between 0-10."
                                 ),
-                                p(strong("Average Removals:"),
+                                p(strong("Average Catches:"),
                                   "The average catches in metric tons across a range of recent years.
                                   Source: GEMM."
                                 ),
@@ -505,13 +505,12 @@ shinyUI(
                                   "Denotes the scaled factor score for each species.
                                   Calculated based on the initial factor score standardized
                                   to the maximum factor score and scaled to range between
-                                  0-10☺."
+                                  0-10."
                                 ),
-                                #p(strong("Interim Value:"),
-                                #  "Unscaled factor score based on the coastwide revenue by species
-                                #  exponentiated by a value of 0.18 to account for highly variable
-                                #  coastwide revenues by species."
-                                #),
+                                p(strong("Assessed Last Cycle:"),
+                                  "Penalty applied to any species assessed in the most recent 
+                                  assessment cycle. Values are either -2 or 0."
+                                ),
                                 p(strong("Revenue:"),
                                   "The summed inflation adjusted ex-vessel revenue across states
                                   by species across a range of years. Source: PacFIN."
@@ -609,6 +608,10 @@ shinyUI(
                                   "The sum of the subsistence score plus the initial factor score.
                                   Values range between 0-10."
                                 ),
+                                p(strong("Assessed Last Cycle:"),
+                                  "Penalty applied to any species assessed in the most recent 
+                                  assessment cycle. Values are either -2 or 0."
+                                ),
                                 p(strong("Tribal Score:"),
                                   "A pre-specified relative importance weight by species to the
                                   tribal fishery. Values range between 0-3.0."
@@ -698,6 +701,10 @@ shinyUI(
                                   "Denotes the scaled initial factor score for each species.
                                   Calculated based on the initial factor score standardized to the
                                   maximum initial factor score and scaled to range between 0-10."
+                                ),
+                                p(strong("Assessed Last Cycle:"),
+                                  "Penalty applied to any species assessed in the most recent 
+                                  assessment cycle. Values are either -2 or 0."
                                 ),
                                 p(strong("Pseudo Revenue Coastwide:"),
                                   "The sum of the state-specific pseudo revenues for each species."
@@ -801,7 +808,8 @@ shinyUI(
                                                choices = cd_cols,
                                                selected = c("Rank", "Factor Score",
                                                             "Choke Stock Score",
-                                                            "Projected ACL Attainment")
+                                                            "Projected ACL Attainment",
+                                                            "Management Group")
                             )
                           ),
                           tabPanel(
@@ -820,10 +828,10 @@ shinyUI(
                                   "Denotes the rank of a fish species based on this factor."
                                 ),
                                 p(strong("Factor Score:"),
-                                  "Denotes the scaled initial factor score for each species.
-                                  Calculated based on the initial factor score standardized to the
-                                  maximum initial factor score and scaled to range between 12,
-                                  the maximum score, and 0, the minimum score."
+                                  "Denotes the scaled factor score for each species.
+                                  The factor score is the sum of the choke stock score,
+                                  commercial importance score, recreational importance score,
+                                  and projected future attainment. Values range from 0 to 10."
                                 ),
                                 p(strong("Choke Stock Score:"),
                                   "Indicates species where ACLs may result in constraints on
@@ -833,17 +841,18 @@ shinyUI(
                                 ),
                                 p(strong("Commercial Importance Score:"),
                                   "Species with state-specific commercial importance that are not
-                                  reflected in the coastwide commercial factor. Values range
+                                  reflected in the coastwide commercial importance factor. Values range
                                   between 0-2."
                                 ),
                                 p(strong("Recreational Importance Score:"),
                                   "Species with state-specific recreational importance that are not
-                                  reflected in the coastwide recreational factor. Values range
+                                  reflected in the coastwide recreational importance factor. Values range
                                   between 0-2."
                                 ),
                                 p(strong("Projected ACL Attainment:"),
                                   "Percent of projected attainment given current average catches compared 
-                                  to future ACLs. "
+                                  to future ACLs. The average catches are equal to those using in
+                                  the fishing mortality factor."
                                 ),
                                 p(strong("Management Group:"),
                                   "Management group associated with a species within the fishery
@@ -1017,7 +1026,7 @@ shinyUI(
                             br(),
                             checkboxGroupInput("reb_columns", "Select columns to display:",
                                                choices = reb_cols,
-                                               selected = c("Factor Score",
+                                               selected = c("Rank", "Factor Score",
                                                             "Rebuilding Target Year")
                             )
                           ),
@@ -1261,39 +1270,35 @@ shinyUI(
                                   "The estimated mean maximum age based on the previous assessment 
                                   or literture."
                                 ),
-                                #p(strong("Transformed Mean Age:"),
-                                #  "The mean age in the catch by species transformed to limit
-                                #  variations across species where the transformed mean age is
-                                #  calculated as \\( (20 * \\bar{A}_{S})^{0.38} \\)  where \\( \\bar{A}_{S} \\)
-                                #  is the mean age in the catch by species \\( s \\)."
-                                #),
                                 p(strong("Recruitment Adjustment:"),
-                                  "Values ranging between -1 to 1 based upon the recruitment variation
+                                  "Values ranging between -0.2 to 0.2 based upon the recruitment variation
                                   where species with high recruitment variation (>0.9) are assigned a
-                                  value of -1, low recruitment variation (<0.3) are assigned a value
-                                  of 1, and all other species assigned a value of 0."
+                                  value of -0.2, low recruitment variation (<0.3) are assigned a value
+                                  of 0.2, and all other species assigned a value of 0."
                                 ),
                                 p(strong("Fishery Importance Adjustment:"),
-                                  "Values ranging between -1 to 1 based on the importance by species
-                                  where species in the top third ranking are assigned a value of -1,
-                                  bottom third ranking are assigned a value of 1, and all other
+                                  "Values ranging between -0.2 to 0.2 based on the importance by species
+                                  where species in the top third ranking are assigned a value of -0.2,
+                                  bottom third ranking are assigned a value of 0.2, and all other
                                   species assigned a value of 0."
                                 ),
                                 p(strong("Ecosystem Importance Adjustment:"),
-                                  "Values ranging between -1 to 1 based on the ecosystem importance
+                                  "Values ranging between -0.2 to 0.2 based on the ecosystem importance
                                   by species where species in the top third ranking are assigned a
-                                  value of -1, bottom third ranking are assigned a value of 1, and
+                                  value of -0.2, bottom third ranking are assigned a value of 0.2, and
                                   all other species assigned a value of 0."
                                 ),
+                                p(strong("Total Adjustment:"),
+                                  "The sum of the recruitment, ecosystem, and fishery importance 
+                                  adjustments."
+                                ),
+                                p(strong("Adjusted Maximum Age:"),
+                                  "The maximum age adjusted by the total adjustments where the
+                                  adjusted maximum age is equal to maximum age multiplied by 1 -
+                                  the total adjustment."
+                                ),
                                 p(strong("Target Assessment Frequency:"),
-                                  "The target assessment frequency in years based on the transformed
-                                  mean age in the catch plus the sum of the adjustments by recruitment
-                                  variation, fishery importance, and ecosystem importance capped to
-                                  be equal to 10 or less. This adjusted mean catch age was then rounded
-                                  to the nearest factor of 2 to align with the PFMC 2-year assessment
-                                  cycle and any species with a calculated assessment frequency less
-                                  than 4 years or species yet to be assessed were adjusted to be
-                                  set equal to 4."
+                                  "The target assessment frequency in years."
                                 ),
                                 p(strong("Last Assessment Year:"),
                                   "The year the most recent benchmark, update, or data-moderate

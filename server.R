@@ -23,10 +23,6 @@ library(openxlsx)
 
 
 # load in data
-## SPELLING INCONSISTENCIES:
-## const_demand, assessment_frequency, ecosystem, new_information,
-## rebuilding use sentence case for both species names
-
 com_rev_data <- read.csv("tables/2_commercial_revenue.csv", header = TRUE)
 
 rec_data <- read.csv("tables/4_recreational_importance.csv", header = TRUE)
@@ -34,19 +30,12 @@ rec_data <- read.csv("tables/4_recreational_importance.csv", header = TRUE)
 tribal_data <- read.csv("tables/3_tribal_revenue.csv", header = TRUE)
 
 const_dem_data <- read.csv("tables/8_constituent_demand.csv", header = TRUE)
-#const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE) %>%
-#  mutate_at(c("Commercial_Importance", "Recreational_Importance",
-#              "Landings_Constricted"), ~replace_na(., 0))
-# adjust negative scores
-#cd_adj <- -min(const_dem_data[, 3])
-#const_dem_data$Factor_Score <- const_dem_data[, 3] + cd_adj
+const_dem_data$Projected_ACL_Attainment <- const_dem_data$Projected_ACL_Attainment / 100
 
-## table has no rank column
 rebuilding_data <- read.csv("tables/10_rebuilding.csv", header = TRUE)
 rebuilding_data <- replace(rebuilding_data, rebuilding_data == "", NA)
 
 stock_stat_data <- read.csv("tables/6_stock_status.csv", header = TRUE)
-#stock_stat_data$Factor_Score <- stock_stat_data$Score
 
 fish_mort_data <- read.csv("tables/1_fishing_mortality.csv", header = TRUE)
 fish_mort_data$Average_OFL_Attainment <- fish_mort_data$Average_OFL_Attainment / 100
@@ -57,11 +46,7 @@ eco_data <- read.csv("tables/5_ecosystem.csv", header = TRUE)
 new_info_data <- read.csv("tables/9_new_information.csv", header = TRUE)
 new_info_data <- replace(new_info_data, new_info_data == "", NA)
 
-## rank column at end of table
 assess_freq_data <- read.csv("tables/7_assessment_frequency.csv", header = TRUE)
-# adjust negative scores
-#af_adj <- -min(assess_freq_data[, 3])
-#assess_freq_data$Score <- assess_freq_data[, 3] + af_adj
 
 
 ## load in species management groups, format cryptic species names
@@ -121,7 +106,8 @@ joined_cd_df <- joined_cd_df %>%
 
 joined_reb_df <- format_table(rebuilding_data, species_groups)
 joined_reb_df <- joined_reb_df %>%
-  arrange(desc(`Factor Score`))
+  arrange(Rank)
+  #arrange(desc(`Factor Score`))
 
 joined_ss_df <- format_table(stock_stat_data, species_groups)
 joined_ss_df <- joined_ss_df %>%
@@ -141,8 +127,8 @@ joined_ni_df <- joined_ni_df %>%
 
 joined_af_df <- format_table(assess_freq_data, species_groups)
 joined_af_df <- joined_af_df %>%
-  arrange(Rank) %>%
-  select(Species, Rank, `Factor Score`, `Recruit Variation`:`Management Group`)
+  arrange(Rank) #%>%
+  #select(Species, Rank, `Factor Score`, `Recruitment Variation`:`Management Group`)
 
 
 # define server logic to display user inputs
@@ -245,13 +231,13 @@ shinyServer(function(input, output, session) {
                 style = "border:none;")
   })
   
-  output$future_spex <- renderUI({
-    tags$iframe(id = "future_spex",
-                seamless = "seamless",
-                src = "32future_spex.html",
-                width = "74%", height = 600,
-                style = "border:none;")
-  })
+  #output$future_spex <- renderUI({
+  #  tags$iframe(id = "future_spex",
+  #              seamless = "seamless",
+  #              src = "32future_spex.html",
+  #              width = "74%", height = 600,
+  #              style = "border:none;")
+  #})
   
   
   # create overall ranking table
@@ -876,15 +862,41 @@ shinyServer(function(input, output, session) {
           cd_table <- cd_table %>%
             data_color(columns = Rank, method = "numeric", palette = "viridis",
                        reverse = TRUE)
-        } else if(i != "Concern") {
+        } else {
           cd_table <- cd_table %>%
             data_color(columns = i, method = "auto", palette = "viridis")
         }
       }
     }
     
+    if("Projected ACL Attainment" %in% input$cd_columns) {
+      cd_table <- cd_table %>%
+        tab_style(style = cell_text(color = "red", weight = "bold"),
+                  locations = cells_body(
+                    columns = `Projected ACL Attainment`,
+                    rows = `Projected ACL Attainment` > 1.00
+                  )
+        ) %>%
+        tab_footnote(footnote = "Cells with red text indicate
+                     high projected ACL attainment percentages and cells with
+                     italic text indicate ACL contributions.",
+                     locations = cells_column_labels(columns = `Projected ACL Attainment`)
+        ) 
+    }
+    
+    if("Projected ACL Attainment" %in% input$cd_columns &
+       "Management Group" %in% input$cd_columns) {
+      cd_table <- cd_table %>%
+        tab_style(style = cell_text(style = "italic"),
+                  locations = cells_body(
+                    columns = `Projected ACL Attainment`,
+                    rows = `Management Group` != "species specific"
+                  )
+        ) 
+    }
+    
     cd_table %>%
-      fmt_percent(columns = contains("Percent"), decimals = 1,
+      fmt_percent(columns = contains("Attainment"), decimals = 1,
                   scale_values = TRUE) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
@@ -958,9 +970,9 @@ shinyServer(function(input, output, session) {
     
     for(i in input$reb_colors) {
       if(i %in% input$reb_columns) {
-        if(i == "Rebuilding Target Year") {
+        if(i == "Rank") {
           reb_table <- reb_table %>%
-            data_color(columns = `Rebuilding Target Year`, method = "auto", palette = "viridis",
+            data_color(columns = Rank, method = "auto", palette = "viridis",
                        reverse = TRUE)
         } else {
           reb_table <- reb_table %>%
@@ -1484,9 +1496,9 @@ shinyServer(function(input, output, session) {
     
     for(i in input$af_colors) {
       if(i %in% input$af_columns) {
-        if(i == "Score") {
+        if(i == "Rank") {
           af_table <- af_table %>%
-            data_color(columns = `Factor Score`, method = "numeric", palette = "viridis")
+            data_color(columns = Rank, method = "numeric", palette = "viridis")
         } else if(i == "Last Assessment Year") {
           af_table <- af_table %>%
             data_color(columns = `Last Assessment Year`, method = "numeric", palette = "viridis",
