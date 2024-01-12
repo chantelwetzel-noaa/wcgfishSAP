@@ -4,99 +4,20 @@ output: html_document
 
 ## Assessment Frequency
 
-The original focus of this Factor was to quantify the extent to which a stock is "overdue" for an assessment (e.g., has it been more than the target number of years since the last assessment was conducted?). Gradually, other considerations which reflect the urgency of conducting a new assessment during the upcoming cycle have been included in the calculation of the final score for this Factor. 
+The the assessment frequency factor determines how often each species should be assessed based on biology (target assessment frequency), evaluates how long it has been since the most recent assessment if available, and if the time since the most recent assessment is beyond the assessment frequency. There is addition consideration for any species where the last assessment was conducted more than ten years ago given the national guidance in calculating the Fish Stock Sustainability Index (FSSI). 
 
-The first step in this process involves the calculation of a target assessment frequency for all stocks that have had a benchmark assessment.  As described in the NMFS Technical Memo [(Methot 2015)](https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf){target="_blank"}, the mean age of harvested fish serves as the starting point, which is then modified by a regional multiplier. In the case of U.S. west coast groundfish, there is more than a 10-fold difference among species in the mean age of fishery catch, so part of the initial adjustment serves to compress the range of the distribution to a range that is more useful for calculating target frequency. The mean age of the catch is transformed as:
+The target assessment frequency is determined based upon maximum age modified based upon the importance of a species to the fishery and the ecosystem, along with the assumed variation in recruitment. Using maximum age in the calculation to determine target assessment frequency is a departure from the recommended approach in the national guidance [(Methot 2015)](https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf){target="_blank"} and how it was conducted in previous cycles which followed that guidance. The previous approach used estimated mean age of the catch from the most recent assessment to determine the initial target assessment frequency (e.g., the value calculation prior to applying adjustments) and then was adjusted based upon modifiers. There are two issues with this approach.  First, the mean age of the catch is more reflective of fishery exploitation and could reduce or increase if there were strong or weak recruitments moving through the population. The second main issue is that unassessed species lack an estimate of the mean age in the catch with these species being assigned a single default target assessment frequency regardless of the biology of the species. Moving to use maximum age provides multiple advantages. It more reflective of life history which the target assessment frequency is attempting to capture in that short lives species with fast population dynamics you may need to assess them more frequency compared to a long lived species. Additionally, for species that have not been assessed a literature search can be conducted to determine estimated maximum age.   
 
-$$
-\begin{equation}
-T_s = (\bar{A}_s*20)^{0.38}
-\end{equation}
-$$
+Determining the target assessment frequency involves two steps.  First, the maximum age is adjusted based on fishery importance, ecosystem importance, and assumed variation in recruitment as described below.  The 25, 50, and 75th quantiles are then calculated for the adjusted maximum ages. The adjusted maximum ages are then assigned a target assessemnt frequency based upon where they fall within the quantiles where adjusted maximum ages that fall within below the 25th quantile are assigned a 4 year target assessment frequency, 25th-50th a 6 year target assessment frequency, 50th-75th a 8 year target assessment frequency, and, 75th and greater a 10 year target assessment frequency.  The target assessment frequency of 4, 6, 8, and 10 were selected due to our biennium cycle with a minimum value of 4 due to the large number of species in the groundfish Fishery Management Plan, and a maximum value of 10 due to FSSI guidance around ensuring assessments are conducted at least every 10 years.  
 
-where $\bar{A}$ is the mean age in the catch for stock $s$.
+The adjustments to the maximum age based on fisheries importance, and the ecosystem importance, and assumed variation in recruitment can be either -0.2, 0, or +0.2 for each adjustment.  For recruitment variability, species with that exhibit a high degree of recruitment variability  ($\sigma_R > 0.9$) receive a value of -0.2, low variability species ($\sigma_R < 0.30$) receive a +0.2, with others receiving values of 0. For the fishery and ecosystem Importance scores, the top-third of each receive a -0.2, the bottom-third a +0.2, and the rest 0. The fishery importance is determined based upon the summed importance across the commercial, recreational, and tribal importance factors.  The combined score based on the recruitment variability $r_s$, fishery importance $f_s$, and ecosystem importance $e_s$ are multiplied with the maximum age $age_s$ $T_s$ defining the assessment frequency recommended is calculated as:
 
-The transformed mean-age value ($T_s$) is then modified, based on each stock's recruitment variability (using the $\sigma_R$ value from the last assessment), the overall importance to fisheries, and the ecosystem importance score, as described in the previous section.  For each of these variables, a species is assigned a value of 1, 0, or -1, which is added to the scaled modified mean catch age.  For recruitment variability, species with that exhibit a high degree of recruitment variability  ($\sigma_R > 0.9$) receive a value of -1, low variability species ($\sigma_R < 0.30$) receive a +1, with others receiving values of zero.  For the Fishery and Ecosystem Importance scores, the top-third of each receive a -1, the bottom-third a +1, and the rest zero. The combined score based on the recruitment variability $r_s$, fishery importance $f_s$, ecosystem importance $e_s$, and the transformed mean age $T_s$ defining the assessment frequency recommended is calculated as:
-
-$$
-F_s =
-\begin{cases}
-T_s + r_s + f_s + e_s & \text{if $<$ 10}\\ 
-10 & \text{if $T_s + r_s + f_s + e_s >$ 10}
-\end{cases}
-$$
-
-where the $F_s$ score is then rounded to near factor of 2 to align with the groundfish biennial cycle.
-
-The number of years a stock is "overdue" for assessment is calculated as the difference between the years since the last assessment and the target frequency (with a minimum value of zero). In an effort to better reflect Council selection decisions of the past decade, a value of 2 was subtracted for any stock that was assessed in the previous cycle.  This makes it harder, but not impossible for a species to return directly to the top-20.  The guidance in the Technical Memorandum calls for points to be added to a species after it has not been assessed by its target frequency.  In order to promote assessing species by the time the target frequency has been reached, points start being added when the target frequency equals the years since the last assessment. This is calculated as:
-
-$$
-\text{Target Score}_s = 
-\begin{cases}
--4 & \text{if $\text{LAY}_{s} - \text{NAY} =$ 2}\\
-0  & \text{if $\text{LAY}_{s} - \text{NAY} - F_s < $ 0}\\
-\text{LAY}_{s} - \text{NAY} - F_s & \text{otherwise}
-\end{cases}
-$$
-
-where LAY is the last year the stock $s$ was assessed and NAY is the next assessment cycle year.  If a stock has not had an accepted assessment to-date a score of 4 is assigned. 
-
-Several other conditional adjustments are made to initial scores. The first of these adds one point to the species if the prior assessment will be 10 years old by the next assessment year. This element acknowledges the Scientific and Statistical Committee's (SSC) previously expressed preference for not endorsing model projections beyond a 10-year period. Now, with a time-varying uncertainty buffer applied to West Coast groundfish when setting ABCs, this addition might need to be revisited.  If, at the time of the last assessment, the SSC recommended that an update assessment was suitable for the next assessment and that assessment will be no more than 6 years old, one point is subtracted.  This is intended to reflect the decreased need for a new assessment to be a benchmark.  If a species is at or beyond its target frequency an additional point is added.  
-
-The overall score for the Assessment Frequency Factor $a_s$ is calculated as:
+The number of years a stock is "overdue" for assessment is calculated as the difference between the years since the last assessment and the target assessment frequency (with a minimum value of zero). Additional point +1 is added for a species if the most recent assessment was conducted within the last 6 years and the SSC indicated that an update assessment could be conducted and if the time since the last assessment is greater than ten year. The assessment frequency factor score is calculated as:
 
 $$
 \begin{aligned}
-a_s = \text{Target Score}_s - (r_s + f_s + e_s) + \text{Assessment Age}_s + \text{Update}_s + \\
-\text{Target Frequency}_s 
+a_s = min(\text{Years Since Last Assessment}_s - \text{Target Assessment Frequency}_s, 0) + \\ \text{Assessment Can be Updated}_s + \text{Greater Than 10 Years Since Last Assessment}_s 
 \end{aligned}
 $$
 
-where Assessment Age for stock $s$ is applied if the time since the last assessment will be 10 years or greater by next assessment cycle, the Update by stock $s$ is based on the time since the last assessment and if the STAR panel recommended an Update for the next assessment, and the Target Frequency by stock $s$ is whether the time since the last assessment is greater that the recommended target frequency $F_s$. The potential adjustment scores for each of these items is given in Table 9.
-
-This Factor is a key element in the ability of the process to elevate species from lower ranks to higher-priority levels in a reasonable cyclical manner. Further exploration will likely be required to achieve desirable longer-term performance. What is 'desirable' should be the topic of discussion with Council and advisory bodies. There are real limits on how many assessments of different levels of complexity and review. 
-
-
-```{r, results = 'asis', echo = FALSE}
-library(gt)
-
-adj <- data.frame(matrix(NA, 9, 2))
-colnames(adj) <- c("Item", "Score")
-
-adj[1,]  = c("Assessment Age", " ")
-adj[2,]  = c("Number of years since last assessment \\(\\ge\\) 10 years", 1)
-adj[3,]  = c("Otherwise", 0)
-adj[4,]  = c("Update", " ")
-adj[5,]  = c("Number of years since last assessment \\(<\\) 6", 1)
-adj[6,]  = c("Otherwise", 0)
-adj[7,]  = c("Target Frequency", " ")
-adj[8,]  = c("Number of years since last assessment \\(\\ge F_s\\)", 1)
-adj[9,]  = c("Otherwise", 0)
-
-adj_tbl <- adj %>%
-  gt() %>%
-  tab_header(
-    title = "Table 9: List of scoring adjustments made depending upon assessment age, the level of recommended next assessment, and the target assessment frequency."
-  ) %>%
-  cols_align(
-    align = "left"
-  ) %>%
-  tab_style(
-    style = cell_text(style = "italic"),
-    locations = cells_body(
-      columns = Item,
-      rows = c(1, 4, 7)
-    )
-  ) %>%
-  tab_style(
-    style = cell_text(indent = px(20), align = "left"),
-    locations = cells_body(
-      columns = Item,
-      rows = c(2:3, 5:6, 8:9)
-    )
-  ) %>%
-  opt_css(css = ".gt_stub { padding-left: 50px !important; }")
-
-adj_tbl
-
-```                    
+The assessment frequency score is then standardized to a maximum value of 10. 

@@ -4,7 +4,7 @@ output: html_document
 
 ## Fishing Mortality, Relative to Overfishing Limits
 
-Analogously to stock status, it will be a higher priority to assess a stock whose fishing mortality represents a larger percentage of its Overfishng Limit (OFL), all other things being equal. Fishing mortality estimates developed by the West Coast Fisheries Observer Program Groundfish Expanded Multiyear Mortality report were averaged over the 2018-2020 period, and then divided by the average OFL (or OFL contribution) for each stock over the same period, to calculate the ratio used to scoring this Factor. Average Acceptable Biological Catches (ABCs) and percentages of ABC attainment are also presented for comparison, but are not used in scoring this Factor.
+If attainment of a species is high relative to the Overfishing Limits (OFLs), depending upon the driving factors, there may be a need for a new assessment to determine if current exploitation is sustainable. The fishing mortality factor compares average coastwide fishing mortality relative to average coastwide OFLs or coastwide OFL-contributions for species managed within a complex.  Estimates of fishing mortality estimates within the West Coast Groundfish Observer Program (WCGOP) Groundfish Expanded Multiyear Mortality (GEMM) report were averaged over a five-year period.  The average OFLs or OFL-contributions for the same period are calculated and the attainment (e.g., the ratio of fishing mortality to the OFL) for each species is used to determine the factor score. Average Annual Catch Limits (ACLs) attainment is also presented for comparison, but are not used in scoring this factor.
 
 The scoring of this factor by species are shown in Table 7.
 
@@ -28,7 +28,7 @@ mort[10,] = c(10, "Mortality well above the OFL or the OFL contribution for the 
 mort_tbl <- mort %>%
   gt() %>%
   tab_header(
-    title = "Table 7: Scores applied based on the percent of the OFL attainment."
+    title = "Table 8: Scores applied based on the percent of the OFL attainment."
   ) %>%
   cols_align(
     align = "left"

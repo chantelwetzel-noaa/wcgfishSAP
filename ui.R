@@ -260,9 +260,9 @@ shinyUI(
                     htmlOutput("new_data", align = "right",
                                class = "align-right"),
                     htmlOutput("assessment_freq", align = "right",
-                               class = "align-right"),
-                    htmlOutput("future_spex", align = "right",
-                               class = "align-right")
+                               class = "align-right")#,
+                    #htmlOutput("future_spex", align = "right",
+                    #           class = "align-right")
                   )
           ),
           
