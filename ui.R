@@ -181,22 +181,26 @@ shinyUI(
           tabItem(tabName = "home",
                   h1("Stock Assessment Prioritization for U.S. West Coast Groundfish"),
                   h4("Groundfish stocks off the U.S. West Coast are managed by the Pacific
-                  Fishery Management Council (PFMC).  The PFMC groundfish Fishery Management Plan
-                  contains a large diversity of 100+ species and stocks. The number of species off
-                  the West Coast far exceeds the capacity and resources to conduct scientific assessments 
-                  each management cycle to determine population status to inform harvest limits.
+                  Fishery Management Council (PFMC). The PFMC groundfish Fishery Management Plan
+                  contains a wide range of diversity species and stocks including from sharks, 
+                  skates, flatfish, rockfish, and various roundfish. The number of species off
+                  the U.S. West Coast far exceeds the capacity and resources to conduct scientific 
+                  assessments each management cycle to determine population status to inform harvest limits.
                   Stock assessment prioritization is aimed to be an objective and transparent tool to
-                  consider a wide range of fishery, economic, and population indicators in order to
-                  identify species with the greatest need for new assessments. Stock assessment
-                  prioritization allows us to work with regional partners to decide which stocks
-                  are assessed each year."),
+                  objectively consider a wide range of fishery, economic, and population attributes 
+                  in order to identify species with the greatest need for new assessments."),
                   tags$footer(
                     style = "text-align: center;",
-                    HTML(paste0("<img src='logos/noaa-logo-rgb-blue-2022.png' alt='Image 1',
-                                height='80' style='margin-right: 15px;'>")),
-                    HTML(paste0("<img src='logos/pfmc_black.png' alt='Image 2',
-                                height='80'>"))
-                  )
+                    HTML(paste0("<img src='figs/sap.png' alt='Image 1',
+                                height='500' style='margin-right: 15px;'>"))
+                  )#,
+                  #tags$footer(
+                  #  style = "text-align: center;",
+                  #  HTML(paste0("<img src='logos/noaa-logo-rgb-blue-2022.png' alt='Image 2',
+                  #              height='80' style='margin-right: 15px;'>")),
+                  #  HTML(paste0("<img src='logos/pfmc_black.png' alt='Image 3',
+                  #              height='80'>"))
+                  #)
           ),
           
           # methodology page
@@ -222,14 +226,14 @@ shinyUI(
                                        "Stock Status Relative to Management Targets")),
                         tags$li(tags$a(href = "#rebuilding", "Rebuilding Status")),
                         tags$li(tags$a(href = "#fishing_mortality",
-                                       "Fishing Mortality, Relative to Overfishing Limits")),
+                                       "Fishing Mortality Relative to Overfishing Limits")),
                         tags$li(tags$a(href = "#ecosystem", "Ecosystem Importance")),
                         tags$li(tags$a(href = "#new_information",
                                        "Relevant New Types of Information Available")),
                         tags$li(tags$a(href = "#assessment_frequency",
-                                       "Assessment Frequency")),
-                        tags$li(tags$a(href = "#future_spex",
-                                       "Future Limiting Harvest Specifications"))
+                                       "Assessment Frequency"))#,
+                        #tags$li(tags$a(href = "#future_spex",
+                        #               "Future Limiting Harvest Specifications"))
                       )
                     ),
                     # HTML outputs of knitted Rmd files
@@ -373,7 +377,7 @@ shinyUI(
                             checkboxGroupInput("fm_columns", "Select columns to display:",
                                                choices = fm_cols,
                                                selected = c("Rank", "Factor Score",
-                                                            "Average Removals",
+                                                            "Average Catches",
                                                             "Average OFL",
                                                             "Average OFL Attainment",
                                                             "Management Group")
@@ -399,11 +403,10 @@ shinyUI(
                                   Calculated based on the percent attainment relative to the
                                   species-specific average overfishing limit (OFL) or the
                                   OFL-contribution for species managed within a complex.
-                                  Values range between 10, the maximum score, and 0,
-                                  the minimum score."
+                                  Values range between 0-10."
                                 ),
                                 p(strong("Average Removals:"),
-                                  "The average removals in metric tons across a range of recent years.
+                                  "The average catches in metric tons across a range of recent years.
                                   Source: GEMM."
                                 ),
                                 p(strong("Average OFL:"),
@@ -411,7 +414,7 @@ shinyUI(
                                   by species."
                                 ),
                                 p(strong("Average OFL Attainment:"),
-                                  "Percent average attainment of removals relative to the OFL across
+                                  "Percent average attainment of catches relative to the OFL across
                                   a range of years by species."
                                 ),
                                 p(strong("Average ACL:"),
@@ -419,7 +422,7 @@ shinyUI(
                                   by species."
                                 ),
                                 p(strong("Average ACL Attainment:"),
-                                  "Percent average attainment of removals relative to the ACL across
+                                  "Percent average attainment of catches relative to the ACL across
                                   a range of years by species."
                                 ),
                                 p(strong("Management Group:"),
@@ -499,10 +502,10 @@ shinyUI(
                                   "Denotes the rank of a fish species based on this factor."
                                 ),
                                 p(strong("Factor Score:"),
-                                  "Denotes the scaled initial factor score for each species.
+                                  "Denotes the scaled factor score for each species.
                                   Calculated based on the initial factor score standardized
-                                  to the maximum initial factor score and scaled to range between
-                                  10, the maximum score, and 0, the minimum score."
+                                  to the maximum factor score and scaled to range between
+                                  0-10☺."
                                 ),
                                 #p(strong("Interim Value:"),
                                 #  "Unscaled factor score based on the coastwide revenue by species
@@ -511,19 +514,19 @@ shinyUI(
                                 #),
                                 p(strong("Revenue:"),
                                   "The summed inflation adjusted ex-vessel revenue across states
-                                  by species. Source: PacFIN."
+                                  by species across a range of years. Source: PacFIN."
                                 ),
                                 p(strong("CA Revenue:"),
                                   "Total inflation adjusted ex-vessel revenue associated by species
-                                  within California. Source: PacFIN."
+                                  landed in California across a range of years. Source: PacFIN."
                                 ),
                                 p(strong("OR Revenue:"),
                                   "Total inflation adjusted ex-vessel revenue associated by species
-                                  within Oregon. Source: PacFIN."
+                                  landed in Oregon across a range of years. Source: PacFIN."
                                 ),
                                 p(strong("WA Revenue:"),
                                   "Total inflation adjusted ex-vessel revenue associated by species
-                                  within Washington. Source: PacFIN."
+                                  landed in Washington across a range of years. Source: PacFIN."
                                 ),
                                 p(strong("Management Group:"),
                                   "Management group associated with a species within the fishery
@@ -581,7 +584,9 @@ shinyUI(
                             br(),
                             checkboxGroupInput("tribal_columns", "Select columns to display:",
                                                choices = tribal_cols,
-                                               selected = c("Rank", "Factor Score",
+                                               selected = c("Rank", 
+                                                            "Factor Score",
+                                                            "Tribal Score",
                                                             "Revenue")
                             )
                           ),
@@ -602,28 +607,16 @@ shinyUI(
                                 ),
                                 p(strong("Factor Score:"),
                                   "The sum of the subsistence score plus the initial factor score.
-                                  Values range between 10, the maximum score, and 0, the minimum
-                                  score."
+                                  Values range between 0-10."
                                 ),
                                 p(strong("Tribal Score:"),
                                   "A pre-specified relative importance weight by species to the
-                                  tribal fishery. Values range between 3.0, maximum score, and 0,
-                                  the minimum score."
+                                  tribal fishery. Values range between 0-3.0."
                                 ),
-                                #p(strong("Initial Factor Score:"),
-                                #  "Denotes the scaled initial factor score for each species.
-                                #  Calculated based on the initial factor score standardized to the
-                                #  maximum initial factor score and scaled to range between 7,
-                                #  the maximum score, and 0, the minimum score."
-                                #),
-                                #p(strong("Interim Value:"),
-                                #  "Unscaled factor score based on the tribal revenue by species
-                                #  exponentiated by a value of 0.18 to account for highly variable
-                                #  revenues by species."
-                                #),
                                 p(strong("Revenue:"),
-                                  "Total revenue based on the inflation adjusted ex-vessel revenue
-                                  by species caught within tribal fisheries. Source: PacFIN."
+                                  "Summed revenue based on the inflation adjusted ex-vessel revenue
+                                  by species caught within tribal fisheries across a range of years. 
+                                  Source: PacFIN."
                                 ),
                                 p(strong("Management Group:"),
                                   "Management group associated with a species within the fishery
@@ -704,14 +697,8 @@ shinyUI(
                                 p(strong("Factor Score:"),
                                   "Denotes the scaled initial factor score for each species.
                                   Calculated based on the initial factor score standardized to the
-                                  maximum initial factor score and scaled to range between 10,
-                                  the maximum score, and 0, the minimum score."
+                                  maximum initial factor score and scaled to range between 0-10."
                                 ),
-                                #p(strong("Initial Factor Score:"),
-                                #  "Unscaled factor score based on the coastwide pseudo revenue by
-                                #  species exponentiated by a value of 0.18 to account for highly
-                                #  variable coastwide pseudo revenues by species."
-                                #),
                                 p(strong("Pseudo Revenue Coastwide:"),
                                   "The sum of the state-specific pseudo revenues for each species."
                                 ),
@@ -740,16 +727,20 @@ shinyUI(
                                   species in Washington."
                                 ),
                                 p(strong("Catch Coastwide:"),
-                                  "The sum of the retained recreational catch by state and species."
+                                  "The sum of the retained recreational catch by state and species.
+                                  Source: GEMM."
                                 ),
                                 p(strong("Catch CA:"),
-                                  "The sum of the retained recreational catch in California by species."
+                                  "The sum of the retained recreational catch in California by species. 
+                                  Source: GEMM."
                                 ),
                                 p(strong("Catch OR:"),
-                                  "The sum of the retained recreational catch in Oregon by species."
+                                  "The sum of the retained recreational catch in Oregon by species.
+                                  Source: GEMM."
                                 ),
                                 p(strong("Catch WA:"),
-                                  "The sum of the retained recreational catch in Washington by species."
+                                  "The sum of the retained recreational catch in Washington by species.
+                                  Source: GEMM."
                                 ),
                                 p(strong("Management Group:"),
                                   "Management group associated with a species within the fishery
@@ -810,7 +801,7 @@ shinyUI(
                                                choices = cd_cols,
                                                selected = c("Rank", "Factor Score",
                                                             "Choke Stock Score",
-                                                            "Future ACL Attainment")
+                                                            "Projected ACL Attainment")
                             )
                           ),
                           tabPanel(
@@ -834,39 +825,26 @@ shinyUI(
                                   maximum initial factor score and scaled to range between 12,
                                   the maximum score, and 0, the minimum score."
                                 ),
-                                p(strong("Choke Stock Adjustment:"),
-                                  "Indicates species where ACLs may result in constraint on
-                                  opportunities across the groundfish fishery. Species that are
-                                  currently managed under rebuilding plans receive the maximum
-                                  score of 10. An adjustment values is calculated based on the
-                                  percent attainment between recent average mortality to future
-                                  ACL values. Adjustments range between -2.0 to 4 for
-                                  non-rebuilding species with a value of 4 being given to species
-                                  with potential future attainments greater than 100 percent."
+                                p(strong("Choke Stock Score:"),
+                                  "Indicates species where ACLs may result in constraints on
+                                  opportunities across the groundfish fishery. Scores are calculated based on the
+                                  percent attainment between recent average catches to future
+                                  ACL values. Adjustments range between 0 to 5."
                                 ),
-                                #p(strong("Total Modifiers:"),
-                                #  "The sum of the commercial importance, recreational importance,
-                                #  landings construed, and species of concern modifiers."
-                                #),
                                 p(strong("Commercial Importance Score:"),
                                   "Species with state-specific commercial importance that are not
                                   reflected in the coastwide commercial factor. Values range
-                                  between 2 to 0."
+                                  between 0-2."
                                 ),
                                 p(strong("Recreational Importance Score:"),
                                   "Species with state-specific recreational importance that are not
                                   reflected in the coastwide recreational factor. Values range
-                                  between 2 to 0."
+                                  between 0-2."
                                 ),
-                                p(strong("Future ACL Attainment:"),
-                                  "Percent of projected attainment given current average landings compared 
+                                p(strong("Projected ACL Attainment:"),
+                                  "Percent of projected attainment given current average catches compared 
                                   to future ACLs. "
                                 ),
-                                #p(strong("Concern:"),
-                                #  "Species that have been identified by stakeholders or management
-                                #  to be of high concern. Species of concern are assigned a value
-                                #  of 1 and all other species receive a value of 0."
-                                #),
                                 p(strong("Management Group:"),
                                   "Management group associated with a species within the fishery
                                   management plan."
@@ -948,12 +926,12 @@ shinyUI(
                                 p(strong("Factor Score:"),
                                   "Denotes the scaled initial factor score for each species.
                                   Calculated based on the initial factor score standardized to the
-                                  maximum initial factor score and scaled to range between 10,
-                                  the maximum score, and 0, the minimum score."
+                                  maximum initial factor score and scaled can range from 0 to 10."
                                 ),
                                 p(strong("Fraction Unfished:"),
-                                  "The estimated fraction of unfished biomass from the year of the
-                                  most recent assessment. Species with multiple stock areas and/or
+                                  "The estimated fraction of unfished biomass from the final model
+                                  year of the most recent assessment(s). Species with multiple stock 
+                                  areas and/or
                                   assessment areas reflect the coastwide fraction unfished. Species
                                   that do not have a benchmark, update, or data-moderate assessment
                                   estimated fraction unfished are shown as NA."
@@ -1002,7 +980,7 @@ shinyUI(
                           can be found", a(href = "https://connect.fisheries.noaa.gov/species_quadplots/",
                                            target = "_blank", "here."))
                     ),
-                    # constituent demand table
+                    # stock status table
                     box(title = "Factor Table", status = "primary", solidHeader = TRUE,
                         collapsible = TRUE, width = 9,
                         gt_output("ss_gt_table") %>% withSpinner(),
@@ -1265,8 +1243,8 @@ shinyUI(
                                 p(strong("Factor Score:"),
                                   "Denotes the factor score for each species based on the sum total
                                   of years past target assessment frequency and the following
-                                  adjustments: beyond assessment, greater than 10 years, less than 6
-                                  years, and greater than target assessment frequency."
+                                  adjustments: greater than 10 years, and less than 6
+                                  years and an update assessment could be conducted"
                                 ),
                                 p(strong("Recruitment Variation:"),
                                   "The assumed variation, above or below, in annual recruitment
@@ -1319,40 +1297,27 @@ shinyUI(
                                 ),
                                 p(strong("Last Assessment Year:"),
                                   "The year the most recent benchmark, update, or data-moderate
-                                  assessment was conducted by species. Species with only a data-limited
-                                  assessment are shown as NA."
+                                  assessment was conducted by species. Species without an 
+                                  assessment that estimated stock status are shown as NA."
                                 ),
                                 p(strong("Years Since Last Assessment:"),
                                   "The number of years since the most recent assessment."
                                 ),
                                 p(strong("Years Past Target Assessment Frequency:"),
-                                  "The difference of the target assessment and the years since the
-                                  last assessment. If a species was assessed in the most recent
-                                  assessment cycle this value is adjusted to be equal to -4 and any
-                                  species yet to be assessed is assigned a value of 4."
+                                  "The difference of the target assessment frequency and the years 
+                                  since the most recent assessment."
                                 ),
-                                #p(strong("Beyond Assessment Adjustment:"),
-                                #  "An adjustment value of +1 to account for any species where
-                                #  the time since the last assessment is greater than the target
-                                #  assessment frequency otherwise species are assigned a value
-                                #  of 0."
-                                #),
-                                p(strong("Greater Than 10 Years:"),
-                                  "An adjustment value of +1 for any species where the time since
-                                  the last assessment is greater than 10 years otherwise species
+                                p(strong("Ten Years or Greater:"),
+                                  "An adjustment value of +3 for any species where the time since
+                                  the last assessment is 10 years or greater, otherwise species
                                   are assigned a value of 0."
                                 ),
-                                p(strong("Less Than 6 Years:"),
-                                  "An adjustment value of -1 for species where the time since
+                                p(strong("Less Than 6 Years Update:"),
+                                  "An adjustment value of +1 for species where the time since
                                   the last assessment is less than six years and the
                                   Scientific and Statistical Committee indicated that an update
                                   assessment could be conducted."
                                 ),
-                                #p(strong("Greater Than Target Assessment Frequency:"),
-                                #  "An additional adjustment value of +1 for species where the time
-                                #  since the last assessment is greater than the target assessment
-                                #  frequency."
-                                #),
                                 p(strong("Management Group:"),
                                   "Management group associated with a species within the fishery
                                   management plan."
@@ -1411,7 +1376,10 @@ shinyUI(
                             br(),
                             checkboxGroupInput("ni_columns", "Select columns to display:",
                                                choices = ni_cols,
-                                               selected = c("Rank", "Factor Score", "Last Assessed")
+                                               selected = c("Rank", 
+                                                            "Factor Score", 
+                                                            "Last Assessed", 
+                                                            "New Research")
                             )
                           ),
                           tabPanel(
@@ -1432,8 +1400,9 @@ shinyUI(
                                 p(strong("Factor Score:"),
                                   "Denotes the factor score for each species.
                                   Calculated based on the summed total of the scores from
-                                  rockfish steepness prior, abundance information, population
-                                  dynamics information, past issues can be addressed."
+                                  survey abundance information, survey population
+                                  dynamics information, new research, and past 
+                                  assessment issues that can be addressed."
                                 ),
                                 p(strong("Last Assessed:"),
                                   "The year of the most recent assessment for each species where
@@ -1441,41 +1410,32 @@ shinyUI(
                                   data-limited assessment catch recommendation model has been
                                   conducted."
                                 ),
-                                #p(strong("Assessment Type:"),
-                                #  "The assessment type for the most recent assessment."
-                                #),
-                                p(strong("Steepness Prior:"),
-                                  "Rockfish species that where the most recent assessment was conducted prior
-                                  to 2015 and used a fixed value for rockfish steepness that was less productive
-                                  relative to the current steepness prior. If the steepness assumed in the previous
-                                  assessment is lower than 0.60 a value of +2 is assigned."
-                                ),
                                 p(strong("New Research:"),
                                   "Adjustment for species where new research could impact a new
-                                  assessment. Values are either 0 or 2."
+                                  assessment. The score is the sum of points based on the type of
+                                  new research available. New biological information (e.g., 
+                                  maturity, fecundity, growth) are assigned a +1 and any information
+                                  that would impact the structure of an assessment or the assessment
+                                  area (e.g., genetics) are assigned a +4)."
                                 ),
                                 p(strong("Issues Can Be Addressed:"),
                                   "Adjustment for species where particular issues identified in
-                                  previous assessment can be adequately addressed. Values range
-                                  from 1 to 0."
+                                  previous assessment can be adequately addressed. Values are either
+                                  0 or +5."
                                 ),
                                 p(strong("Survey Abundance:"),
                                   "Adjustment for species where either new survey trend or abundance information
                                   are available or the existing trend information used in the assessment
-                                  can be extended by six or more years. Values range from 3 to 0 where
+                                  can be extended. Values range from 0 to 3 where
                                   species with the greatest change in abundance information receive
                                   a value of 3."
                                 ),
                                 p(strong("Survey Composition:"),
                                   "Adjustment for species where new survey compositions provides additional
                                   information on population dynamics or biological processes.
-                                  Values range from 3 to 0 where species with the critical new
+                                  Values range from 0 to 3 where species with the most abundant new
                                   information receive a value of 3."
                                 ),
-                                #p(strong("Notes:"),
-                                #  "Description of the new information that could be incorporated
-                                #  in a new assessment."
-                                #),
                                 p(strong("Management Group:"),
                                   "Management group associated with a species within the fishery
                                   management plan."
