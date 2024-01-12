@@ -4,15 +4,16 @@ output: html_document
 
 ## Tribal Importance
 
-West Coast groundfish species are highly important to northwest coastal Tribes. The Subsistence category identified in the NMFS guidance document [(Methot 2015)](https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf){target="_blank"} was expanded to include the value of Tribal fishing for both commercial sale and subsistence and ceremonial uses. The Tribal Importance Factor is calculated as:
+West Coast groundfish species are highly important to coastal Tribes. The Subsistence category identified in the NMFS guidance document [(Methot 2015)](https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf){target="_blank"} was expanded to include the value of Tribal fishing for both commercial sale and subsistence and ceremonial uses. The Tribal Importance Factor is calculated as:
+
 
 $$
-t_{s} = \frac{\alpha}{\text{max}(\text{revenue}_{s}^{0.18})} \text{revenue}_{s}^{0.18} + \beta_s
+\text{Initial Score}_{s} = \alpha * log(\text{revenue}_{s} + 1) + \beta_s + \text{recently assessed penalty}_s 
 $$
   
-where $\text{revenue}_s$ is the revenue based on ex-vessel prices by species $s$, $\alpha$ is the initial factor score set equal to 7.0 and $\beta_s$ is the subsistence score by species $s$ (Table 2).
-  
-Commercial revenue from landings by Tribal vessels were obtained from PacFIN. The calculation of the Tribal Importance scores is broken into two parts.  The first component uses revenues and were transformed using the same process described above for commercial and recreational values, except that the maximum for this part of the total score is set to 7.0. The second component of the score (ranging from 0 to 3.0), represents the relative value of groundfish species to Tribal subsistence harvesters (Table 2).  These species scores were refined through consultation with Tribal representatives.  Continued comments/input from the Tribal community regarding subsistence scores will ensure that the scoring reflect the current prioritization of the Tribal sector. 
+where $\text{revenue}_s$ is the revenue based on ex-vessel prices by species $s$, $\alpha$ is the initial factor score set equal to 7.0, $\beta_s$ is the tribal importance score by species $s$ (Table 2), and the recently assessed penalty that is -2 for species that were assesed in the most recent assessment cycle or 0 for all other species. The scores are then standardized to range between 0 and 10. The tribal landings ex-revenue was pulled from PacFIN with the total revenue summed across the five-year period of `r start_yr`-`r end_yr`. 
+
+The tribal importance scores range from 0 to 3.0 and represent the relative value of groundfish species to tribal harvesters (Table 2). These species scores were refined through consultation with Tribal representatives with the values initially developed in 2016 and updated in 2024. Continued comments/input from the tribal community regarding tribal scores will ensure that the scoring reflect the current prioritization of the tribal sector. 
   
 ```{r, results = 'asis', echo = FALSE}
 library(gt)
