@@ -4,20 +4,30 @@ output: html_document
 
 ## Recreational Importance
 
-Recreational landings lack a measure of value that is equivalent to commercial ex-vessel revenue. In the absence of an equivalent metric, these rankings continue to rely on the approach implemented in 2016, in which a "pseudo" value for the recreational landings of each species is calculated by multiplying the -2 landed catch amounts in each state by a set of state-specific relative weights, which serve the same function as prices. The factor score by species is calculated as:
+Recreational landings lack a measure of value that is equivalent to commercial ex-vessel revenue. In the absence of an equivalent metric, these rankings rely on state-specific species-importance score to adjust the recreational catches based on the importance of the species. The species-specific scores are used to calculate "pseudo" revenues by state based on total recreational catches over a range of years in each state by a set of state-specific importance scores, which serve the same function as prices. The coastwide pseudo revenue by species is calculated as:
 
 $$
-\text{pseudo}_{s} = \sum_{a=1}^{A} \text{catch}_{s,a}*\text{importance}_{s,a}
+\text{Pseudo Revenue}_{s} = \sum_{a=1}^{A} \text{catch}_{s,a}*\text{importance score}_{s,a}  
 $$
 
-where catch is the recreational catch by stock $s$ and state $a$ and importance by stock $s$ and area $a$ is a qualitative measure to represent the importance of that stock to the recreational fishery by area. The overall factor for recreational importance is then calculated as:
+where catch is the recreational catch by species $s$ and state $a$ and importance score by species $s$ and state $a$. The catch data are pulled from the WCGOP GEMM report. The recreational importance score by species and state are shown in Table 3. These weights were initially developed in cooperation with the state recreational representatives to the Groundfish Management Team and reviewed by the Groundfish Advisory Panel in 2016 and updated in 2024 based on input from state representatives to reflect current recreational fishery conditions.
+
+The overall factor for recreational importance is then calculated as:
 
 $$
-r_s = \frac{10}{\text{max}(\text{pseudo value}_s^{0.18})}\text{pseudo value}_s^{0.18} 
+\text{Initial Score}_s = log(\text{pseudo revenue}_s + 1) + \text{recently assessed penalty}_s  
+
 $$
 
-The recreational importance by species and state are shown in Table 3. These weights were initially developed in cooperation with the state recreational representatives to the Groundfish Management Team in 2016, and were reviewed by members of the Groundfish Advisory Panel in in that year and 2018. The pseudo values are transformed into Factor Scores using the same exponential transformation that is applied to commercial revenues. Continued comments and input from the recreational fishing community or state agencies regarding relative value of species among recreational fishery participants of each state will allow these weights to reflect the current priority of the recreational sector.
+where the recently assessed penalty is -2 for species that were assesed in the most recent assessment cycle or 0 for all other species. 
 
+The transformed scores are then standardized to range between 0 and 10:
+
+$$
+c_{s} = \frac{10 * log(\text{Initial Score}_s + 1)}{\text{max}(log(\text{Initial Score}_s + 1))}
+$$
+
+Continued comments and input from the recreational fishing community or state agencies regarding relative value of species among recreational fishery participants of each state will allow these weights to reflect the current priority of the recreational sector.
   
 ```{r, results = 'asis', echo = FALSE}
 library(gt)
