@@ -4,11 +4,7 @@ output: html_document
 
 ## Stock Status Relative to Management Targets
 
-Holding other Factors constant, scheduling an assessment in the upcoming cycle will be a higher priority for a stock whose spawning biomass represents a lower percentage of that in an unfished condition, as estimated in the most recent assessment. Correspondingly, the highest scores for this Factor would be assigned to stocks that are below their Minimum Stock Size Thresholds (MSSTs, i.e., are overfished). Such cases are differentiated in the scoring by whether the spawning biomass trend is decreasing, stable, or increasing. As the ratio of current stock biomass to the unfished level increases, this Factor Score decreases. Where available, the percentage of unfished biomass estimated in the terminal year of the most recent assessment for each species is used as the basis for scoring. Scoring criteria for this factor by species are described in (Table 4).
-
-However, not all groundfish species have not been assessed in a manner that provides an estimate of relative abundance. For those stocks, the Productivity Susceptibility Analysis (PSA) score, a measure of a species potential vulnerability to fishing pressures, has been used to assign a Factor Score (Table 5).
-
-Rather than basing scores for these species solely on PSA scores, it may be useful in the future to also categorize them according to the average attainment of their OFL contributions (to assemblage OFLs) over the past 10 years. The scoring criteria show the stocks ordered by PSA score (with assessment-based fraction of unfished levels) and also by the fraction of unfished level, within each of the three PSA categories used in the analysis.
+The Stock Status factor incorporates scoring based upon the estimated stock status (Table 5) or Productivity Susceptibility Analysis (PSA) values for unassessed species (Table 6). Species that either have been estimated to have low status or high PSA scores receive higher scores with species estimated to be below the Minimum Stock Size Threshold receiving the highest scores. Such cases are differentiated in the scoring by whether the spawning output trend is decreasing, stable, or increasing. As the ratio of current spawning output relative to the unfished level increases, this factor score decreases. Where available, the percentage of unfished output estimated in the terminal year of the most recent assessment for each species is used as the basis for scoring. The stock status for species with multiple assessment areas have use a coastwide stock status based on the summed spawning output in the final year of the most recent assessment. 
  
 
 ```{r, results = 'asis', echo = FALSE}
@@ -31,7 +27,7 @@ abund[10,] = c(10, "Stock is overfished (\\(SB \\le \\text{MSST}\\)) and decreas
 abund_tbl <- abund %>%
   gt() %>%
   tab_header(
-    title = "Table 4: Scores applied based the estimated fraction of unfished relative to management targets from the most recent assessment or the PSA score for un-assessed stocks."
+    title = "Table 5: Scores applied based the estimated fraction of unfished relative to management targets from the most recent assessment or the PSA score for un-assessed stocks."
   ) %>%
   cols_align(
     align = "left",
@@ -54,7 +50,7 @@ colnames(psa) <- c("Species", "PSA Score")
 psa_tbl <- psa %>%
   gt() %>%
   tab_header(
-    title = "Table 5: The estimated stock status and Productivity Susceptibility Analysis (PSA) scores by species.  Higher PSA values indicate higher vulnerability. Stocks that have area specific assessments a single stock status value is calculated by aggregating spawning biomass or output by area."
+    title = "Table 6: The estimated stock status and Productivity Susceptibility Analysis (PSA) scores by species.  Higher PSA values indicate higher vulnerability. Stocks that have area specific assessments a single stock status value is calculated by aggregating spawning biomass or output by area."
   ) %>%
   cols_align(
     align = "left",

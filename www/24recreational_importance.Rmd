@@ -12,11 +12,10 @@ $$
 
 where catch is the recreational catch by species $s$ and state $a$ and importance score by species $s$ and state $a$. The catch data are pulled from the WCGOP GEMM report. The recreational importance score by species and state are shown in Table 3. These weights were initially developed in cooperation with the state recreational representatives to the Groundfish Management Team and reviewed by the Groundfish Advisory Panel in 2016 and updated in 2024 based on input from state representatives to reflect current recreational fishery conditions.
 
-The overall factor for recreational importance is then calculated as:
+The inital factor score for recreational importance is then calculated as:
 
 $$
 \text{Initial Score}_s = log(\text{pseudo revenue}_s + 1) + \text{recently assessed penalty}_s  
-
 $$
 
 where the recently assessed penalty is -2 for species that were assesed in the most recent assessment cycle or 0 for all other species. 
@@ -24,7 +23,7 @@ where the recently assessed penalty is -2 for species that were assesed in the m
 The transformed scores are then standardized to range between 0 and 10:
 
 $$
-c_{s} = \frac{10 * log(\text{Initial Score}_s + 1)}{\text{max}(log(\text{Initial Score}_s + 1))}
+r_{s} = \frac{10 * log(\text{Initial Score}_s + 1)}{\text{max}(log(\text{Initial Score}_s + 1))}
 $$
 
 Continued comments and input from the recreational fishing community or state agencies regarding relative value of species among recreational fishery participants of each state will allow these weights to reflect the current priority of the recreational sector.
