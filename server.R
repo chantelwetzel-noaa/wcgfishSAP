@@ -1498,7 +1498,7 @@ shinyServer(function(input, output, session) {
       if(i %in% input$af_columns) {
         if(i == "Rank") {
           af_table <- af_table %>%
-            data_color(columns = Rank, method = "numeric", palette = "viridis")
+            data_color(columns = Rank, method = "numeric", palette = "viridis", reverse = TRUE)
         } else if(i == "Last Assessment Year") {
           af_table <- af_table %>%
             data_color(columns = `Last Assessment Year`, method = "numeric", palette = "viridis",

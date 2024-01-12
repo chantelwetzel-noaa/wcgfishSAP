@@ -19,16 +19,11 @@ source("format_table.R")
 
 
 # load in data (10 factors)
-#com_rev_data <- read.csv("tables/commercial_revenue.csv", header = TRUE)
 com_rev_data <- read.csv("tables/2_commercial_revenue.csv", header = TRUE)
-#rec_data <- read.csv("tables/recreational_importance.csv", header = TRUE)
 rec_data <- read.csv("tables/4_recreational_importance.csv", header = TRUE)
-#tribal_data <- read.csv("tables/tribal_revenue.csv", header = TRUE)
 tribal_data <- read.csv("tables/3_tribal_revenue.csv", header = TRUE)
 tribal_data <- tribal_data[, c("Species", "Rank", "Factor_Score", "Tribal_Score", "Revenue")]
-#const_dem_data <- read.csv("tables/const_demand.csv", header = TRUE)
 const_dem_data <- read.csv("tables/8_constituent_demand.csv", header = TRUE)
-#rebuilding_data <- read.csv("tables/rebuilding.csv", header = TRUE)
 rebuilding_data <- read.csv("tables/10_rebuilding.csv", header = TRUE)
 stock_stat_data <- read.csv("tables/6_stock_status.csv", header = TRUE)
 fish_mort_data <- read.csv("tables/1_fishing_mortality.csv", header = TRUE)
@@ -1035,7 +1030,7 @@ shinyUI(
                             br(),
                             checkboxGroupInput("reb_colors", "Select columns to color:",
                                                choices = reb_cols,
-                                               selected = c("Currently Rebuilding")
+                                               selected = c("Rank")
                             )
                           ),
                           tabPanel(
@@ -1239,7 +1234,7 @@ shinyUI(
                             br(),
                             checkboxGroupInput("af_colors", "Select columns to display:",
                                                choices = af_cols,
-                                               selected = c("Factor Score")
+                                               selected = c("Rank")
                             )
                           ),
                           tabPanel(
