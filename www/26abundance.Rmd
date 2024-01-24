@@ -4,7 +4,7 @@ output: html_document
 
 ## Stock Status Relative to Management Targets
 
-The Stock Status factor incorporates scoring based upon the estimated stock status (Table 5) or Productivity Susceptibility Analysis (PSA) values for unassessed species (Table 6). Species that either have been estimated to have low status or high PSA scores receive higher scores with species estimated to be below the Minimum Stock Size Threshold receiving the highest scores. Such cases are differentiated in the scoring by whether the spawning output trend is decreasing, stable, or increasing. As the ratio of current spawning output relative to the unfished level increases, this factor score decreases. Where available, the percentage of unfished output estimated in the terminal year of the most recent assessment for each species is used as the basis for scoring. The stock status for species with multiple assessment areas have use a coastwide stock status based on the summed spawning output in the final year of the most recent assessment. 
+The stock status factor incorporates scoring based upon the estimated stock status (Table 5) or Productivity Susceptibility Analysis (PSA) values for unassessed species (Table 6). Species that either have been estimated to be below the management target or high PSA scores receive higher scores with species estimated to be below the Minimum Stock Size Threshold (MSST) and are estimated to have declining spawning output in recent years receiving the highest scores. Species that are estimate to be well above the management target or are unassessed and have low PSA values receive the lowest scores. Where available, the percentage of unfished output estimated in the terminal year of the most recent assessment for each species is used as the basis for scoring. The stock status for species with multiple assessment areas have calculated coastwide stock status based on the coastwid summed spawning output in the final year of the most recent assessment. 
  
 
 ```{r, results = 'asis', echo = FALSE}
@@ -13,21 +13,22 @@ library(gt)
 abund = data.frame(matrix(NA, 10, 2))
 colnames(abund) <- c("Score", "Stock Status")
 
-abund[1,]  = c(1, "Stock abundance is well above the target (\\(SB > 2*SB_{\\text{PROXY}}\\))." )
-abund[2,]  = c(2, "Stock abundance is above the target (\\(2*SB_{\\text{PROXY}}\\) \\(\\ge SB > 1.5*SB_{\\text{PROXY}}\\)).")
-abund[3,]  = c(3, "Stock abundance is above the target (\\(1.5*SB_{\\text{PROXY}} \\ge SB > 1.1*SB_{\\text{PROXY}}\\)) or abundance is unknown and vulnerability is low (1.8 \\(>\\) PSA).")
-abund[4,]  = c(4, "Stock abundance is near the target (\\(1.1*SB_{\\text{PROXY}} \\ge SB > 0.9*SB_{\\text{PROXY}}\\), or is unknown and vulnerability is intermediate (2 \\(>\\) PSA \\(\\ge\\) 1.8).")
-abund[5,]  = c(5, "Stock abundance is below the target (\\(0.9*SB_{\\text{PROXY}} \\ge SB > \\text{MSST}\\)) and is not declining.")
-abund[6,]  = c(6, "Stock abundance is unknown and the vulnerability is high (\\(PSA > 2\\)).")
-abund[7,]  = c(7, "Stock abundance is below the target (\\(0.9*SB_{\\text{PROXY}} \\ge SB > \\text{MSST}\\)) and is declining or recent trend unknown.")
-abund[8,]  = c(8, "Stock is overfished (\\(SB \\le \\text{MSST}\\)) and increasing.")
-abund[9,]  = c(9, "Stock is overfished (\\(SB \\le \\text{MSST}\\)) and stable.")
-abund[10,] = c(10, "Stock is overfished (\\(SB \\le \\text{MSST}\\)) and decreasing.")
+abund[1,]  = c(1, "Species abundance is well above the target ($SO > 2*SO_{\\text{PROXY}}$)." )
+abund[2,]  = c(2, "Species abundance is above the target ($2*SO_{\\text{PROXY}}$ $\\ge SO > 1.5*SO_{\\text{PROXY}}$).")
+abund[3,]  = c(3, "Species abundance is above the target ($1.5*SO_{\\text{PROXY}} \\ge SO > 1.1*SO_{\\text{PROXY}}$) or abundance is unknown and vulnerability is low (1.8 $>$ PSA).")
+abund[4,]  = c(4, "Species abundance is near the target ($1.1*SO_{\\text{PROXY}} \\ge SO > 0.9*SO_{\\text{PROXY}}$), or is unknown and vulnerability is intermediate (2 $>$ PSA $\\ge$ 1.8).")
+abund[5,]  = c(5, "Species abundance is below the target ($0.9*SO_{\\text{PROXY}} \\ge SO > \\text{MSST}$) and is not declining.")
+abund[6,]  = c(6, "Species abundance is unknown and the vulnerability is high (PSA $>$ 2).")
+abund[7,]  = c(7, "Species abundance is below the target ($0.9*SO_{\\text{PROXY}} \\ge SO > \\text{MSST}$) and is declining or recent trend unknown.")
+abund[8,]  = c(8, "Species is overfished ($SO \\le \\text{MSST}$) and increasing.")
+abund[9,]  = c(9, "Species is overfished ($SO \\le \\text{MSST}$) and stable.")
+abund[10,] = c(10, "Species is overfished ($SO \\le \\text{MSST}$) and decreasing.")
+
 
 abund_tbl <- abund %>%
   gt() %>%
   tab_header(
-    title = "Table 5: Scores applied based the estimated fraction of unfished relative to management targets from the most recent assessment or the PSA score for un-assessed stocks."
+    title = "Table 5: Factor sores applied based the estimated fraction of unfished spawning output (SO) relative to management targets from the most recent assessment or the PSA score for un-assessed species."
   ) %>%
   cols_align(
     align = "left",
@@ -38,7 +39,7 @@ abund_tbl
 
 ```
 
-<br>
+
 
 ```{r, results = 'asis', echo = FALSE}
 library(gt)
@@ -50,7 +51,7 @@ colnames(psa) <- c("Species", "PSA Score")
 psa_tbl <- psa %>%
   gt() %>%
   tab_header(
-    title = "Table 6: The estimated stock status and Productivity Susceptibility Analysis (PSA) scores by species.  Higher PSA values indicate higher vulnerability. Stocks that have area specific assessments a single stock status value is calculated by aggregating spawning biomass or output by area."
+    title = "Table 6: The Productivity Susceptibility Analysis (PSA) scores by species. Higher PSA values indicate higher vulnerability."
   ) %>%
   cols_align(
     align = "left",

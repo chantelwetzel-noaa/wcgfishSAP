@@ -387,36 +387,37 @@ to the coastwide value is assigned a +1 for each state. The
 state-specific adjustments are then summed to determine the recreational
 importance modifier.</p>
 <p>The third element accounts for species that currently are or could be
-choke stocks based on current average catches compared to expected
-future ACLs. Future ACLs may be constraining due to stock status, small
-unfished population sizes, or due to decreasing ACLs given increases in
-time-varying uncertainty for species with older assessments. Species are
-assigned a score ranging between 0 to 5 depending upon the projected ACL
-attainment given current average catches (Table 4). The current average
-catch from the fishing mortality factor was used to compare to
-<code>ass_yr</code> anticipated ACLs.</p>
-<p>The overall score for constituent demand score is calculated as:</p>
+choke stocks based on current average catches compared to future ACLs.
+Future ACLs may be constraining due to stock status, population sizes,
+or due to decreasing ACLs given increases in time-varying uncertainty
+for species with older assessments. Species are assigned a score ranging
+between 0 to 5 depending upon the projected ACL attainment given current
+average catches (Table 4). The current average catch from the fishing
+mortality factor was used to compare to expected 2025 ACLs.</p>
+<p>The overall score for constituent demand factor is calculated as:</p>
 <p><span class="math display">\[
+\begin{aligned}
 d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
 \text{Recreational Importance Modifier}_s
+\end{aligned}
 \]</span></p>
-<div id="scresyjvcj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#scresyjvcj table {
+<div id="vouielhjwa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vouielhjwa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#scresyjvcj thead, #scresyjvcj tbody, #scresyjvcj tfoot, #scresyjvcj tr, #scresyjvcj td, #scresyjvcj th {
+#vouielhjwa thead, #vouielhjwa tbody, #vouielhjwa tfoot, #vouielhjwa tr, #vouielhjwa td, #vouielhjwa th {
   border-style: none;
 }
 
-#scresyjvcj p {
+#vouielhjwa p {
   margin: 0;
   padding: 0;
 }
 
-#scresyjvcj .gt_table {
+#vouielhjwa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -442,12 +443,12 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-left-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_caption {
+#vouielhjwa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#scresyjvcj .gt_title {
+#vouielhjwa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -459,7 +460,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-bottom-width: 0;
 }
 
-#scresyjvcj .gt_subtitle {
+#vouielhjwa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -471,7 +472,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-top-width: 0;
 }
 
-#scresyjvcj .gt_heading {
+#vouielhjwa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -483,13 +484,13 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-right-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_bottom_border {
+#vouielhjwa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_col_headings {
+#vouielhjwa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -504,7 +505,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-right-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_col_heading {
+#vouielhjwa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -524,7 +525,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   overflow-x: hidden;
 }
 
-#scresyjvcj .gt_column_spanner_outer {
+#vouielhjwa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -536,15 +537,15 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   padding-right: 4px;
 }
 
-#scresyjvcj .gt_column_spanner_outer:first-child {
+#vouielhjwa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#scresyjvcj .gt_column_spanner_outer:last-child {
+#vouielhjwa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#scresyjvcj .gt_column_spanner {
+#vouielhjwa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -556,11 +557,11 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   width: 100%;
 }
 
-#scresyjvcj .gt_spanner_row {
+#vouielhjwa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#scresyjvcj .gt_group_heading {
+#vouielhjwa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -586,7 +587,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   text-align: left;
 }
 
-#scresyjvcj .gt_empty_group_heading {
+#vouielhjwa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -601,15 +602,15 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   vertical-align: middle;
 }
 
-#scresyjvcj .gt_from_md > :first-child {
+#vouielhjwa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#scresyjvcj .gt_from_md > :last-child {
+#vouielhjwa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#scresyjvcj .gt_row {
+#vouielhjwa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -628,7 +629,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   overflow-x: hidden;
 }
 
-#scresyjvcj .gt_stub {
+#vouielhjwa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -641,7 +642,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   padding-right: 5px;
 }
 
-#scresyjvcj .gt_stub_row_group {
+#vouielhjwa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -655,15 +656,15 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   vertical-align: top;
 }
 
-#scresyjvcj .gt_row_group_first td {
+#vouielhjwa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#scresyjvcj .gt_row_group_first th {
+#vouielhjwa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#scresyjvcj .gt_summary_row {
+#vouielhjwa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -673,16 +674,16 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   padding-right: 5px;
 }
 
-#scresyjvcj .gt_first_summary_row {
+#vouielhjwa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_first_summary_row.thick {
+#vouielhjwa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#scresyjvcj .gt_last_summary_row {
+#vouielhjwa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -692,7 +693,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-bottom-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_grand_summary_row {
+#vouielhjwa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -702,7 +703,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   padding-right: 5px;
 }
 
-#scresyjvcj .gt_first_grand_summary_row {
+#vouielhjwa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -712,7 +713,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-top-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_last_grand_summary_row_top {
+#vouielhjwa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -722,11 +723,11 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-bottom-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_striped {
+#vouielhjwa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#scresyjvcj .gt_table_body {
+#vouielhjwa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -735,7 +736,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-bottom-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_footnotes {
+#vouielhjwa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -749,7 +750,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-right-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_footnote {
+#vouielhjwa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -758,7 +759,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   padding-right: 5px;
 }
 
-#scresyjvcj .gt_sourcenotes {
+#vouielhjwa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -772,7 +773,7 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   border-right-color: #D3D3D3;
 }
 
-#scresyjvcj .gt_sourcenote {
+#vouielhjwa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -780,70 +781,70 @@ d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s +
   padding-right: 5px;
 }
 
-#scresyjvcj .gt_left {
+#vouielhjwa .gt_left {
   text-align: left;
 }
 
-#scresyjvcj .gt_center {
+#vouielhjwa .gt_center {
   text-align: center;
 }
 
-#scresyjvcj .gt_right {
+#vouielhjwa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#scresyjvcj .gt_font_normal {
+#vouielhjwa .gt_font_normal {
   font-weight: normal;
 }
 
-#scresyjvcj .gt_font_bold {
+#vouielhjwa .gt_font_bold {
   font-weight: bold;
 }
 
-#scresyjvcj .gt_font_italic {
+#vouielhjwa .gt_font_italic {
   font-style: italic;
 }
 
-#scresyjvcj .gt_super {
+#vouielhjwa .gt_super {
   font-size: 65%;
 }
 
-#scresyjvcj .gt_footnote_marks {
+#vouielhjwa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#scresyjvcj .gt_asterisk {
+#vouielhjwa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#scresyjvcj .gt_indent_1 {
+#vouielhjwa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#scresyjvcj .gt_indent_2 {
+#vouielhjwa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#scresyjvcj .gt_indent_3 {
+#vouielhjwa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#scresyjvcj .gt_indent_4 {
+#vouielhjwa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#scresyjvcj .gt_indent_5 {
+#vouielhjwa .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
 <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
   <thead>
     <tr class="gt_heading">
-      <td colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Table 4. Choke scores applied based the percent of the projected ACL attainment given current average catches by species.</td>
+      <td colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Table 4. Choke scores applied based the percent of the projected ACL attainment given current average coastwide catches by species.</td>
     </tr>
     
     <tr class="gt_col_headings">

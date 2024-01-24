@@ -363,59 +363,54 @@ pre code {
 <p>Recreational landings lack a measure of value that is equivalent to
 commercial ex-vessel revenue. In the absence of an equivalent metric,
 these rankings rely on state-specific species-importance score to adjust
-the recreational catches based on the importance of the species. The
-species-specific scores are used to calculate “pseudo” revenues by state
-based on total recreational catches over a range of years in each state
-by a set of state-specific importance scores, which serve the same
-function as prices. The coastwide pseudo revenue by species is
-calculated as:</p>
+the recreational catches based on the importance of the species within
+each state’s recreational fishery. The species-specific scores are used
+to calculate “pseudo” revenues by state by adjusting the the total
+recreational catches over a range of years. The coastwide pseudo revenue
+by species is calculated as:</p>
 <p><span class="math display">\[
 \text{Pseudo Revenue}_{s} = \sum_{a=1}^{A}
 \text{catch}_{s,a}*\text{importance score}_{s,a}  
 \]</span></p>
 <p>where catch is the recreational catch by species <span class="math inline">\(s\)</span> and state <span class="math inline">\(a\)</span> and importance score by species <span class="math inline">\(s\)</span> and state <span class="math inline">\(a\)</span>. The catch data are pulled from the
-WCGOP GEMM report. The recreational importance score by species and
-state are shown in Table 3. These weights were initially developed in
-cooperation with the state recreational representatives to the
-Groundfish Management Team and reviewed by the Groundfish Advisory Panel
-in 2016 and updated in 2024 based on input from state representatives to
-reflect current recreational fishery conditions.</p>
-<p>The inital factor score for recreational importance is then
-calculated as:</p>
+WCGOP GEMM report with catches summed between 2018-2022. The
+recreational importance score by species and state are shown in Table 3.
+These weights were initially developed in cooperation with the state
+recreational representatives to the Groundfish Management Team and
+reviewed by the Groundfish Advisory Panel in 2016 and updated in 2024
+based on input from state representatives to reflect current
+recreational fishery conditions.</p>
+<p>The overall factor for recreational importance is then calculated
+as:</p>
 <p><span class="math display">\[
 \text{Initial Score}_s = log(\text{pseudo revenue}_s + 1) +
 \text{recently assessed penalty}_s  
 \]</span></p>
 <p>where the recently assessed penalty is -2 for species that were
-assesed in the most recent assessment cycle or 0 for all other
-species.</p>
-<p>The transformed scores are then standardized to range between 0 and
-10:</p>
-<p><span class="math display">\[
-c_{s} = \frac{10 * log(\text{Initial Score}_s +
-1)}{\text{max}(log(\text{Initial Score}_s + 1))}
-\]</span></p>
+assesed in the most recent assessment cycle or 0 for all other species.
+The transformed scores are then standardized to have a maximum value of
+10.</p>
 <p>Continued comments and input from the recreational fishing community
 or state agencies regarding relative value of species among recreational
 fishery participants of each state will allow these weights to reflect
 the current priority of the recreational sector.</p>
-<div id="jzfwarwxtl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#jzfwarwxtl table {
+<div id="opbnummjsc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#opbnummjsc table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#jzfwarwxtl thead, #jzfwarwxtl tbody, #jzfwarwxtl tfoot, #jzfwarwxtl tr, #jzfwarwxtl td, #jzfwarwxtl th {
+#opbnummjsc thead, #opbnummjsc tbody, #opbnummjsc tfoot, #opbnummjsc tr, #opbnummjsc td, #opbnummjsc th {
   border-style: none;
 }
 
-#jzfwarwxtl p {
+#opbnummjsc p {
   margin: 0;
   padding: 0;
 }
 
-#jzfwarwxtl .gt_table {
+#opbnummjsc .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -441,12 +436,12 @@ the current priority of the recreational sector.</p>
   border-left-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_caption {
+#opbnummjsc .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#jzfwarwxtl .gt_title {
+#opbnummjsc .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -458,7 +453,7 @@ the current priority of the recreational sector.</p>
   border-bottom-width: 0;
 }
 
-#jzfwarwxtl .gt_subtitle {
+#opbnummjsc .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -470,7 +465,7 @@ the current priority of the recreational sector.</p>
   border-top-width: 0;
 }
 
-#jzfwarwxtl .gt_heading {
+#opbnummjsc .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -482,13 +477,13 @@ the current priority of the recreational sector.</p>
   border-right-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_bottom_border {
+#opbnummjsc .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_col_headings {
+#opbnummjsc .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -503,7 +498,7 @@ the current priority of the recreational sector.</p>
   border-right-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_col_heading {
+#opbnummjsc .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -523,7 +518,7 @@ the current priority of the recreational sector.</p>
   overflow-x: hidden;
 }
 
-#jzfwarwxtl .gt_column_spanner_outer {
+#opbnummjsc .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -535,15 +530,15 @@ the current priority of the recreational sector.</p>
   padding-right: 4px;
 }
 
-#jzfwarwxtl .gt_column_spanner_outer:first-child {
+#opbnummjsc .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jzfwarwxtl .gt_column_spanner_outer:last-child {
+#opbnummjsc .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jzfwarwxtl .gt_column_spanner {
+#opbnummjsc .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -555,11 +550,11 @@ the current priority of the recreational sector.</p>
   width: 100%;
 }
 
-#jzfwarwxtl .gt_spanner_row {
+#opbnummjsc .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#jzfwarwxtl .gt_group_heading {
+#opbnummjsc .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -585,7 +580,7 @@ the current priority of the recreational sector.</p>
   text-align: left;
 }
 
-#jzfwarwxtl .gt_empty_group_heading {
+#opbnummjsc .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -600,15 +595,15 @@ the current priority of the recreational sector.</p>
   vertical-align: middle;
 }
 
-#jzfwarwxtl .gt_from_md > :first-child {
+#opbnummjsc .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jzfwarwxtl .gt_from_md > :last-child {
+#opbnummjsc .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jzfwarwxtl .gt_row {
+#opbnummjsc .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -627,7 +622,7 @@ the current priority of the recreational sector.</p>
   overflow-x: hidden;
 }
 
-#jzfwarwxtl .gt_stub {
+#opbnummjsc .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -640,7 +635,7 @@ the current priority of the recreational sector.</p>
   padding-right: 5px;
 }
 
-#jzfwarwxtl .gt_stub_row_group {
+#opbnummjsc .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -654,15 +649,15 @@ the current priority of the recreational sector.</p>
   vertical-align: top;
 }
 
-#jzfwarwxtl .gt_row_group_first td {
+#opbnummjsc .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jzfwarwxtl .gt_row_group_first th {
+#opbnummjsc .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#jzfwarwxtl .gt_summary_row {
+#opbnummjsc .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -672,16 +667,16 @@ the current priority of the recreational sector.</p>
   padding-right: 5px;
 }
 
-#jzfwarwxtl .gt_first_summary_row {
+#opbnummjsc .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_first_summary_row.thick {
+#opbnummjsc .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jzfwarwxtl .gt_last_summary_row {
+#opbnummjsc .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -691,7 +686,7 @@ the current priority of the recreational sector.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_grand_summary_row {
+#opbnummjsc .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -701,7 +696,7 @@ the current priority of the recreational sector.</p>
   padding-right: 5px;
 }
 
-#jzfwarwxtl .gt_first_grand_summary_row {
+#opbnummjsc .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -711,7 +706,7 @@ the current priority of the recreational sector.</p>
   border-top-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_last_grand_summary_row_top {
+#opbnummjsc .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -721,11 +716,11 @@ the current priority of the recreational sector.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_striped {
+#opbnummjsc .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jzfwarwxtl .gt_table_body {
+#opbnummjsc .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -734,7 +729,7 @@ the current priority of the recreational sector.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_footnotes {
+#opbnummjsc .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -748,7 +743,7 @@ the current priority of the recreational sector.</p>
   border-right-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_footnote {
+#opbnummjsc .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -757,7 +752,7 @@ the current priority of the recreational sector.</p>
   padding-right: 5px;
 }
 
-#jzfwarwxtl .gt_sourcenotes {
+#opbnummjsc .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -771,7 +766,7 @@ the current priority of the recreational sector.</p>
   border-right-color: #D3D3D3;
 }
 
-#jzfwarwxtl .gt_sourcenote {
+#opbnummjsc .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -779,63 +774,63 @@ the current priority of the recreational sector.</p>
   padding-right: 5px;
 }
 
-#jzfwarwxtl .gt_left {
+#opbnummjsc .gt_left {
   text-align: left;
 }
 
-#jzfwarwxtl .gt_center {
+#opbnummjsc .gt_center {
   text-align: center;
 }
 
-#jzfwarwxtl .gt_right {
+#opbnummjsc .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jzfwarwxtl .gt_font_normal {
+#opbnummjsc .gt_font_normal {
   font-weight: normal;
 }
 
-#jzfwarwxtl .gt_font_bold {
+#opbnummjsc .gt_font_bold {
   font-weight: bold;
 }
 
-#jzfwarwxtl .gt_font_italic {
+#opbnummjsc .gt_font_italic {
   font-style: italic;
 }
 
-#jzfwarwxtl .gt_super {
+#opbnummjsc .gt_super {
   font-size: 65%;
 }
 
-#jzfwarwxtl .gt_footnote_marks {
+#opbnummjsc .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#jzfwarwxtl .gt_asterisk {
+#opbnummjsc .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jzfwarwxtl .gt_indent_1 {
+#opbnummjsc .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jzfwarwxtl .gt_indent_2 {
+#opbnummjsc .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jzfwarwxtl .gt_indent_3 {
+#opbnummjsc .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jzfwarwxtl .gt_indent_4 {
+#opbnummjsc .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jzfwarwxtl .gt_indent_5 {
+#opbnummjsc .gt_indent_5 {
   text-indent: 25px;
 }
 </style>

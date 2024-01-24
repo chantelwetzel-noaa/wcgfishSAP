@@ -15,7 +15,7 @@ $$
 \end{align}
 $$
 
-where $w$ is the weight applied to each Factor, $c$ is the commercial importance by species $s$, $r$ is the recreational importance by species $s$, $t$ is the tribal importance by species $s$, $d$ is he constituent demand or choke factor by species $s$, $o$ is rebuilding by species $s$, $b$ is relative stock status by species $s$, $h$ is harvest by species $s$, $e$ is ecosystem importance by species $s$, $n$ is new information available by species $s$, and $a$ is the assessment frequency by species $s$. The weights for each Factor are shown in Table 1.
+where $w$ is the weight applied to each factor, $c$ is the commercial importance by species $s$, $r$ is the recreational importance by species $s$, $t$ is the tribal importance by species $s$, $d$ is he constituent demand or choke factor by species $s$, $o$ is rebuilding by species $s$, $b$ is relative stock status by species $s$, $h$ is harvest by species $s$, $e$ is ecosystem importance by species $s$, $n$ is new information available by species $s$, and $a$ is the assessment frequency by species $s$. The weights for each factor are shown in Table 1.
 
 ```{r, results = 'asis', echo = FALSE}
 library(gt)

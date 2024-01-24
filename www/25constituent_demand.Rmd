@@ -4,18 +4,27 @@ output: html_document
 
 ## Constituent Demand
 
+
+```{r, include = FALSE}
+ass_yr <- 2025
+```
+
+
 The constituent demand factor includes aspects of species importance that may not be adequately captured by coastwide measures of commercial and recreational importance. Additionally, this factor also measures the potential for species to be choke species within the fishery given future Annual Catch Limits relative to current average catch. 
 
 The first element examines commercial importance by state and trawl or non-trawl ex-vessel revenues comparing then to the coastwide totals in order to identify species that are considerably more important to a segment of the commercial fishery compared to their coastwide importance. The ex-vessel revenue is summed across recent years by state and gear grouping. The summed ex-vessel revenue by species is then ranked within each state and gear group with and standardized to range between 0 and 1. Any species that has a state-specific standardized score greater than 0.10 compared to the coastwide score is assigned a +1 for each state and any species that is equally important to both the trawl and non-trawl gear types is assigned a +1. The state-specific and gear-specific adjustments are then summed to determine the commercial importance modifier.     
 
 The second element examines the recreational catches by state compared to the coastwide totals. Similar to commercial ex-vessel revenue, the catches are ranked and standardized by each state and compared to the ranked and standardized coastwide values. Any species that has a state-specific standardized score greater than 0.10 compared to the coastwide value is assigned a +1 for each state. The state-specific adjustments are then summed to determine the recreational importance modifier. 
 
-The third element accounts for species that currently are or could be choke stocks based on current average catches compared to expected future ACLs. Future ACLs may be constraining due to stock status, small unfished population sizes, or due to decreasing ACLs given increases in time-varying uncertainty for species with older assessments. Species are assigned a score ranging between 0 to 5 depending upon the projected ACL attainment given current average catches (Table 4). The current average catch from the fishing mortality factor was used to compare to `ass_yr` anticipated ACLs.
+The third element accounts for species that currently are or could be choke stocks based on current average catches compared to future ACLs. Future ACLs may be constraining due to stock status, population sizes, or due to decreasing ACLs given increases in time-varying uncertainty for species with older assessments. Species are assigned a score ranging between 0 to 5 depending upon the projected ACL attainment given current average catches (Table 4). The current average catch from the fishing mortality factor was used to compare to expected `r ass_yr` ACLs.
 
-The overall score for constituent demand score is calculated as:
+The overall score for constituent demand factor is calculated as:
 
 $$
-d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s + \text{Recreational Importance Modifier}_s 
+\begin{aligned}
+d_s = \text{Choke Score}_s + \text{Commercial Importance Modifier}_s + 
+\text{Recreational Importance Modifier}_s 
+\end{aligned}
 $$
 
 
@@ -35,7 +44,7 @@ mort[6,]  = c(5, "\\(1.25*ACL\\) < Current Average Catch")
 mort_tbl <- mort %>%
   gt::gt() %>%
   gt::tab_header(
-    title = "Table 4. Choke scores applied based the percent of the projected ACL attainment given current average catches by species."
+    title = "Table 4. Choke scores applied based the percent of the projected ACL attainment given current average coastwide catches by species."
   ) %>%
   gt::cols_align(
     align = "left"
