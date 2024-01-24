@@ -22,7 +22,8 @@ source("format_table.R")
 com_rev_data <- read.csv("tables/2_commercial_revenue.csv", header = TRUE)
 rec_data <- read.csv("tables/4_recreational_importance.csv", header = TRUE)
 tribal_data <- read.csv("tables/3_tribal_revenue.csv", header = TRUE)
-tribal_data <- tribal_data[, c("Species", "Rank", "Factor_Score", "Tribal_Score", "Revenue")]
+#tribal_data <- tribal_data[, c("Species", "Rank", "Factor_Score", "Tribal_Score", "Revenue")]
+tribal_data <- tribal_data[, !colnames(tribal_data) %in% c("OR_Revenue", "CA_Revenue", "WA_Revenue")]
 const_dem_data <- read.csv("tables/8_constituent_demand.csv", header = TRUE)
 rebuilding_data <- read.csv("tables/10_rebuilding.csv", header = TRUE)
 stock_stat_data <- read.csv("tables/6_stock_status.csv", header = TRUE)
@@ -125,7 +126,7 @@ shinyUI(
       
       skin = "blue",
       
-      dashboardHeader(title = "U.S. West Coast Groundfish Stock Assessment Prioritization",
+      dashboardHeader(title = "U.S. West Coast Groundfish Assessment Prioritization",
                       titleWidth = 300),
       
       dashboardSidebar(width = 300,
@@ -156,7 +157,7 @@ shinyUI(
                                   menuSubItem("New Information", tabName = "ni_page",
                                               icon = icon("info"))
                          ),
-                         menuItem("Stock Assessment Calendar", tabName = "calendar",
+                         menuItem("Groundfish Assessment Calendar", tabName = "calendar",
                                   icon = icon("calendar")),
                          menuItem("Resources", tabName = "resources", icon = icon("book")),
                          menuItem("Contact", tabName = "contact", icon = icon("envelope")),
@@ -174,16 +175,18 @@ shinyUI(
           
           # home page (landing)
           tabItem(tabName = "home",
-                  h1("Stock Assessment Prioritization for U.S. West Coast Groundfish"),
+                  h1("U.S. West Coast Groundfish Assessment Prioritization"),
                   h4("Groundfish stocks off the U.S. West Coast are managed by the Pacific
                   Fishery Management Council (PFMC). The PFMC groundfish Fishery Management Plan
                   contains a wide range of diversity species and stocks including from sharks, 
                   skates, flatfish, rockfish, and various roundfish. The number of species off
                   the U.S. West Coast far exceeds the capacity and resources to conduct scientific 
                   assessments each management cycle to determine population status to inform harvest limits.
-                  Stock assessment prioritization is aimed to be an objective and transparent tool to
-                  objectively consider a wide range of fishery, economic, and population attributes 
-                  in order to identify species with the greatest need for new assessments."),
+                  The groundfish assessment prioritization is led by National Marine Fisheries Service staff to 
+                  support decision making by the PFMC around selecting species to assessed each
+                  biennium. Groundfish assessment prioritization aims 
+                  to be an objective and transparent tool to consider a wide range of fishery, economic, 
+                  and population attributes."),
                   tags$footer(
                     style = "text-align: center;",
                     HTML(paste0("<img src='figs/sap.png' alt='Image 1',
@@ -263,7 +266,7 @@ shinyUI(
           
           # overall ranking page
           tabItem(tabName = "overall_ranking",
-                  h1("2024 Stock Assessment Prioritization Ranking"),
+                  h1("2024 Groundfish Assessment Prioritization Ranking"),
                   fluidRow(
                     # overall ranking plot
                     box(title = "Overall Ranking", status = "primary",
@@ -1253,7 +1256,7 @@ shinyUI(
                                 p(strong("Recruitment Variation:"),
                                   "The assumed variation, above or below, in annual recruitment
                                   relative to the stock recruitment curve from the most recent
-                                  stock assessment. A NA is shown for species without a benchmark
+                                  assessment. A NA is shown for species without a benchmark
                                   or data-moderate assessment."
                                 ),
                                 p(strong("Mean Catch Age:"),
@@ -1482,19 +1485,19 @@ shinyUI(
           
           # stock assessment calendar page
           tabItem(tabName = "calendar",
-                  h1("2025 Stock Assessment Calendar"),
+                  h1("2025 Groundfish Assessment Calendar"),
                   fluidRow(
                     box(
                       width = 12,
-                      h4("Below is an annotated 2025 assessment planning calendar that
-                      identifies potential weeks in which STAR panels can be scheduled.
-                      Based on the expected availability of 2024 data and the time
-                      needed for model development and documentation, it is unlikely
-                      that any full assessments could be reviewed before May. As of
-                      January 2024, the June and September Pacific Fishery Management Council
-                      meeting date have not been announced. Once meeting dates for June
-                      and September 2025 are available these weeks will be shaded and
-                      potential STAR panel weeks will be finalized."),
+                      h4("The 2025 assessment planning calendar identifies potential weeks 
+                         in which Stock Assessment Review (STAR) panels could potentially 
+                         be scheduled. Based on the expected availability of 2024 data and 
+                         the time needed for model development and documentation, it is 
+                         unlikely that any benchmark assessments could be reviewed before 
+                         May. As of January 2024, the 2025 June and September Pacific Fishery 
+                         Management Council meeting dates have not been confirmed. Once those 
+                         meeting dates are available, these weeks will be shaded and potential 
+                         STAR panel weeks will be finalized. "),
                       br(),
                       div(
                         img(src = "figs/calendar.png", height = "800px", width = "800px",
