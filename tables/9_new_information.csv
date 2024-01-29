@@ -1,66 +1,66 @@
 "Species","Rank","Factor_Score","Last_Assessed","New_Research","Issues_Can_be_Addressed","Survey_Abundance","Survey_Composition"
-"arrowtooth flounder",15,2,2017,0,0,0,2
-"aurora rockfish",8,4,2013,0,0,1,3
-"bank rockfish",3,5,NA,0,0,3,2
-"big skate",25,0,2019,0,0,0,0
-"black rockfish",25,0,2023,0,0,0,0
-"blackgill rockfish",21,1,2017,0,0,0,1
-"blue and deacon rockfish",25,0,2017,0,0,0,0
-"bocaccio",15,2,2017,0,0,0,2
-"brown rockfish",25,0,2013,0,0,0,0
-"cabezon",25,0,2019,0,0,0,0
-"California scorpionfish",25,0,2017,0,0,0,0
-"canary rockfish",25,0,2023,0,0,0,0
-"chilipepper",13,3,2015,0,0,1,2
-"China rockfish",25,0,2015,0,0,0,0
-"copper rockfish",25,0,2023,0,0,0,0
-"cowcod",25,0,2019,0,0,0,0
-"curlfin sole",25,0,NA,0,0,0,0
-"darkblotched rockfish",15,2,2017,0,0,0,2
-"Dover sole",15,2,2021,0,0,0,2
-"English sole",8,4,2013,0,0,1,3
-"flag rockfish",25,0,NA,0,0,0,0
-"flathead sole",3,5,NA,0,0,3,2
-"gopher and black and yellow rockfish",25,0,2019,0,0,0,0
-"grass rockfish",25,0,NA,0,0,0,0
-"greenspotted rockfish",3,5,2011,0,0,2,3
-"greenstriped rockfish",3,5,2009,0,0,2,3
-"honeycomb rockfish",25,0,NA,0,0,0,0
-"kelp greenling",25,0,2015,0,0,0,0
-"kelp rockfish",25,0,NA,0,0,0,0
-"leopard shark",25,0,NA,0,0,0,0
-"lingcod",25,0,2021,0,0,0,0
-"longnose skate",21,1,2019,0,0,0,1
-"longspine thornyhead",8,4,2013,0,0,1,3
-"olive rockfish",25,0,NA,0,0,0,0
-"Pacific cod",21,1,NA,0,0,0,1
-"Pacific ocean perch",21,1,2017,0,0,0,1
-"Pacific sanddab",1,6,NA,0,0,3,3
-"Pacific spiny dogfish",25,0,2021,0,0,0,0
-"petrale sole",25,0,2023,0,0,0,0
-"quillback rockfish",25,0,2021,0,0,0,0
-"redbanded rockfish",8,4,NA,0,0,3,1
-"redstripe rockfish",25,0,NA,0,0,0,0
-"rex sole",25,0,2023,0,0,0,0
-"rock sole",25,0,NA,0,0,0,0
-"rosethorn rockfish",25,0,NA,0,0,0,0
-"rosy rockfish",25,0,NA,0,0,0,0
-"rougheye and black spotted rockfish",25,0,2013,0,0,0,0
-"sablefish",25,0,2023,0,0,0,0
-"sand sole",25,0,NA,0,0,0,0
-"sharpchin rockfish",1,6,2013,0,0,3,3
-"shortraker rockfish",25,0,NA,0,0,0,0
-"shortspine thornyhead",25,0,2023,0,0,0,0
-"silvergray rockfish",25,0,NA,0,0,0,0
-"speckled rockfish",13,3,NA,0,0,2,1
-"splitnose rockfish",3,5,2009,0,0,2,3
-"squarespot rockfish",25,0,2021,0,0,0,0
-"starry flounder",25,0,NA,0,0,0,0
-"starry rockfish",8,4,NA,0,0,3,1
-"stripetail rockfish",25,0,NA,0,0,0,0
-"treefish",25,0,NA,0,0,0,0
-"vermilion and sunset rockfish",15,2,2021,0,0,0,2
-"widow rockfish",25,0,2019,0,0,0,0
-"yelloweye rockfish",25,0,2017,0,0,0,0
-"yellowmouth rockfish",25,0,NA,0,0,0,0
-"yellowtail rockfish",15,2,2017,0,0,0,2
+"arrowtooth flounder",17,3,2017,0,0,1,2
+"aurora rockfish",6,5,2013,1,0,1,3
+"bank rockfish",6,5,NA,1,0,3,1
+"big skate",32,0,2019,0,0,0,0
+"black rockfish",32,0,2023,0,0,0,0
+"blackgill rockfish",23,2,2017,0,0,1,1
+"blue and deacon rockfish",32,0,2017,0,0,0,0
+"bocaccio",17,3,2017,0,0,1,2
+"brown rockfish",32,0,2013,0,0,0,0
+"cabezon",32,0,2019,0,0,0,0
+"California scorpionfish",32,0,2017,0,0,0,0
+"canary rockfish",32,0,2023,0,0,0,0
+"chilipepper",12,4,2015,1,0,1,2
+"China rockfish",32,0,2015,0,0,0,0
+"copper rockfish",32,0,2023,0,0,0,0
+"cowcod",32,0,2019,0,0,0,0
+"curlfin sole",6,5,NA,0,0,3,2
+"darkblotched rockfish",17,3,2017,0,0,1,2
+"Dover sole",17,3,2021,1,0,0,2
+"English sole",12,4,2013,0,0,1,3
+"flag rockfish",32,0,NA,0,0,0,0
+"flathead sole",6,5,NA,0,0,3,2
+"gopher and black and yellow rockfish",32,0,2019,0,0,0,0
+"grass rockfish",32,0,NA,0,0,0,0
+"greenspotted rockfish",12,4,2011,0,0,2,2
+"greenstriped rockfish",6,5,2009,0,0,2,3
+"honeycomb rockfish",32,0,NA,0,0,0,0
+"kelp greenling",32,0,2015,0,0,0,0
+"kelp rockfish",32,0,NA,0,0,0,0
+"leopard shark",32,0,NA,0,0,0,0
+"lingcod",32,0,2021,0,0,0,0
+"longnose skate",28,1,2019,0,0,0,1
+"longspine thornyhead",12,4,2013,0,0,1,3
+"olive rockfish",32,0,NA,0,0,0,0
+"Pacific cod",28,1,NA,0,0,0,1
+"Pacific ocean perch",23,2,2017,0,0,1,1
+"Pacific sanddab",2,6,NA,0,0,3,3
+"Pacific spiny dogfish",32,0,2021,0,0,0,0
+"petrale sole",32,0,2023,0,0,0,0
+"quillback rockfish",32,0,2021,0,0,0,0
+"redbanded rockfish",6,5,NA,1,0,3,1
+"redstripe rockfish",23,2,NA,0,0,0,2
+"rex sole",32,0,2023,0,0,0,0
+"rock sole",32,0,NA,0,0,0,0
+"rosethorn rockfish",2,6,NA,0,0,3,3
+"rosy rockfish",32,0,NA,0,0,0,0
+"rougheye and black spotted rockfish",23,2,2013,2,0,0,0
+"sablefish",28,1,2023,1,0,0,0
+"sand sole",32,0,NA,0,0,0,0
+"sharpchin rockfish",2,6,2013,0,0,3,3
+"shortraker rockfish",32,0,NA,0,0,0,0
+"shortspine thornyhead",32,0,2023,0,0,0,0
+"silvergray rockfish",32,0,NA,0,0,0,0
+"speckled rockfish",17,3,NA,0,0,2,1
+"splitnose rockfish",1,7,2009,2,0,2,3
+"squarespot rockfish",32,0,2021,0,0,0,0
+"starry flounder",32,0,NA,0,0,0,0
+"starry rockfish",12,4,NA,0,0,3,1
+"stripetail rockfish",2,6,NA,0,0,3,3
+"treefish",32,0,NA,0,0,0,0
+"vermilion and sunset rockfish",23,2,2021,0,0,0,2
+"widow rockfish",28,1,2019,1,0,0,0
+"yelloweye rockfish",32,0,2017,0,0,0,0
+"yellowmouth rockfish",32,0,NA,0,0,0,0
+"yellowtail rockfish",17,3,2017,1,0,0,2
