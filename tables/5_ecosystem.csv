@@ -1,66 +1,66 @@
 "Species","Rank","Factor_Score","Ecosystem_Functional_Group","Top_Down_Scaled","Bottom_Up_Scaled"
-"arrowtooth flounder",3,5.71,"",4.038346903,0.157950498
-"aurora rockfish",41,0.01,"Arrowtooth flounder",0.000292964,0.004031757
-"bank rockfish",42,0.01,"slope rockfish",0.000249888,0.003438949
-"big skate",15,0.48,"slope rockfish",0.324533653,0.031464227
-"black rockfish",9,0.95,"skates",0.636771739,0.059645367
-"blackgill rockfish",43,0.01,"Black rockfish",0.000343274,0.004724118
-"blue rockfish",25,0.11,"slope rockfish",0.062980208,0.020508511
-"bocaccio",13,0.66,"nearshore rockfish",0.435189365,0.051794649
-"brown rockfish",37,0.03,"shelf rockfish",0.014685133,0.004781982
-"cabezon",19,0.22,"nearshore rockfish",0.151262282,0.008815724
-"California scorpionfish",17,0.39,"lingcod",0.163672911,0.122122794
-"canary rockfish",28,0.08,NA,0.018302793,0.038388183
-"chilipepper",10,0.83,"Canary Rockfish",0.544000793,0.064744988
-"China rockfish",38,0.03,"shelf rockfish",0.022243109,0.002647294
-"copper rockfish",34,0.05,"shelf rockfish",0.026250139,0.008547944
-"cowcod",54,0,"nearshore rockfish",0.000772774,0.000251642
-"curlfin sole",55,0,"nearshore rockfish",2.69e-05,0.000597254
-"darkblotched rockfish",32,0.06,"flatfish",0.002816202,0.038756458
-"Dover sole",7,1.89,"slope rockfish",0.059971278,1.331868567
-"English sole",29,0.08,"flatfish",0.002537353,0.056350664
-"flag rockfish",44,0.01,"flatfish",0.007542335,0.000897661
-"flathead sole",45,0.01,"shelf rockfish",0.000219744,0.004880162
-"gopher rockfish",23,0.12,"flatfish",0.079613746,0.009475337
-"grass rockfish",56,0,"shelf rockfish",0.001766534,0.000575244
-"greenspotted rockfish",46,0.01,"nearshore rockfish",0.00277279,0.000902915
-"greenstriped rockfish",31,0.07,"nearshore rockfish",0.015758277,0.037548231
-"honeycomb rockfish",57,0,"Greenstriped rockfish",0.002923131,0.0003479
-"kelp greenling",47,0.01,"shelf rockfish",0.00586706,0.001910516
-"kelp rockfish",58,0,"nearshore rockfish",0.000681642,0.000221966
-"leopard shark",16,0.46,"nearshore rockfish",0.324356045,0.010385097
-"lingcod",4,3.11,"",2.157298404,0.125729606
-"longnose skate",8,1.85,"Lingcod",1.237104414,0.119939903
-"longspine thornyhead",20,0.22,"skates",0.015708411,0.148564869
-"olive rockfish",48,0.01,"Longspine thornyhead",0.007749116,0.002523377
-"Pacific cod",18,0.39,"nearshore rockfish",0.163672911,0.122122794
-"Pacific ocean perch",30,0.08,NA,0.011589477,0.045166021
-"Pacific sanddab",35,0.05,"Pacific Ocean Perch",0.0014921,0.033137214
+"arrowtooth flounder",3,5.72,"",4.038346903,0.166091815
+"aurora rockfish",46,0.01,"Arrowtooth flounder",0.000313662,0.003812902
+"bank rockfish",34,0.03,"slope rockfish",0.001774237,0.02156776
+"big skate",13,0.69,"slope rockfish",0.46439837,0.045024409
+"black rockfish",11,0.94,"skates",0.635006266,0.055836916
+"blackgill rockfish",47,0.01,"Black rockfish",0.00063312,0.007696259
+"blue rockfish",31,0.05,"slope rockfish",0.027452258,0.009249843
+"bocaccio",10,0.98,"nearshore rockfish",0.640701623,0.081093034
+"brown rockfish",41,0.02,"shelf rockfish",0.011095236,0.003738461
+"cabezon",19,0.26,"nearshore rockfish",0.180664529,0.011790411
+"California scorpionfish",16,0.39,"lingcod",0.163672911,0.122122794
+"canary rockfish",27,0.08,NA,0.019104826,0.040118316
+"chilipepper",9,1.18,"Canary Rockfish",0.770091227,0.097469761
+"China rockfish",42,0.02,"shelf rockfish",0.012492789,0.001581201
+"copper rockfish",35,0.03,"shelf rockfish",0.018637538,0.006279786
+"cowcod",48,0.01,"nearshore rockfish",0.005538398,0.001866124
+"curlfin sole",56,0,"nearshore rockfish",5.16e-06,0.000119242
+"darkblotched rockfish",32,0.05,"flatfish",0.002857053,0.03473056
+"Dover sole",7,1.88,"slope rockfish",0.05720755,1.321893159
+"English sole",20,0.22,"flatfish",0.006625722,0.153100361
+"flag rockfish",49,0.01,"flatfish",0.006553137,0.000829425
+"flathead sole",57,0,"shelf rockfish",2.2e-05,0.000508958
+"gopher rockfish",28,0.07,"flatfish",0.04341802,0.00549538
+"grass rockfish",50,0.01,"shelf rockfish",0.003706608,0.001248915
+"greenspotted rockfish",51,0.01,"nearshore rockfish",0.005753541,0.001938615
+"greenstriped rockfish",26,0.09,"nearshore rockfish",0.01998518,0.046666444
+"honeycomb rockfish",58,0,"Greenstriped rockfish",0.002760683,0.000349417
+"kelp greenling",33,0.05,"shelf rockfish",0.02986186,0.010061741
+"kelp rockfish",59,0,"nearshore rockfish",0.001702704,0.000573714
+"leopard shark",15,0.46,"nearshore rockfish",0.324356045,0.010385097
+"lingcod",4,3.09,"",2.131128292,0.139080312
+"longnose skate",8,1.64,"Lingcod",1.097239697,0.106379721
+"longspine thornyhead",18,0.27,"skates",0.015708411,0.183809664
+"olive rockfish",36,0.03,"Longspine thornyhead",0.013830627,0.004660131
+"Pacific cod",17,0.39,"nearshore rockfish",0.163672911,0.122122794
+"Pacific ocean perch",22,0.12,NA,0.021373474,0.066271911
+"Pacific sanddab",25,0.1,"Pacific Ocean Perch",0.00302136,0.069814486
 "Pacific spiny dogfish",1,10,"flatfish",7.023481955,0.323220235
-"petrale sole",11,0.82,"dogfish",0.496885275,0.108781802
-"quillback rockfish",49,0.01,"Petrale sole",0.004174103,0.001359231
-"redbanded rockfish",50,0.01,"nearshore rockfish",0.000356392,0.004904649
-"redstripe rockfish",51,0.01,"slope rockfish",0.006525844,0.002125038
-"rex sole",22,0.16,"",0.004980872,0.110617394
-"rock sole",59,0,"flatfish",3.66e-05,0.000813223
-"rosethorn rockfish",39,0.03,"flatfish",0.019186949,0.002283561
-"rosy rockfish",60,0,"",0.001938661,0.000631294
-"rougheye rockfish",33,0.06,"",0.002947022,0.040556793
-"sablefish",2,9.62,"slope rockfish",6.668284843,0.397720693
-"sand sole",52,0.01,"Sablefish",0.000326004,0.007240044
-"sharpchin rockfish",61,0,"flatfish",0.000194342,0.002674529
-"shortraker rockfish",62,0,"slope rockfish",8.23e-05,0.001132324
-"shortspine thornyhead",5,2.06,"slope rockfish",1.015858604,0.495962112
-"silvergray rockfish",27,0.1,"Shortspine thornyhead",0.063848947,0.007599069
-"speckled rockfish",53,0.01,"",0.007172099,0.000853597
-"splitnose rockfish",21,0.18,"shelf rockfish",0.001554526,0.130040186
-"squarespot rockfish",40,0.02,"Splitnose Rockfish",0.014700972,0.001749656
-"starry flounder",63,0,"shelf rockfish",0.000106907,0.002374246
-"starry rockfish",36,0.05,"flatfish",0.032578456,0.003877369
-"stripetail rockfish",26,0.11,"shelf rockfish",0.070899314,0.008438177
-"treefish",64,0,"",0.001709831,0.000556779
-"vermilion rockfish",14,0.53,"nearshore rockfish",0.346066438,0.041187564
-"widow rockfish",12,0.71,"shelf rockfish",0.267957528,0.255093719
-"yelloweye rockfish",24,0.12,"Widow Rockfish",0.08273528,0.003746264
-"yellowmouth rockfish",65,0,"Yelloweye rockfish",0.000184963,0.002545448
-"yellowtail rockfish",6,2.01,"",1.20709551,0.266526559
+"petrale sole",12,0.73,"dogfish",0.496885275,0.038014957
+"quillback rockfish",60,0,"Petrale sole",0.000786809,0.00026511
+"redbanded rockfish",61,0,"nearshore rockfish",0.000189902,0.002308463
+"redstripe rockfish",37,0.03,"slope rockfish",0.01662134,0.005600442
+"rex sole",30,0.06,"",0.001726851,0.039902302
+"rock sole",62,0,"flatfish",4.2e-05,0.000969928
+"rosethorn rockfish",52,0.01,"flatfish",0.004182854,0.00052942
+"rosy rockfish",53,0.01,"",0.002919799,0.000983806
+"rougheye rockfish",54,0.01,"",0.000777337,0.009449365
+"sablefish",2,9.59,"slope rockfish",6.665052709,0.381395301
+"sand sole",43,0.02,"Sablefish",0.000486589,0.011243608
+"sharpchin rockfish",38,0.03,"flatfish",0.001398183,0.016996423
+"shortraker rockfish",63,0,"slope rockfish",6.41e-05,0.000779158
+"shortspine thornyhead",5,2.01,"slope rockfish",1.015858604,0.460717317
+"silvergray rockfish",29,0.07,"Shortspine thornyhead",0.044589219,0.005643618
+"speckled rockfish",44,0.02,"",0.011042733,0.001397669
+"splitnose rockfish",21,0.21,"shelf rockfish",0.009759666,0.147740188
+"squarespot rockfish",64,0,"Splitnose Rockfish",0.003151083,0.00039883
+"starry flounder",45,0.02,"shelf rockfish",0.000560534,0.012952252
+"starry rockfish",39,0.03,"flatfish",0.017456442,0.002209446
+"stripetail rockfish",40,0.03,"shelf rockfish",0.017846842,0.002258859
+"treefish",65,0,"",0.000823691,0.000277537
+"vermilion rockfish",23,0.12,"nearshore rockfish",0.077801076,0.009847213
+"widow rockfish",14,0.6,"shelf rockfish",0.24125512,0.197491691
+"yelloweye rockfish",24,0.12,"Widow Rockfish",0.082851218,0.003996364
+"yellowmouth rockfish",55,0.01,"Yelloweye rockfish",0.000659031,0.008011238
+"yellowtail rockfish",6,1.99,"",1.204251435,0.260391366
