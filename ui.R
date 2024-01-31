@@ -1489,7 +1489,7 @@ shinyUI(
                   fluidRow(
                     box(
                       width = 12,
-                      h4("The 2025 assessment planning calendar identifies potential weeks 
+                      h4("The 2025 groundfish assessment planning calendar identifies potential weeks 
                          in which Stock Assessment Review (STAR) panels could potentially 
                          be scheduled. Based on the expected availability of 2024 data and 
                          the time needed for model development and documentation, it is 
