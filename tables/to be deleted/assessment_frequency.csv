@@ -1,0 +1,66 @@
+Species,Rank,Score,Recruit_Variation,Mean_Age,Transfom_Mean_Age,Recruit_Adjustment,Fishery_Importance_Adjustment,Ecosystem_Importance_Adjustment,Target_Assessment_Frequency,Last_Assessment_Year,Years_Since_Assessment,Years_Past_Target_Assessment_Frequency,Beyond_Assessment_Adjustment,Greater_Than_10_Years,Less_Than_6_Years_Update,Greater_Than_Target_Assessment_Frequency
+Arrowtooth flounder,37,2,0.8,8.05,6.895945697,0,1,-1,6,2017,6,0,0,0,0,1
+Aurora rockfish,39,1,0.5,31.13,11.52920773,0,0,1,10,2013,10,0,0,0,0,1
+Bank rockfish,4,6,NA,NA,NA,0,1,0,NA,NA,NA,4,1,NA,0,NA
+Big skate,53,-1,0.3,4.3,5.433872094,1,0,-1,6,2019,4,0,0,0,-1,0
+Black rockfish,34,3,0.5,8.010164041,6.882958233,0,0,-1,6,2015,8,2,0,0,0,1
+Blackgill rockfish,44,0,0.5,30.184,11.39479665,0,0,1,10,2017,6,0,0,0,0,0
+Blue/Deacon rockfish,44,0,0.5,10.57,7.647859371,0,-1,0,6,2017,6,0,0,0,0,1
+Bocaccio,34,3,1,2.97,4.721052708,-1,0,-1,4,2017,6,2,0,0,0,1
+Brown rockfish,23,4,NA,NA,NA,0,-1,0,NA,NA,NA,4,1,NA,0,NA
+Cabezon,39,1,0.5,5.2,5.840804485,0,0,-1,4,2019,4,0,0,0,0,1
+California scorpionfish,39,1,0.6,8.241,6.957669027,0,0,-1,6,2017,6,0,0,0,0,1
+Canary rockfish,39,1,0.5,10.148,7.530364054,0,0,0,8,2015,8,0,0,0,0,1
+Chilipepper rockfish ,34,3,1,9.149,7.239580088,-1,0,-1,6,2015,8,2,0,0,0,1
+China rockfish,44,0,0.5,19.34570281,9.622623925,0,-1,0,8,2015,8,0,0,0,0,1
+Copper rockfish,60,-3,0.6,7.367941685,6.667805865,0,-1,0,6,2021,2,-2,0,0,0,0
+Cowcod ,44,0,NA,14.2,8.555806802,0,1,1,10,2019,4,0,0,0,-1,0
+Curlfin sole,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Darkblotched rockfish,44,0,0.75,9.361,7.302874739,0,0,0,8,2017,6,0,0,0,0,0
+Dover sole,56,-2,0.35,13.6,8.416590228,0,1,-1,8,2021,2,-2,0,0,-1,0
+English sole,3,7,0.8,7.14,6.588654265,0,1,-1,6,2013,10,4,1,0,0,1
+Flag rockfish,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Flathead Sole,23,4,NA,NA,NA,0,-1,1,NA,NA,NA,4,1,NA,0,NA
+Gopher/Black and yellow rockfish,56,-2,0.5,11.6,7.922922983,0,-1,0,6,2019,4,0,0,0,-1,0
+Grass rockfish,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Greenspotted rockfish,23,4,0.7,19.216,9.598057217,0,0,1,10,2011,12,2,0,1,0,1
+Greenstriped rockfish,2,8,0.84,16.8,9.120295827,0,1,0,10,2009,14,4,1,1,0,1
+Honeycomb rockfish,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Kelp greenling,23,4,0.65,4.25,5.409774865,0,1,0,6,2015,8,2,0,0,0,1
+Kelp rockfish,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Leopard shark,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Lingcod ,56,-2,0.6,5.291665889,5.879718258,0,0,-1,4,2021,2,-2,0,0,0,0
+Longnose skate,53,-1,0.3,10.1,7.516809092,1,0,-1,8,2019,4,0,0,0,-1,0
+Longspine thornyhead,23,4,0.6,15.27,8.795291393,0,1,-1,8,2013,10,2,0,0,0,1
+Olive rockfish,11,5,NA,NA,NA,0,0,0,NA,NA,NA,4,1,NA,0,NA
+Pacific cod,4,6,NA,NA,NA,0,1,-1,NA,NA,NA,4,1,NA,0,NA
+Pacific Ocean perch,44,0,0.7,16.32,9.020384645,0,0,0,10,2017,6,0,0,0,0,0
+Pacific sanddab,4,6,NA,NA,NA,0,1,0,NA,NA,NA,4,1,NA,0,NA
+Pacific spiny dogfish,60,-3,0.2,22.2,10.13924293,1,-1,-1,10,2021,2,-2,0,0,0,0
+Petrale sole,53,-1,0.4,7,6.539260728,0,-1,-1,4,2019,4,0,0,0,-1,1
+Quillback rockfish,60,-3,0.6,12.94841155,8.26101986,0,-1,1,8,2021,2,-2,0,0,0,0
+Redbanded rockfish,23,4,NA,NA,NA,0,-1,1,NA,NA,NA,4,1,NA,0,NA
+Redstripe rockfish,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Rex Sole,4,6,0.8,7.63,6.756950273,0,0,0,6,2013,10,4,1,0,0,1
+Rock Sole,4,6,NA,NA,NA,0,1,1,NA,NA,NA,4,1,NA,0,NA
+Rosethorn rockfish,23,4,NA,NA,NA,0,-1,1,NA,NA,NA,4,1,NA,0,NA
+Rosy rockfish,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Rougheye/Blackspotted rockfish,44,0,0.4,32.51,11.72081596,0,-1,1,10,2013,10,0,0,0,0,1
+Sablefish ,60,-3,1.4,9.7,7.402265488,-1,-1,-1,4,2021,2,-2,0,0,0,0
+Sand Sole,4,6,NA,NA,NA,0,1,0,NA,NA,NA,4,1,NA,0,NA
+Sharpchin rockfish,37,2,0.8,13.32,8.350317789,0,1,0,10,2013,10,0,0,0,0,1
+Shortraker rockfish,23,4,NA,NA,NA,0,-1,1,NA,NA,NA,4,1,NA,0,NA
+Shortspine thornyhead ,39,1,0.5,25.4,10.67156738,0,0,-1,10,2013,10,0,0,0,0,1
+Silvergray rockfish,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Speckled rockfish,11,5,NA,NA,NA,0,0,0,NA,NA,NA,4,1,NA,0,NA
+Splitnose rockfish,1,9,1,15.91,8.933591021,-1,1,-1,8,2009,14,6,0,1,0,1
+Squarespot rockfish,60,-3,0.7,11.7,7.948808346,0,-1,1,8,2021,2,-2,0,0,0,0
+Starry flounder,4,6,NA,NA,NA,0,1,0,NA,NA,NA,4,1,NA,0,NA
+Starry rockfish,23,4,NA,NA,NA,0,-1,0,NA,NA,NA,4,1,NA,0,NA
+Stripetail rockfish,23,4,NA,NA,NA,0,-1,1,NA,NA,NA,4,1,NA,0,NA
+Treefish rockfish,23,4,NA,NA,NA,0,-1,1,NA,NA,NA,4,1,NA,0,NA
+Vermilion/Sunset rockfish,60,-3,0.5,7.252882466,6.628044895,0,-1,1,6,2021,2,-2,0,0,0,0
+Widow rockfish,56,-2,0.6,9.7,7.402265488,0,-1,-1,6,2019,4,0,0,0,-1,0
+Yelloweye rockfish,44,0,0.5,21.78893375,10.06748683,0,0,0,10,2017,6,0,0,0,0,0
+Yellowmouth rockfish,11,5,NA,NA,NA,0,0,1,NA,NA,NA,4,1,NA,0,NA
+Yellowtail rockfish,44,0,0.37832249,14.12,8.537458057,0,0,-1,8,2017,6,0,0,0,0,0
