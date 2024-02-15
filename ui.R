@@ -1493,11 +1493,7 @@ shinyUI(
                          in which Stock Assessment Review (STAR) panels could potentially 
                          be scheduled. Based on the expected availability of 2024 data and 
                          the time needed for model development and documentation, it is 
-                         unlikely that any benchmark assessments could be reviewed before 
-                         May. As of January 2024, the 2025 June and September Pacific Fishery 
-                         Management Council meeting dates have not been confirmed. Once those 
-                         meeting dates are available, these weeks will be shaded and potential 
-                         STAR panel weeks will be finalized. "),
+                         unlikely that a STAR panel could be held any earlier in April."),
                       br(),
                       div(
                         img(src = "figs/calendar.png", height = "800px", width = "800px",
