@@ -1432,13 +1432,15 @@ shinyUI(
                                   are available or the existing trend information used in the assessment
                                   can be extended. Values range from 0 to 3 where
                                   species with the greatest change in abundance information receive
-                                  a value of 3."
+                                  a value of 3. Currently, the survey abundance only considers the NWFSC
+                                  WCGBT or hook-and-line surveys."
                                 ),
                                 p(strong("Survey Composition:"),
                                   "Adjustment for species where new survey compositions provides additional
                                   information on population dynamics or biological processes.
                                   Values range from 0 to 3 where species with the most abundant new
-                                  information receive a value of 3."
+                                  information receive a value of 3.  Currently, the survey composition 
+                                  only considers the NWFSC WCGBT or hook-and-line surveys. "
                                 ),
                                 p(strong("Management Group:"),
                                   "Management group associated with a species within the fishery
