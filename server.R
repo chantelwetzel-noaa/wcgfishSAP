@@ -397,6 +397,9 @@ shinyServer(function(input, output, session) {
           title = "Overall Factor Summary",
           subtitle = "The weighted score using the specified weights (shown above) for each factor and the sum of all weighted factors (Total Weighted Score) by species to determine overall rank."
         ) %>%
+        tab_options(
+          heading.subtitle.font.size = 14
+        ) %>%
         cols_label(
           `Commercial Importance` = "Comm. Importance Factor Score",
           `Recreational Importance` = "Rec. Importance Factor Score",
@@ -541,6 +544,9 @@ shinyServer(function(input, output, session) {
         title = "Commercial Importance",
         subtitle = "Measured by total inflation adjusted ex-vessel revenue data ($1,000)
         between 2018-2022 (source: PacFIN)"
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
     
     for(i in input$com_colors) {
@@ -662,6 +668,9 @@ shinyServer(function(input, output, session) {
         title = "Recreational Importance",
         subtitle = "Measured by total recreational catch
         between 2018-2022 (source: GEMM)"
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
     
     for(i in input$rec_colors) {
@@ -677,14 +686,13 @@ shinyServer(function(input, output, session) {
       }
     }
     
-    if("Rank" %in% input$rec_columns) {
-      rec_table <- rec_table %>%
-        fmt_number(columns = -c("Rank"), decimals = 2)
-    } else {
-      rec_table <- rec_table %>%
-        fmt_number(columns = everything(), decimals = 2)
-    }
-    
+    rec_table <- rec_table %>%
+      fmt_number(columns = -c("Rank"), decimals = 2) #%>%   
+      #tab_footnote(footnote = "Recreational catches are not calculated
+      #             for petrale sole and widow rockfish in Washington.",
+      #             locations = cells_column_labels(columns = `Catch WA`)
+      #) 
+
     rec_table %>%
       fmt_currency(columns = contains("Revenue"), decimals = 0) %>%
       tab_style(style = list(cell_text(weight = "bold")),
@@ -758,6 +766,9 @@ shinyServer(function(input, output, session) {
         title = "Tribal Importance",
         subtitle = "Measured by total inflation adjusted ex-vessel revenue data for tribal landings
         between 2018-2022 (source: PacFIN)"
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
     
     for(i in input$tribal_colors) {
@@ -853,7 +864,14 @@ shinyServer(function(input, output, session) {
     cd_table <- reactive_cd_df() %>%
       gt() %>%
       tab_header(
-        title = "Constituent Demand"
+        title = "Constituent Demand",
+        subtitle = "Measured by projected future constraints given current average catch
+        compared to anticipated future ACLs, for species with greater important in a 
+        particular state compared to coastwide, and commercial species that are important 
+        to both trawl and fixed gear fisheries."
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
     
     for(i in input$cd_colors) {
@@ -965,7 +983,12 @@ shinyServer(function(input, output, session) {
     reb_table <- reactive_reb_df() %>%
       gt() %>%
       tab_header(
-        title = "Rebuilding"
+        title = "Rebuilding",
+        subtitle = "Accounts for species that are overfished, recent trends in the 
+        abundance, and the anticipated rebuilding time."
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
     
     for(i in input$reb_colors) {
@@ -1065,6 +1088,9 @@ shinyServer(function(input, output, session) {
         title = "Stock Status",
         subtitle = "Measured by the estimated fraction unfished at the time of the most
         recent assessment or the PSA score for un-assessed species"
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
     
     # reverse color scale for Fraction_Unfished?
@@ -1184,6 +1210,9 @@ shinyServer(function(input, output, session) {
         title = "Fishing Mortality",
         subtitle = "Measured by average OFLs and average catch
         between 2018-2022 (source: GEMM)"
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
       
     for(i in input$fm_colors) {
@@ -1296,7 +1325,12 @@ shinyServer(function(input, output, session) {
     eco_table <- reactive_eco_df() %>%
       gt() %>%
       tab_header(
-        title = "Ecosystem"
+        title = "Ecosystem",
+        subtitle = "Measures importance of species to the trophic cynamics of the 
+        California Current ecosystem based on an Ecopath model."
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
     
     for(i in input$eco_colors) {
@@ -1388,7 +1422,13 @@ shinyServer(function(input, output, session) {
     ni_table <- reactive_ni_df() %>%
       gt() %>%
       tab_header(
-        title = "New Information"
+        title = "New Information", 
+        subtitle = "Measured by known available on ongoing research and data available in 
+        the NWFSC West Coast Groundfish Bottom Trawl and Hook-and-Line surveys since the 
+        most recent assessment by species."
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
     
     for(i in input$ni_colors) {
@@ -1491,7 +1531,14 @@ shinyServer(function(input, output, session) {
     af_table <- reactive_af_df() %>%
       gt() %>%
       tab_header(
-        title = "Assessment Frequency"
+        title = "Assessment Frequency",
+        subtitle = "Accounts for the target assessment frequency based on the biology, 
+        the time since the last assessment, and 
+        whether that time is greater than the target assessment frequency and or greater 
+        than ten years."
+      ) %>%
+      tab_options(
+        heading.subtitle.font.size = 14
       )
     
     for(i in input$af_colors) {
