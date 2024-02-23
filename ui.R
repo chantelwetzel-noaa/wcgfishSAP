@@ -1292,11 +1292,12 @@ shinyUI(
                                 ),
                                 p(strong("Adjusted Maximum Age:"),
                                   "The maximum age adjusted by the total adjustments where the
-                                  adjusted maximum age is equal to maximum age multiplied by 1 -
+                                  adjusted maximum age is equal to maximum age multiplied by 1 +
                                   the total adjustment."
                                 ),
                                 p(strong("Target Assessment Frequency:"),
-                                  "The target assessment frequency in years."
+                                  "The target assessment frequency in years based on the quantile
+                                  of the quantiles of the adjustement maximum age distribution."
                                 ),
                                 p(strong("Last Assessment Year:"),
                                   "The year the most recent benchmark, update, or data-moderate
