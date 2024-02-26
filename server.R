@@ -398,7 +398,8 @@ shinyServer(function(input, output, session) {
           subtitle = "The weighted score using the specified weights (shown above) for each factor and the sum of all weighted factors (Total Weighted Score) by species to determine overall rank."
         ) %>%
         tab_options(
-          heading.subtitle.font.size = 14
+          heading.subtitle.font.size = 14,
+          footnotes.font.size = 14
         ) %>%
         cols_label(
           `Commercial Importance` = "Comm. Importance Factor Score",
@@ -543,10 +544,11 @@ shinyServer(function(input, output, session) {
       tab_header(
         title = "Commercial Importance",
         subtitle = "Measured by total inflation adjusted ex-vessel revenue data ($1,000)
-        between 2018-2022 (source: PacFIN)"
+        between 2018-2022."
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
       )
     
     for(i in input$com_colors) {
@@ -574,6 +576,8 @@ shinyServer(function(input, output, session) {
       fmt_currency(columns = contains("Revenue"), decimals = 0) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
+      tab_footnote(footnote = "Source: PacFIN") %>%
+      tab_footnote(footnote = "") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -667,10 +671,11 @@ shinyServer(function(input, output, session) {
       tab_header(
         title = "Recreational Importance",
         subtitle = "Measured by total recreational catch
-        between 2018-2022 (source: GEMM)"
+        between 2018-2022."
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
       )
     
     for(i in input$rec_colors) {
@@ -687,11 +692,12 @@ shinyServer(function(input, output, session) {
     }
     
     rec_table <- rec_table %>%
-      fmt_number(columns = -c("Rank"), decimals = 2) #%>%   
-      #tab_footnote(footnote = "Recreational catches are not calculated
-      #             for petrale sole and widow rockfish in Washington.",
-      #             locations = cells_column_labels(columns = `Catch WA`)
-      #) 
+      fmt_number(columns = -c("Rank"), decimals = 2) %>%   
+      tab_footnote("Source: GEMM 2018-2022") %>%
+      tab_footnote(footnote = "Recreational catches are not calculated
+                   for petrale sole and widow rockfish in Washington.",
+                   locations = cells_column_labels(columns = `Factor Score`)
+      ) 
 
     rec_table %>%
       fmt_currency(columns = contains("Revenue"), decimals = 0) %>%
@@ -765,10 +771,11 @@ shinyServer(function(input, output, session) {
       tab_header(
         title = "Tribal Importance",
         subtitle = "Measured by total inflation adjusted ex-vessel revenue data for tribal landings
-        between 2018-2022 (source: PacFIN)"
+        between 2018-2022."
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
       )
     
     for(i in input$tribal_colors) {
@@ -796,6 +803,8 @@ shinyServer(function(input, output, session) {
       fmt_currency(columns = contains("Revenue"), decimals = 0) %>%
       tab_style(style = list(cell_text(weight = "bold")),
                 locations = cells_body(columns = Species)) %>%
+      tab_footnote(footnote = "Source: PacFIN") %>%
+      tab_footnote(footnote = "") %>%
       opt_interactive(use_search = TRUE,
                       use_highlight = TRUE,
                       use_page_size_select = TRUE)
@@ -871,7 +880,8 @@ shinyServer(function(input, output, session) {
         to both trawl and fixed gear fisheries."
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
       )
     
     for(i in input$cd_colors) {
@@ -895,11 +905,14 @@ shinyServer(function(input, output, session) {
                     rows = `Projected ACL Attainment` > 1.00
                   )
         ) %>%
+        tab_footnote(footnote = "Source: GEMM 2018-2022 and PacFIN APEX GMT008",
+                     locations = cells_column_labels(columns = `Projected ACL Attainment`) 
+        ) %>%
         tab_footnote(footnote = "Cells with red text indicate
                      high projected ACL attainment percentages and cells with
                      italic text indicate ACL contributions.",
                      locations = cells_column_labels(columns = `Projected ACL Attainment`)
-        ) 
+        )
     }
     
     if("Projected ACL Attainment" %in% input$cd_columns &
@@ -988,7 +1001,8 @@ shinyServer(function(input, output, session) {
         abundance, and the anticipated rebuilding time."
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
       )
     
     for(i in input$reb_colors) {
@@ -1090,7 +1104,8 @@ shinyServer(function(input, output, session) {
         recent assessment or the PSA score for un-assessed species"
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
       )
     
     # reverse color scale for Fraction_Unfished?
@@ -1209,11 +1224,16 @@ shinyServer(function(input, output, session) {
       tab_header(
         title = "Fishing Mortality",
         subtitle = "Measured by average OFLs and average catch
-        between 2018-2022 (source: GEMM)"
+        between 2018-2022."
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
+      ) %>%
+      tab_footnote(
+        footnote = "Source: GEMM"
       )
+      
       
     for(i in input$fm_colors) {
       if(i %in% input$fm_columns) {
@@ -1330,7 +1350,8 @@ shinyServer(function(input, output, session) {
         California Current ecosystem based on an Ecopath model."
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
       )
     
     for(i in input$eco_colors) {
@@ -1428,7 +1449,8 @@ shinyServer(function(input, output, session) {
         most recent assessment by species."
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
       )
     
     for(i in input$ni_colors) {
@@ -1538,7 +1560,8 @@ shinyServer(function(input, output, session) {
         than ten years."
       ) %>%
       tab_options(
-        heading.subtitle.font.size = 14
+        heading.subtitle.font.size = 14,
+        footnotes.font.size = 14
       )
     
     for(i in input$af_colors) {
