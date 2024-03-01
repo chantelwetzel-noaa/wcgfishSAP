@@ -47,6 +47,8 @@ new_info_data <- read.csv("tables/9_new_information.csv", header = TRUE)
 new_info_data <- replace(new_info_data, new_info_data == "", NA)
 
 assess_freq_data <- read.csv("tables/7_assessment_frequency.csv", header = TRUE)
+assessed <- assess_freq_data[,"Last_Assessment_Year"]
+assessed[is.na(assessed)] <- "-" 
 
 
 ## load in species management groups, format cryptic species names
@@ -231,15 +233,7 @@ shinyServer(function(input, output, session) {
                 style = "border:none;")
   })
   
-  #output$future_spex <- renderUI({
-  #  tags$iframe(id = "future_spex",
-  #              seamless = "seamless",
-  #              src = "32future_spex.html",
-  #              width = "74%", height = 600,
-  #              style = "border:none;")
-  #})
-  
-  
+
   # create overall ranking table
   results <- data.frame(species_groups$speciesName,
                         com_rev_data$Factor_Score,
@@ -359,23 +353,24 @@ shinyServer(function(input, output, session) {
     
     # create column with weighted sum
     results$total <- rowSums(results[2:11])
+    results$assessed <- assessed
     
     results <- results %>%
       arrange(desc(total))
     
     # create rank column
     results$rank <- NA
-    order_totals <- order(results$total, results$species_groups.speciesName,
+    order_totals <- order(results$total, results$species_groups.speciesName, 
                           decreasing = TRUE)
     results$rank[order_totals] <- 1:nrow(results)
     
     # order columns in table
     results <- results %>%
-      select(species_groups.speciesName, rank, total,
+      select(species_groups.speciesName, rank, assessed, total,
              com_rev_data.Factor_Score:assess_freq_data.Factor_Score)
     
     # rename columns in table
-    colnames(results) <- c("Species", "Rank", "Weighted Total Score",
+    colnames(results) <- c("Species", "Rank", "Last Assessed", "Weighted Total Score",
                            "Commercial Importance", "Recreational Importance",
                            "Tribal Importance", "Constituent Demand", "Rebuilding",
                            "Stock Status", "Fishing Mortality", "Ecosystem",
@@ -395,7 +390,7 @@ shinyServer(function(input, output, session) {
         gt() %>%
         tab_header(
           title = "Overall Factor Summary",
-          subtitle = "The weighted score using the specified weights (shown above) for each factor and the sum of all weighted factors (Total Weighted Score) by species to determine overall rank."
+          subtitle = "The weighted score using the specified weights (shown above) for each factor and the sum of all weighted factors (Weighted Total Score) by species to determine overall rank."
         ) %>%
         tab_options(
           heading.subtitle.font.size = 14,
@@ -425,7 +420,7 @@ shinyServer(function(input, output, session) {
       
       # color cells of columns
       overall_table <- overall_table %>%
-        data_color(columns = 4:13, method = "numeric",
+        data_color(columns = 4:14, method = "numeric",
                    palette = "Greys", reverse = TRUE)
       
       overall_table
