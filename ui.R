@@ -1521,9 +1521,49 @@ shinyUI(
                             class = "custom-bulleted-list",
                             tags$li(
                               tags$a(href="https://www.fisheries.noaa.gov/s3/dam-migration/prioritizingfishstockassessments_finalweb.pdf",
-                                     target = "_blank", "Prioritizing Fish Stock Assessments")
+                                     target = "_blank", "National Guidance on Prioritizing Fish Stock Assessments")
                             )
-                          )
+                          ),
+                          h3("2024 - PFMC June Briefing Book Materials"),
+                          tags$ul(
+                            class = "custom-bulleted-list",
+                            tags$li(
+                              tags$a(#href="",
+                                     target = "_blank", "Coming soon")
+                            )
+                          ),
+                          h3("2024 - PFMC March Briefing Book Materials"),
+                          tags$ul(
+                            class = "custom-bulleted-list",
+                            tags$li(
+                              tags$a(href="https://www.pcouncil.org/documents/2024/02/agenda-item-f-3-attach-1-groundfish-assessment-prioritization-to-inform-the-selection-of-species-for-assessment-in-2025-and-additional-considerations.pdf/",
+                                     target = "_blank", "Background summary")
+                            ),
+                            tags$li(
+                              tags$a(href="https://www.pcouncil.org/documents/2024/02/agenda-item-f-3-supplemental-attachment-4-summary-of-available-data-to-support-u-s-west-coast-groundfish-stock-assessments.pdf/",
+                                     target = "_blank", "Summary of available data to support U.S. West Coast groundfish stock assessments")
+                            ), 
+                            tags$li(
+                              tags$a(href="https://www.pcouncil.org/documents/2024/02/agenda-item-f-3-attach-3-california-collaborative-fisheries-research-program-data-availability-for-stock-assessments.pdf/",
+                                     target = "_blank", "Summary of California Collaborative Fisheries Research Program data")
+                            )
+                          ),
+                          h3("2022 - PFMC June Briefing Book Materials"),
+                            tags$ul(
+                              class = "custom-bulleted-list",
+                              tags$li(
+                                tags$a(href="https://www.pcouncil.org/documents/2022/05/f-3-attachment-1-summary-of-final-information-to-inform-selection-of-species-for-assessment-in-2023-workload-and-other-considerations.pdf/",
+                                       target = "_blank", "Background summary")
+                              ),
+                              tags$li(
+                                tags$a(href="https://www.pcouncil.org/documents/2022/05/f-3-attachment-4-detailed-summary-of-available-data-to-support-west-coast-groundfish-stock-assessments-in-2023-electronic-only.pdf/",
+                                       target = "_blank", "Summary of available data to support U.S. West Coast groundfish stock assessments")
+                              ), 
+                              tags$li(
+                                tags$a(href="https://www.pcouncil.org/documents/2022/05/f-3-attachment-5-california-collaborative-fisheries-research-program-data-availability-for-stock-assessments.pdf/",
+                                       target = "_blank", "Summary of California Collaborative Fisheries Research Program data")
+                              )
+                            )
                         ),
                         tabPanel(
                           "PFMC Decisions",
