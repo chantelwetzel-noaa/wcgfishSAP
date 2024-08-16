@@ -2,6 +2,10 @@
 output: html_document
 ---
 
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 ## Relevant New Types of Information Available
 
 As new types information or data sources become available for a species, the potential value of conducting a new assessment for it increases. The scoring of the new information factor incorporates various types of new information that account for survey indices, survey compositions, new research, assumptions about steepness for rockfish species, and the ability to address known assessment issues. 
